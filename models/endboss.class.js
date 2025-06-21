@@ -1,8 +1,8 @@
 class Endboss extends movableObject {
-    height = 220;
-    width = 220;
-    x = 300;
-    y = 220;
+    width = 280;
+    height = 320;
+    x = 500;
+    y = 120;
     IMAGES_WALKING = [
         './img/4_enemie_boss_chicken/2_alert/G5.png',
         './img/4_enemie_boss_chicken/2_alert/G6.png',

@@ -16,8 +16,8 @@ function init() {
             case 'ArrowRight':
                 keyboard.RIGHT = true;
                 break;
-            case ' ':
-                keyboard.SPACE = true;
+            case 'ArrowUp':
+                keyboard.UP = true;
                 break;
         }
     })
@@ -30,8 +30,8 @@ function init() {
             case 'ArrowRight':
                 keyboard.RIGHT = false;
                 break;
-            case ' ':
-                keyboard.SPACE = false;
+            case 'ArrowUp':
+                keyboard.UP = false;
                 break;
         }
     })
