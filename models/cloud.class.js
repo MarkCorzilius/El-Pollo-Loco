@@ -5,8 +5,9 @@ class Cloud extends movableObject {
   height = 300;
   speed = 0.1
 
-  constructor(cloudPath) {
+  constructor(cloudPath, x) {
     super();
+    this.x = x;
     this.loadImage(cloudPath);
     this.animate();
   }

@@ -1,0 +1,1 @@
+let globalEnemyId = 0;
