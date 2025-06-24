@@ -1,5 +1,7 @@
 class World {
   character = new Character();
+  statusBar = new StatusBar();
+  throwableObjects = [new ThrowableObjects()];
   level = level1;
 
   canvas;
@@ -14,7 +16,7 @@ class World {
     this.draw();
     this.setWorld();
     this.collidingEnemies = new Set();
-    this.checkCollisions();
+    this.startCollisitionCheck();
   }
 
   setWorld() {
@@ -22,23 +24,34 @@ class World {
     this.character.animate();
   }
 
-  checkCollisions() {
+  startCollisitionCheck() {
     setInterval(() => {
-      this.level.enemies.forEach(enemy => {
-        const key = enemy.id;
-        if (this.character.isColliding(enemy)) {
-          // If this enemy is not yet recorded as colliding
-          if (!this.collidingEnemies.has(key)) {
-            this.character.energy -= 10;
-            this.collidingEnemies.add(key);
-            console.log(`Collided with enemy ${key}, energy: ${this.character.energy}`);
-          }
-        } else {
-          // No collision, remove from collidingEnemies so next collision counts again
-          this.collidingEnemies.delete(key);
-        }
+      this.level.enemies.forEach((enemy) => {
+        this.handleCollision(enemy);
+        this.checkThrowObjects();
       });
     }, 1000 / 60);
+  }
+
+  checkThrowObjects() {
+    if (this.keyboard.D) {
+      console.log(this.keyboard.D)
+      let bottle = new ThrowableObjects(this.character.x, this.character.y);
+      this.throwableObjects.push(bottle);
+    }
+  }
+
+  handleCollision(enemy) {
+    const key = enemy.id;
+    if (this.character.isColliding(enemy)) {
+      if (!this.collidingEnemies.has(key)) {
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+        this.collidingEnemies.add(key);
+      }
+    } else {
+      this.collidingEnemies.delete(key);
+    }
   }
 
   draw() {
@@ -52,7 +65,13 @@ class World {
 
     this.addToMap(this.character);
 
+    this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.statusBar);
+    this.ctx.translate(this.camera_x, 0);
+
     this.addObjectsToMap(this.level.enemies);
+
+    this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
 
@@ -70,18 +89,17 @@ class World {
 
   addToMap(object) {
     if (object.otherDirection) {
-        this.flipImage(object);
+      this.flipImage(object);
     }
     object.draw(this.ctx);
     object.drawFrame(this.ctx);
 
-
     if (object.otherDirection) {
-        this.flipImageBack(object);
+      this.flipImageBack(object);
     }
   }
 
-  flipImage(object){
+  flipImage(object) {
     this.ctx.save();
     this.ctx.translate(object.width, 0);
     this.ctx.scale(-1, 1);
