@@ -1,6 +1,9 @@
 class World {
   character = new Character();
-  statusBar = new StatusBar();
+  weaponBar = new StatusBar(this, 0, "weapon");
+  healthBar = new StatusBar(this, 45, "health");
+  coinsBar = new StatusBar(this, 100, "coins");
+
   throwableObjects = [new ThrowableObjects()];
   level = level1;
 
@@ -37,7 +40,7 @@ class World {
   checkThrowObjects() {
     const now = new Date().getTime();
     if (this.keyboard.D && now - this.lastBottle > 1500) {
-      let bottle = new ThrowableObjects(this.character.x, this.character.y);
+      let bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50);
       this.throwableObjects.push(bottle);
       this.lastBottle = now;
     }
@@ -48,7 +51,7 @@ class World {
     if (this.character.isColliding(enemy)) {
       if (!this.collidingEnemies.has(key)) {
         this.character.hit();
-        this.statusBar.setPercentage(this.character.energy);
+        this.healthBar.setPercentage(this.character.energy);
         this.collidingEnemies.add(key);
       }
     } else {
@@ -68,7 +71,9 @@ class World {
     this.addToMap(this.character);
 
     this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBar);
+    this.addToMap(this.healthBar);
+    this.addToMap(this.weaponBar);
+    this.addToMap(this.coinsBar);
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.enemies);
