@@ -8,6 +8,7 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
+  lastBottle = 0;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -34,10 +35,11 @@ class World {
   }
 
   checkThrowObjects() {
-    if (this.keyboard.D) {
-      console.log(this.keyboard.D)
+    const now = new Date().getTime();
+    if (this.keyboard.D && now - this.lastBottle > 1500) {
       let bottle = new ThrowableObjects(this.character.x, this.character.y);
       this.throwableObjects.push(bottle);
+      this.lastBottle = now;
     }
   }
 
