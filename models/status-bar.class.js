@@ -40,32 +40,35 @@ class StatusBar extends DrawableObject {
 
     if (type === 'health') {
       this.statusImages = this.HEALTH_STATUS_IMAGES;
+      this.setPercentage(100, this.HEALTH_STATUS_IMAGES);
     } else if (type === 'weapon') {
       this.statusImages = this.WEAPON_STATUS_IMAGES;
+      this.setPercentage(100, this.WEAPON_STATUS_IMAGES);
     } else if (type === 'coins') {
       this.statusImages = this.COINS_STATUS_IMAGES;
+      this.setPercentage(100, this.COINS_STATUS_IMAGES);
     } else {
-      this.statusImages = this.HEALTH_STATUS_IMAGES; // fallback
+      this.statusImages = this.HEALTH_STATUS_IMAGES;
+      this.setPercentage(100, this.HEALTH_STATUS_IMAGES);
     }
-    this.setPercentage(100);
   }
 
-  setPercentage(percentange) {
-    let path = this.statusImages[this.resolveImageIndex(percentange)];
+  setPercentage(percentange, barImages) {
+    let path = barImages[this.resolveImageIndex(percentange)];
     this.img = this.imageCache[path];
   }
 
-  resolveImageIndex(energy) {
+  resolveImageIndex(resource) {
 
-    if (energy >= 100) {
+    if (resource >= 100) {
       return 5;
-    } else if (energy >= 80) {
+    } else if (resource >= 80) {
       return 4;
-    } else if (energy >= 60) {
+    } else if (resource >= 60) {
       return 3;
-    } else if (energy >= 40) {
+    } else if (resource >= 40) {
       return 2;
-    } else if (energy >= 20) {
+    } else if (resource >= 20) {
       return 1;
     } else {
       return 0;

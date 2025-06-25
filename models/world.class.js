@@ -39,10 +39,12 @@ class World {
 
   checkThrowObjects() {
     const now = new Date().getTime();
-    if (this.keyboard.D && now - this.lastBottle > 1500) {
+    if (this.keyboard.D && now - this.lastBottle > 1500 && this.character.bottles > 0) {
       let bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50);
       this.throwableObjects.push(bottle);
       this.lastBottle = now;
+      this.character.bottles -= 20;
+      this.weaponBar.setPercentage(this.character.bottles, this.weaponBar.WEAPON_STATUS_IMAGES);
     }
   }
 
@@ -50,8 +52,8 @@ class World {
     const key = enemy.id;
     if (this.character.isColliding(enemy)) {
       if (!this.collidingEnemies.has(key)) {
-        this.character.hit();
-        this.healthBar.setPercentage(this.character.energy);
+        this.character.hit(); 
+        this.healthBar.setPercentage(this.character.health, this.healthBar.HEALTH_STATUS_IMAGES);
         this.collidingEnemies.add(key);
       }
     } else {

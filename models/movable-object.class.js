@@ -12,7 +12,10 @@ class movableObject extends DrawableObject {
     right: 0,
   };
 
-  energy = 100;
+  coins = 0;
+  health = 100;
+  bottles = 100;
+
   lastHit = 0;
 
   isColliding(mo) {
@@ -25,9 +28,9 @@ class movableObject extends DrawableObject {
   }
 
   hit() {
-    this.energy -= 10;
-    if (this.energy <= 0) {
-      this.energy = 0;
+    this.health -= 10;
+    if (this.health <= 0) {
+      this.health = 0;
     } else {
       this.lastHit = new Date().getTime();
     }
@@ -40,7 +43,7 @@ class movableObject extends DrawableObject {
   }
 
   isDead() {
-    return this.energy == 0;
+    return this.health == 0;
   }
 
   moveRight() {
