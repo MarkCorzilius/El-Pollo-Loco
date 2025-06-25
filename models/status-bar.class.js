@@ -1,10 +1,10 @@
 class StatusBar extends DrawableObject {
   HEALTH_STATUS_IMAGES = [
-      "./img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png",
-      "./img/7_statusbars/1_statusbar/2_statusbar_health/green/20.png",
-      "./img/7_statusbars/1_statusbar/2_statusbar_health/green/40.png",
-      "./img/7_statusbars/1_statusbar/2_statusbar_health/green/60.png",
-      "./img/7_statusbars/1_statusbar/2_statusbar_health/green/80.png",
+    "./img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png",
+    "./img/7_statusbars/1_statusbar/2_statusbar_health/green/20.png",
+    "./img/7_statusbars/1_statusbar/2_statusbar_health/green/40.png",
+    "./img/7_statusbars/1_statusbar/2_statusbar_health/green/60.png",
+    "./img/7_statusbars/1_statusbar/2_statusbar_health/green/80.png",
     "./img/7_statusbars/1_statusbar/2_statusbar_health/green/100.png",
   ];
 
@@ -15,7 +15,7 @@ class StatusBar extends DrawableObject {
     "./img/7_statusbars/1_statusbar/3_statusbar_bottle/green/60.png",
     "./img/7_statusbars/1_statusbar/3_statusbar_bottle/green/80.png",
     "./img/7_statusbars/1_statusbar/3_statusbar_bottle/green/100.png",
-  ]
+  ];
 
   COINS_STATUS_IMAGES = [
     "./img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png",
@@ -24,7 +24,7 @@ class StatusBar extends DrawableObject {
     "./img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png",
     "./img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png",
     "./img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png",
-  ]
+  ];
 
   constructor(world, y, type) {
     super();
@@ -37,16 +37,19 @@ class StatusBar extends DrawableObject {
     this.type = type;
     this.width = 250;
     this.height = 70;
+    this.decideCurrentBar(type);
+  }
 
-    if (type === 'health') {
+  decideCurrentBar(type) {
+    if (type === "health") {
       this.statusImages = this.HEALTH_STATUS_IMAGES;
       this.setPercentage(100, this.HEALTH_STATUS_IMAGES);
-    } else if (type === 'weapon') {
+    } else if (type === "weapon") {
       this.statusImages = this.WEAPON_STATUS_IMAGES;
       this.setPercentage(100, this.WEAPON_STATUS_IMAGES);
-    } else if (type === 'coins') {
+    } else if (type === "coins") {
       this.statusImages = this.COINS_STATUS_IMAGES;
-      this.setPercentage(100, this.COINS_STATUS_IMAGES);
+      this.setPercentage(0, this.COINS_STATUS_IMAGES);
     } else {
       this.statusImages = this.HEALTH_STATUS_IMAGES;
       this.setPercentage(100, this.HEALTH_STATUS_IMAGES);
@@ -59,7 +62,6 @@ class StatusBar extends DrawableObject {
   }
 
   resolveImageIndex(resource) {
-
     if (resource >= 100) {
       return 5;
     } else if (resource >= 80) {

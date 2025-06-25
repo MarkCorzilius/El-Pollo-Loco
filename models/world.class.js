@@ -4,6 +4,14 @@ class World {
   healthBar = new StatusBar(this, 45, "health");
   coinsBar = new StatusBar(this, 100, "coins");
 
+  coins = [
+    new Coins(200, 100),
+    new Coins(600, 300),
+    new Coins(1000, 200),
+    new Coins(1200, 90),
+    new Coins(1500, 300),
+  ]
+
   throwableObjects = [new ThrowableObjects()];
   level = level1;
 
@@ -72,6 +80,7 @@ class World {
 
     this.addToMap(this.character);
 
+
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);
     this.addToMap(this.weaponBar);
@@ -79,6 +88,8 @@ class World {
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.enemies);
+
+    this.addObjectsToMap(this.coins);
 
     this.addObjectsToMap(this.throwableObjects);
 
