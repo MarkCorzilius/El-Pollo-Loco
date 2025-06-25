@@ -60,6 +60,9 @@ class Character extends movableObject {
 
   animate() {
     setInterval(() => {
+      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE) {
+        this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
+      }
       if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
         this.moveRight();
       }
