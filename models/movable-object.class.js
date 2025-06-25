@@ -5,17 +5,6 @@ class movableObject extends DrawableObject {
   speedY = 0;
   acceleration = 2;
 
-  offset = {
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  };
-
-  coins = 0;
-  health = 100;
-  bottles = 100;
-
   lastHit = 0;
 
   isColliding(mo) {
@@ -28,9 +17,9 @@ class movableObject extends DrawableObject {
   }
 
   hit() {
-    this.health -= 10;
-    if (this.health <= 0) {
-      this.health = 0;
+    this.healthTracker -= 10;
+    if (this.healthTracker <= 0) {
+      this.healthTracker = 0;
     } else {
       this.lastHit = new Date().getTime();
     }
@@ -43,7 +32,7 @@ class movableObject extends DrawableObject {
   }
 
   isDead() {
-    return this.health == 0;
+    return this.healthTracker == 0;
   }
 
   moveRight() {

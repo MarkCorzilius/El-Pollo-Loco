@@ -4,14 +4,6 @@ class World {
   healthBar = new StatusBar(this, 45, "health");
   coinsBar = new StatusBar(this, 100, "coins");
 
-  coins = [
-    new Coins(200, 100),
-    new Coins(600, 300),
-    new Coins(1000, 200),
-    new Coins(1200, 90),
-    new Coins(1500, 300),
-  ]
-
   throwableObjects = [new ThrowableObjects()];
   level = level1;
 
@@ -28,6 +20,7 @@ class World {
     this.draw();
     this.setWorld();
     this.collidingEnemies = new Set();
+    this.collidingCoins = new Set();
     this.startCollisitionCheck();
   }
 
@@ -39,35 +32,67 @@ class World {
   startCollisitionCheck() {
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
-        this.handleCollision(enemy);
+        this.handleEnemyCollisition(enemy);
         this.checkThrowObjects();
+      });
+      this.level.coins.forEach((coin, index) => {
+        this.handleCoinCollisition(coin, index);
       });
     }, 1000 / 60);
   }
 
   checkThrowObjects() {
     const now = new Date().getTime();
-    if (this.keyboard.D && now - this.lastBottle > 1500 && this.character.bottles > 0) {
+    if (this.keyboard.D && now - this.lastBottle > 1500 && this.character.bottlesTracker > 0) {
       let bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50);
       this.throwableObjects.push(bottle);
       this.lastBottle = now;
-      this.character.bottles -= 20;
-      this.weaponBar.setPercentage(this.character.bottles, this.weaponBar.WEAPON_STATUS_IMAGES);
+      this.character.bottlesTracker -= 20;
+      this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
     }
   }
 
-  handleCollision(enemy) {
+  handleEnemyCollisition(enemy) {
     const key = enemy.id;
     if (this.character.isColliding(enemy)) {
       if (!this.collidingEnemies.has(key)) {
-        this.character.hit(); 
-        this.healthBar.setPercentage(this.character.health, this.healthBar.HEALTH_STATUS_IMAGES);
+        this.character.hit();
+        this.healthBar.setPercentage(this.character.healthTracker, this.healthBar.HEALTH_STATUS_IMAGES);
         this.collidingEnemies.add(key);
       }
     } else {
       this.collidingEnemies.delete(key);
     }
   }
+
+  handleCoinCollisition(coin, index) {
+    const key = coin.id;
+    if (this.character.isColliding(coin)) {
+      if (!this.collidingCoins.has(key)) {
+        this.increaseCoinBar();
+        this.deleteCoinFromUI(index);
+        this.collidingCoins.add(key);
+      }
+    } else {
+      this.collidingCoins.delete(key);
+    }
+  }
+
+  increaseCoinBar() {
+    this.character.coinsTracker += 20;
+    if (this.character.coinsTracker >= 100) {
+      this.character.coinsTracker = 100;
+    }
+    this.coinsBar.setPercentage(this.character.coinsTracker, this.coinsBar.COINS_STATUS_IMAGES);
+  }
+
+  deleteCoinFromUI(index) {
+    this.level.coins.splice(index, 1);
+  }
+
+  handleBossCollisition() {}
+
+  handleBottlePickup() {}
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -80,7 +105,6 @@ class World {
 
     this.addToMap(this.character);
 
-
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);
     this.addToMap(this.weaponBar);
@@ -89,7 +113,7 @@ class World {
 
     this.addObjectsToMap(this.level.enemies);
 
-    this.addObjectsToMap(this.coins);
+    this.addObjectsToMap(this.level.coins);
 
     this.addObjectsToMap(this.throwableObjects);
 

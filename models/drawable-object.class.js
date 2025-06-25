@@ -6,6 +6,11 @@ class DrawableObject {
   height = 100;
   imageCache = {};
   currentImage = 0;
+  offset = { top: 0, left: 0, right: 0, bottom: 0 };
+  coinsTracker = 0;
+  healthTracker = 100;
+  bottlesTracker = 100;
+
 
   loadImage(path) {
     this.img = new Image();
@@ -17,7 +22,7 @@ class DrawableObject {
   }
 
   drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
+    if (this instanceof Character || this instanceof Chicken || this instanceof Endboss || this instanceof Coins) {
       ctx.beginPath();
       ctx.lineWidth = "6";
       ctx.strokeStyle = "red";
