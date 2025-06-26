@@ -1,4 +1,4 @@
-class World {
+class World extends movableObject {
   character = new Character();
   weaponBar = new StatusBar(this, 0, "weapon");
   healthBar = new StatusBar(this, 45, "health");
@@ -14,6 +14,7 @@ class World {
   lastBottle = 0;
 
   constructor(canvas, keyboard) {
+    super();
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
@@ -21,6 +22,7 @@ class World {
     this.setWorld();
     this.collidingEnemies = new Set();
     this.collidingCoins = new Set();
+    this.collidingBottleHit = new Set();
     this.startCollisitionCheck();
   }
 
@@ -38,6 +40,7 @@ class World {
       this.level.coins.forEach((coin, index) => {
         this.handleCoinCollisition(coin, index);
       });
+      this.handleBottleAttack();
     }, 1000 / 60);
   }
 
@@ -65,6 +68,38 @@ class World {
     }
   }
 
+  // if hit one of the enemies –> stop;
+  // play animation of the bottle hit.
+
+  handleBottleAttack() {
+    this.throwableObjects.forEach((bottle) => {
+      this.level.enemies.forEach((enemy) => {
+        const key = enemy.id;
+        if (bottle.isColliding(enemy)) {
+          if (!this.collidingBottleHit.has(key)) {
+            this.bottleHit(bottle);
+            this.collidingBottleHit.add(key);
+          }
+        } else {
+          this.collidingBottleHit.delete(key);
+        }
+      });
+    });
+  }
+
+  bottleHit(bottle) {
+    bottle.gravityDisabled = true;
+    console.log(bottle.gravityDisabled)
+    this.playBottleHitAnimation(bottle);
+  }
+
+  playBottleHitAnimation(bottle) {
+    console.log(bottle.BOTTLE_SPLASH_IMAGES);
+    setInterval(() => {
+      bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES);
+    }, 25);
+  }
+
   handleCoinCollisition(coin, index) {
     const key = coin.id;
     if (this.character.isColliding(coin)) {
@@ -89,10 +124,6 @@ class World {
   deleteCoinFromUI(index) {
     this.level.coins.splice(index, 1);
   }
-
-  handleBossCollisition() {}
-
-  handleBottlePickup() {}
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
