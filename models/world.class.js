@@ -139,7 +139,7 @@ class World extends movableObject {
     const key = bottle.id;
     if (this.character.isColliding(bottle)) {
       if (!this.collidingCollectableBottle.has(key)) {
-        this.collectBottle(bottle, index);
+        this.collectBottle(index);
         this.collidingCollectableBottle.add(key);
       }
     } else {
@@ -147,7 +147,7 @@ class World extends movableObject {
     }
   }
 
-  collectBottle(bottle, index) {
+  collectBottle(index) {
     if (this.character.bottlesTracker >= 100) return;
     this.character.bottlesTracker += 20;
     // increase bottle amount (bar and ...)

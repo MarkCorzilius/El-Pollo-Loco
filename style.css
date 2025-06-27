@@ -1,5 +1,7 @@
 canvas {
   background-color: black;
+  border: 1px solid white;
+  border-radius: 20px;
 }
 
 body {
@@ -7,7 +9,41 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 10vh;
+  justify-content: center;
   height: 100vh;
   margin: 0;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('./img/mexican-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  margin-bottom: 80px;
+}
+
+.navbar button {
+  border: none;
+  border-radius: none;
+  outline: none;
+  height: 80px;
+  width: 120px;
+  border-radius: 30px;
+  cursor: pointer;
+  background-color: white;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.navbar button:hover {
+  transform: scale(1.1);
+  background-color: sandybrown;
+  outline: 0.3px solid red;
 }
