@@ -43,7 +43,7 @@ class World extends movableObject {
       });
       this.level.collectableObjects.forEach((collectableBottle, index) => {
         this.handleCollectableBottleCollisition(collectableBottle, index);
-      })
+      });
       this.handleBottleAttack();
     }, 1000 / 60);
   }
@@ -52,7 +52,7 @@ class World extends movableObject {
     const now = new Date().getTime();
     if (this.keyboard.D && now - this.lastBottle > 1500 && this.character.bottlesTracker > 0) {
       let bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50);
-      bottle.world = this
+      bottle.world = this;
       this.throwableObjects.push(bottle);
       this.lastBottle = now;
       this.character.bottlesTracker -= 20;
@@ -98,14 +98,17 @@ class World extends movableObject {
     this.playBottleHitAnimation(bottle, index);
   }
 
-  playBottleHitAnimation(bottle, index) {
+  playBottleHitAnimation(bottle, i) {
     bottle.currentImage = 0;
     bottle.splashInterval = setInterval(() => {
       bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
 
       if (bottle.currentImage >= bottle.BOTTLE_SPLASH_IMAGES.length) {
         clearInterval(bottle.splashInterval);
-        this.throwableObjects.splice(index, 1);
+        const index = this.throwableObjects.indexOf(bottle);
+        if (index !== -1) {
+          this.throwableObjects.splice(index, 1);
+        }
       }
     }, 50);
   }
@@ -150,7 +153,6 @@ class World extends movableObject {
   collectBottle(index) {
     if (this.character.bottlesTracker >= 100) return;
     this.character.bottlesTracker += 20;
-    // increase bottle amount (bar and ...)
     this.level.collectableObjects.splice(index, 1);
     console.log(this.character.bottlesTracker);
     this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
