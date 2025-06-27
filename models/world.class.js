@@ -4,7 +4,7 @@ class World extends movableObject {
   healthBar = new StatusBar(this, 45, "health");
   coinsBar = new StatusBar(this, 100, "coins");
 
-  throwableObjects = [new ThrowableObjects(this.character.x, this.character.y ,this.character)];
+  throwableObjects = [];
   level = level1;
 
   canvas;
@@ -61,7 +61,7 @@ class World extends movableObject {
   }
 
   adjustBottleForDirection() {
-    let bottle
+    let bottle;
     if (this.character.otherDirection) {
       bottle = new ThrowableObjects(this.character.x, this.character.y + 50, this.character);// adjust for direction
     } else {
@@ -73,7 +73,7 @@ class World extends movableObject {
   handleEnemyCollisition(enemy) {
     const key = enemy.id;
     if (this.character.isColliding(enemy)) {
-      if (!this.collidingEnemies.has(key)) {
+      if (!this.collidingEnemies.has(key) && !enemy.isDead) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.healthTracker, this.healthBar.HEALTH_STATUS_IMAGES);
         this.collidingEnemies.add(key);
@@ -89,7 +89,7 @@ class World extends movableObject {
         const key = enemy.id;
         if (bottle.isColliding(enemy)) {
           if (!this.collidingBottleHit.has(key)) {
-            this.bottleHit(bottle);
+            this.bottleHit(bottle, enemy);
             this.collidingBottleHit.add(key);
           }
         } else {
@@ -99,17 +99,18 @@ class World extends movableObject {
     });
   }
 
-  bottleHit(bottle) {
+  bottleHit(bottle, enemy) {
     bottle.gravityDisabled = true;
     clearInterval(bottle.rotationInterval);
     clearInterval(bottle.gravityInterval);
-    this.playBottleHitAnimation(bottle);
+    this.playBottleHitAnimation(bottle, enemy);
   }
 
-  playBottleHitAnimation(bottle) {
+  playBottleHitAnimation(bottle, enemy) {
     bottle.currentImage = 0;
     bottle.splashInterval = setInterval(() => {
       bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
+      this.handleEnemyHit(enemy);
 
       if (bottle.currentImage >= bottle.BOTTLE_SPLASH_IMAGES.length) {
         clearInterval(bottle.splashInterval);
@@ -119,6 +120,31 @@ class World extends movableObject {
         }
       }
     }, 50);
+  }
+
+  handleEnemyHit(enemy) {
+    if (enemy instanceof Chicken) {
+      console.log('chicken is dead!')
+      const index = this.level.enemies.indexOf(enemy);
+      this.showDeadChicken(enemy, index);
+    }
+    if (enemy instanceof Endboss) {
+      console.log("Endboss got damage")
+      // play animation 
+      // create hp amount for boss
+      // take hp from boss
+      // if 0 –> play dead animation
+    }
+  }
+
+  showDeadChicken(enemy, index) {
+    clearInterval(enemy.moveLeftInterval);
+    clearInterval(enemy.walkingInterval);
+    enemy.loadImage('./img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+    enemy.isDead = true;
+    setTimeout(() => {
+      this.level.enemies.splice(index, 1);
+    }, 10000);
   }
 
   handleCoinCollisition(coin, index) {

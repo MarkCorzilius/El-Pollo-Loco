@@ -15,7 +15,7 @@ class movableObject extends DrawableObject {
       this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom
     ); // Top -> Bottom
   }
-  
+
   hit() {
     this.healthTracker -= 10;
     if (this.healthTracker <= 0) {

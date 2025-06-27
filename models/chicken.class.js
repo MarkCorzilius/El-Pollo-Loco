@@ -1,4 +1,7 @@
 class Chicken extends movableObject {
+  moveLeftInterval;
+  walkingInterval;
+  isDead = false;
 
   offset = {
     top: 10,
@@ -26,10 +29,16 @@ class Chicken extends movableObject {
   }
 
   animate() {
-    setInterval(() => {
+   this.walkingInterval = setInterval(() => {
       this.playObjectAnimation(this.IMAGES_WALKING);
     }, 200);
 
     this.moveLeft();
+  }
+
+  moveLeft() {
+    this.moveLeftInterval = setInterval(() => {
+      this.x -= this.speed;
+    }, 1000 / 60);
   }
 }
