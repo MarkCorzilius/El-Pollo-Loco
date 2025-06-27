@@ -45,11 +45,19 @@ class movableObject extends DrawableObject {
     }, 1000 / 60);
   }
 
-  playObjectAnimation(images) {
-    let i = this.currentImage % images.length;
-    let path = images[i];
-    this.img = this.imageCache[path];
-    this.currentImage++;
+  playObjectAnimation(images, stopAtEnd = false) {
+    if (stopAtEnd) {
+      if (this.currentImage < images.length) {
+        let path = images[this.currentImage];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+      }
+      // Else: do nothing, animation has ended
+    } else {
+      let path = images[this.currentImage % images.length];
+      this.img = this.imageCache[path];
+      this.currentImage++;
+    }
   }
 
   applyGravity() {
@@ -58,13 +66,26 @@ class movableObject extends DrawableObject {
         if (this.gravityDisabled) return;
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
+        this.checkGroundImpact();
       }
     }, 1000 / 25);
   }
 
+  checkGroundImpact() {
+    if (this instanceof ThrowableObjects && this.y >= 380 && !this.hasExploded) {
+      this.hasExploded = true;
+      if (this.world && typeof this.world.bottleHit === "function") {
+        const index = this.world.throwableObjects.indexOf(this);
+        if (index !== -1) {
+          this.world.bottleHit(this, index);
+        }
+      }
+    }
+  }
+
   isAboveGround() {
     if (this instanceof ThrowableObjects) {
-      return true;
+        return this.y <= 380;
     }
     return this.y < 225;
   }

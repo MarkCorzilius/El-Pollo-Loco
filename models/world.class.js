@@ -48,10 +48,13 @@ class World extends movableObject {
     const now = new Date().getTime();
     if (this.keyboard.D && now - this.lastBottle > 1500 && this.character.bottlesTracker > 0) {
       let bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50);
+      bottle.world = this
       this.throwableObjects.push(bottle);
       this.lastBottle = now;
       this.character.bottlesTracker -= 20;
       this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
+      console.log("Bottle created at", bottle.x, bottle.y);
+      console.log("Total bottles:", this.throwableObjects.length);
     }
   }
 
@@ -68,16 +71,13 @@ class World extends movableObject {
     }
   }
 
-  // if hit one of the enemies –> stop;
-  // play animation of the bottle hit.
-
   handleBottleAttack() {
-    this.throwableObjects.forEach((bottle) => {
+    this.throwableObjects.forEach((bottle, index) => {
       this.level.enemies.forEach((enemy) => {
         const key = enemy.id;
         if (bottle.isColliding(enemy)) {
           if (!this.collidingBottleHit.has(key)) {
-            this.bottleHit(bottle);
+            this.bottleHit(bottle, index);
             this.collidingBottleHit.add(key);
           }
         } else {
@@ -87,17 +87,23 @@ class World extends movableObject {
     });
   }
 
-  bottleHit(bottle) {
+  bottleHit(bottle, index) {
     bottle.gravityDisabled = true;
-    console.log(bottle.gravityDisabled)
-    this.playBottleHitAnimation(bottle);
+    clearInterval(bottle.rotationInterval);
+    clearInterval(bottle.gravityInterval);
+    this.playBottleHitAnimation(bottle, index);
   }
 
-  playBottleHitAnimation(bottle) {
-    console.log(bottle.BOTTLE_SPLASH_IMAGES);
-    setInterval(() => {
-      bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES);
-    }, 25);
+  playBottleHitAnimation(bottle, index) {
+    bottle.currentImage = 0;
+    bottle.splashInterval = setInterval(() => {
+      bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
+
+      if (bottle.currentImage >= bottle.BOTTLE_SPLASH_IMAGES.length) {
+        clearInterval(bottle.splashInterval);
+        this.throwableObjects.splice(index, 1);
+      }
+    }, 50);
   }
 
   handleCoinCollisition(coin, index) {

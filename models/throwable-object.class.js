@@ -16,6 +16,9 @@ class ThrowableObjects extends movableObject {
   ];
 
   offset = { top: 50, left: 40, right: 40, bottom: 50 };
+  rotationInterval;
+  gravityInterval;
+  gravityDisabled;
 
   constructor(x, y) {
     super().loadImage(`./img/6_salsa_bottle/salsa_bottle.png`);
@@ -28,19 +31,18 @@ class ThrowableObjects extends movableObject {
   }
 
   throw(x, y) {
-      this.x = x;
-      this.y = y;
-      this.speedY = 20;
-      setInterval(() => {
-          this.playObjectAnimation(this.BOTTLE_ROTATION_IMAGES);
-      }, 50);
+    this.x = x;
+    this.y = y;
+    this.speedY = 20;
+    this.rotationInterval = setInterval(() => {
+      this.playObjectAnimation(this.BOTTLE_ROTATION_IMAGES);
+    }, 50);
 
     this.applyGravity();
-    setInterval(() => {
+    this.gravityInterval = setInterval(() => {
       if (this.gravityDisabled) return;
       this.x += 10;
     }, 25);
   }
-}
 
-// bottle splash –> disappear
+}
