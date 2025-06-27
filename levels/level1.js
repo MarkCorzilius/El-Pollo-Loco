@@ -52,5 +52,11 @@ const level1 = new Level(
         new Coins(1000, 200), 
         new Coins(1200, 90), 
         new Coins(1500, 300),
+    ],
+
+    [
+        new CollectableObject('./img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 600, 350),
+        new CollectableObject('./img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 1000, 355),
+        new CollectableObject('./img/6_salsa_bottle/1_salsa_bottle_on_ground.png', 1400, 355),
     ]
 );

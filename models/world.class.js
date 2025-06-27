@@ -23,6 +23,7 @@ class World extends movableObject {
     this.collidingEnemies = new Set();
     this.collidingCoins = new Set();
     this.collidingBottleHit = new Set();
+    this.collidingCollectableBottle = new Set();
     this.startCollisitionCheck();
   }
 
@@ -40,6 +41,9 @@ class World extends movableObject {
       this.level.coins.forEach((coin, index) => {
         this.handleCoinCollisition(coin, index);
       });
+      this.level.collectableObjects.forEach((collectableBottle, index) => {
+        this.handleCollectableBottleCollisition(collectableBottle, index);
+      })
       this.handleBottleAttack();
     }, 1000 / 60);
   }
@@ -131,12 +135,35 @@ class World extends movableObject {
     this.level.coins.splice(index, 1);
   }
 
+  handleCollectableBottleCollisition(bottle, index) {
+    const key = bottle.id;
+    if (this.character.isColliding(bottle)) {
+      if (!this.collidingCollectableBottle.has(key)) {
+        this.collectBottle(bottle, index);
+        this.collidingCollectableBottle.add(key);
+      }
+    } else {
+      this.collidingCollectableBottle.delete(key);
+    }
+  }
+
+  collectBottle(bottle, index) {
+    if (this.character.bottlesTracker >= 100) return;
+    this.character.bottlesTracker += 20;
+    // increase bottle amount (bar and ...)
+    this.level.collectableObjects.splice(index, 1);
+    console.log(this.character.bottlesTracker);
+    this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
+  }
+
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.backgroundObjects);
+
+    this.addObjectsToMap(this.level.collectableObjects);
 
     this.addObjectsToMap(this.level.clouds);
 
