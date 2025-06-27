@@ -41,11 +41,12 @@ class Character extends movableObject {
   speed = 6;
 
   offset = {
-    top: 90,
-    bottom: 0,
-    left: 30,
-    right: 35,
+    top: 100,
+    bottom: 12,
+    left: 35,
+    right: 44,
   };
+  
   energy = 100;
 
   constructor() {
@@ -78,7 +79,7 @@ class Character extends movableObject {
         this.jump();
       }
 
-      this.world.camera_x = -this.x + 100;
+      this.world.camera_x = -this.x + 200;
     }, 1000 / 60);
 
     setInterval(() => {

@@ -20,20 +20,29 @@ class ThrowableObjects extends movableObject {
   gravityInterval;
   gravityDisabled;
 
-  constructor(x, y) {
+  constructor(x, y, character) {
     super().loadImage(`./img/6_salsa_bottle/salsa_bottle.png`);
     this.gravityDisabled = false;
     this.loadMovementSprites(this.BOTTLE_ROTATION_IMAGES);
     this.loadMovementSprites(this.BOTTLE_SPLASH_IMAGES);
     this.height = 60;
     this.width = 60;
-    this.throw(x, y);
+    this.character = character;
+    this.throw(x, y, this.character);
   }
 
-  throw(x, y) {
+  throw(x, y, character) {
     this.x = x;
     this.y = y;
-    this.speedY = 20;
+    this.speedY = 15;
+    if (character.otherDirection) {
+        this.throwLeft();
+    } else {
+        this.throwRight();
+    }
+  }
+
+  throwLeft() {
     this.rotationInterval = setInterval(() => {
       this.playObjectAnimation(this.BOTTLE_ROTATION_IMAGES);
     }, 50);
@@ -41,8 +50,19 @@ class ThrowableObjects extends movableObject {
     this.applyGravity();
     this.gravityInterval = setInterval(() => {
       if (this.gravityDisabled) return;
-      this.x += 10;
+      this.x -= 15;
     }, 25);
   }
 
+  throwRight() {
+    this.rotationInterval = setInterval(() => {
+      this.playObjectAnimation(this.BOTTLE_ROTATION_IMAGES);
+    }, 50);
+
+    this.applyGravity();
+    this.gravityInterval = setInterval(() => {
+      if (this.gravityDisabled) return;
+      this.x += 15;
+    }, 25);
+  }
 }

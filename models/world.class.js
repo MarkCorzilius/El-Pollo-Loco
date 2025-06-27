@@ -4,7 +4,7 @@ class World extends movableObject {
   healthBar = new StatusBar(this, 45, "health");
   coinsBar = new StatusBar(this, 100, "coins");
 
-  throwableObjects = [new ThrowableObjects()];
+  throwableObjects = [new ThrowableObjects(this.character.x, this.character.y ,this.character)];
   level = level1;
 
   canvas;
@@ -51,15 +51,23 @@ class World extends movableObject {
   checkThrowObjects() {
     const now = new Date().getTime();
     if (this.keyboard.D && now - this.lastBottle > 1500 && this.character.bottlesTracker > 0) {
-      let bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50);
+      let bottle = this.adjustBottleForDirection();
       bottle.world = this;
       this.throwableObjects.push(bottle);
       this.lastBottle = now;
       this.character.bottlesTracker -= 20;
       this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
-      console.log("Bottle created at", bottle.x, bottle.y);
-      console.log("Total bottles:", this.throwableObjects.length);
     }
+  }
+
+  adjustBottleForDirection() {
+    let bottle
+    if (this.character.otherDirection) {
+      bottle = new ThrowableObjects(this.character.x, this.character.y + 50, this.character);// adjust for direction
+    } else {
+      bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50, this.character);// adjust for direction
+    }
+    return bottle;
   }
 
   handleEnemyCollisition(enemy) {
@@ -76,12 +84,12 @@ class World extends movableObject {
   }
 
   handleBottleAttack() {
-    this.throwableObjects.forEach((bottle, index) => {
+    this.throwableObjects.forEach((bottle) => {
       this.level.enemies.forEach((enemy) => {
         const key = enemy.id;
         if (bottle.isColliding(enemy)) {
           if (!this.collidingBottleHit.has(key)) {
-            this.bottleHit(bottle, index);
+            this.bottleHit(bottle);
             this.collidingBottleHit.add(key);
           }
         } else {
@@ -91,14 +99,14 @@ class World extends movableObject {
     });
   }
 
-  bottleHit(bottle, index) {
+  bottleHit(bottle) {
     bottle.gravityDisabled = true;
     clearInterval(bottle.rotationInterval);
     clearInterval(bottle.gravityInterval);
-    this.playBottleHitAnimation(bottle, index);
+    this.playBottleHitAnimation(bottle);
   }
 
-  playBottleHitAnimation(bottle, i) {
+  playBottleHitAnimation(bottle) {
     bottle.currentImage = 0;
     bottle.splashInterval = setInterval(() => {
       bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
