@@ -46,8 +46,9 @@ class Character extends movableObject {
     left: 35,
     right: 44,
   };
-  
+
   energy = 100;
+  enemyWasJumpedOn;
 
   constructor() {
     super();

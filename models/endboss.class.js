@@ -10,8 +10,9 @@ class Endboss extends movableObject {
     left: 30,
     right: 35,
   };
+  speed = 0.3;
 
-  IMAGES_WALKING = [
+  IMAGES_ALERT = [
     "./img/4_enemie_boss_chicken/2_alert/G5.png",
     "./img/4_enemie_boss_chicken/2_alert/G6.png",
     "./img/4_enemie_boss_chicken/2_alert/G7.png",
@@ -21,6 +22,13 @@ class Endboss extends movableObject {
     "./img/4_enemie_boss_chicken/2_alert/G11.png",
     "./img/4_enemie_boss_chicken/2_alert/G12.png",
   ];
+
+  IMAGES_WALKING = [
+    "./img/4_enemie_boss_chicken/1_walk/G1.png",
+    "./img/4_enemie_boss_chicken/1_walk/G2.png",
+    "./img/4_enemie_boss_chicken/1_walk/G3.png",
+    "./img/4_enemie_boss_chicken/1_walk/G4.png",
+  ]
 
   constructor() {
     super();
@@ -34,6 +42,13 @@ class Endboss extends movableObject {
   animate() {
     setInterval(() => {
       this.playObjectAnimation(this.IMAGES_WALKING);
-    }, 1000);
+    }, 200);
+    this.moveLeft()
   }
 }
+
+
+// endboss stays
+// endboss in visiblity –> agro –> walking;
+// if near character –> attack
+// run after character

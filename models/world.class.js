@@ -63,9 +63,9 @@ class World extends movableObject {
   adjustBottleForDirection() {
     let bottle;
     if (this.character.otherDirection) {
-      bottle = new ThrowableObjects(this.character.x, this.character.y + 50, this.character);// adjust for direction
+      bottle = new ThrowableObjects(this.character.x, this.character.y + 50, this.character); // adjust for direction
     } else {
-      bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50, this.character);// adjust for direction
+      bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50, this.character); // adjust for direction
     }
     return bottle;
   }
@@ -73,6 +73,7 @@ class World extends movableObject {
   handleEnemyCollisition(enemy) {
     const key = enemy.id;
     if (this.character.isColliding(enemy)) {
+      this.didJumpOnChicken(enemy);
       if (!this.collidingEnemies.has(key) && !enemy.isDead) {
         this.character.hit();
         this.healthBar.setPercentage(this.character.healthTracker, this.healthBar.HEALTH_STATUS_IMAGES);
@@ -80,6 +81,19 @@ class World extends movableObject {
       }
     } else {
       this.collidingEnemies.delete(key);
+    }
+  }
+
+  didJumpOnChicken(enemy) {
+    if (enemy instanceof Chicken) {
+      this.character.enemyWasJumpedOn = false;
+      const characterBottom = this.character.y + this.character.height;
+      const enemyTop = enemy.y + enemy.offset.top;
+    
+      if (this.character.speedY < 0 && characterBottom <= enemyTop + enemy.height / 2) {
+        this.character.enemyWasJumpedOn = true;
+        this.handleEnemyHit(enemy);
+      }
     }
   }
 
@@ -124,13 +138,13 @@ class World extends movableObject {
 
   handleEnemyHit(enemy) {
     if (enemy instanceof Chicken) {
-      console.log('chicken is dead!')
+      console.log("chicken is dead!");
       const index = this.level.enemies.indexOf(enemy);
       this.showDeadChicken(enemy, index);
     }
     if (enemy instanceof Endboss) {
-      console.log("Endboss got damage")
-      // play animation 
+      console.log("Endboss got damage");
+      // play animation
       // create hp amount for boss
       // take hp from boss
       // if 0 –> play dead animation
@@ -140,7 +154,7 @@ class World extends movableObject {
   showDeadChicken(enemy, index) {
     clearInterval(enemy.moveLeftInterval);
     clearInterval(enemy.walkingInterval);
-    enemy.loadImage('./img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+    enemy.loadImage("./img/3_enemies_chicken/chicken_normal/2_dead/dead.png");
     enemy.isDead = true;
     setTimeout(() => {
       this.level.enemies.splice(index, 1);
@@ -188,7 +202,6 @@ class World extends movableObject {
     if (this.character.bottlesTracker >= 100) return;
     this.character.bottlesTracker += 20;
     this.level.collectableObjects.splice(index, 1);
-    console.log(this.character.bottlesTracker);
     this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
   }
 

@@ -17,6 +17,7 @@ class movableObject extends DrawableObject {
   }
 
   hit() {
+    if (this.enemyWasJumpedOn) return;
     this.healthTracker -= 10;
     if (this.healthTracker <= 0) {
       this.healthTracker = 0;
