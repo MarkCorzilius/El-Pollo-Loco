@@ -12,6 +12,7 @@ class World extends movableObject {
   keyboard;
   camera_x = 0;
   lastBottle = 0;
+  endboss;
 
   constructor(canvas, keyboard) {
     super();
@@ -24,7 +25,10 @@ class World extends movableObject {
     this.collidingCoins = new Set();
     this.collidingBottleHit = new Set();
     this.collidingCollectableBottle = new Set();
+    this.endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+    this.collidingEndboss = new Set();
     this.startCollisitionCheck();
+    this.getDistanceBetweenEndbossAndCharacter();
   }
 
   setWorld() {
@@ -89,7 +93,7 @@ class World extends movableObject {
       this.character.enemyWasJumpedOn = false;
       const characterBottom = this.character.y + this.character.height;
       const enemyTop = enemy.y + enemy.offset.top;
-    
+
       if (this.character.speedY < 0 && characterBottom <= enemyTop + enemy.height / 2) {
         this.character.enemyWasJumpedOn = true;
         this.handleEnemyHit(enemy);
@@ -117,14 +121,16 @@ class World extends movableObject {
     bottle.gravityDisabled = true;
     clearInterval(bottle.rotationInterval);
     clearInterval(bottle.gravityInterval);
-    this.playBottleHitAnimation(bottle, enemy);
+
+    this.handleEnemyHit(enemy);
+
+    this.playBottleHitAnimation(bottle);
   }
 
-  playBottleHitAnimation(bottle, enemy) {
+  playBottleHitAnimation(bottle) {
     bottle.currentImage = 0;
     bottle.splashInterval = setInterval(() => {
       bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
-      this.handleEnemyHit(enemy);
 
       if (bottle.currentImage >= bottle.BOTTLE_SPLASH_IMAGES.length) {
         clearInterval(bottle.splashInterval);
@@ -138,26 +144,51 @@ class World extends movableObject {
 
   handleEnemyHit(enemy) {
     if (enemy instanceof Chicken) {
-      console.log("chicken is dead!");
-      const index = this.level.enemies.indexOf(enemy);
-      this.showDeadChicken(enemy, index);
+      this.showDeadChicken(enemy);
     }
     if (enemy instanceof Endboss) {
-      console.log("Endboss got damage");
-      // play animation
-      // create hp amount for boss
-      // take hp from boss
+      this.endboss.hp -= 50;
+      this.hurtEndboss(this.endboss.hp);
       // if 0 –> play dead animation
     }
   }
 
-  showDeadChicken(enemy, index) {
+  hurtEndboss(hp) {
+    clearInterval(this.endboss.alertAndWalkingInterval);
+    clearInterval(this.endboss.movingInterval);
+    this.endboss.movingInterval = null;
+    clearInterval(this.deadEndbossInterval);
+    clearInterval(this.hurtEndbossInterval);
+
+    this.endboss.currentImage = 0;
+
+    if (hp <= 0) {
+      this.endboss.hp = 0;
+      this.deadEndbossInterval = setInterval(() => {
+        this.endboss.playObjectAnimation(this.endboss.IMAGES_DEAD, true);
+      }, 200);
+    } else {
+      this.hurtEndbossInterval = setInterval(() => {
+        this.endboss.playObjectAnimation(this.endboss.IMAGES_HURT, true);
+      }, 200);
+
+      setTimeout(() => {
+        clearInterval(this.hurtEndbossInterval);
+
+        this.endboss.currentImage = 0;
+        this.endboss.animate();
+      }, this.endboss.IMAGES_HURT.length * 400);
+    }
+  }
+
+  showDeadChicken(enemy) {
     clearInterval(enemy.moveLeftInterval);
     clearInterval(enemy.walkingInterval);
     enemy.loadImage("./img/3_enemies_chicken/chicken_normal/2_dead/dead.png");
     enemy.isDead = true;
     setTimeout(() => {
-      this.level.enemies.splice(index, 1);
+      const index = this.level.enemies.indexOf(enemy);
+      this.level.enemies.indexOf(index, 1);
     }, 10000);
   }
 
@@ -267,4 +298,19 @@ class World extends movableObject {
     this.ctx.restore();
     object.x = object.x * -1;
   }
+
+  getDistanceBetweenEndbossAndCharacter() {
+    setInterval(() => {
+      this.endboss.alertSituation = false;
+
+      let characterX = this.character.x;
+      let endbossX = this.endboss.x;
+      this.distanceCharacterEndboss = Math.abs(characterX - endbossX);
+      if (this.distanceCharacterEndboss <= 490) {
+        this.endboss.alertSituation = true;
+      }
+    }, 50);
+  }
+
+
 }
