@@ -14,6 +14,7 @@ class Endboss extends movableObject {
   hp;
   alertSituation;
   isDead = false;
+  isHurt = false;
 
   IMAGES_ALERT = [
     "./img/4_enemie_boss_chicken/2_alert/G5.png",
@@ -65,9 +66,11 @@ class Endboss extends movableObject {
       if (this.alertSituation) {
         this.playObjectAnimation(this.IMAGES_ALERT, true);  
         setTimeout(() => {
-          this.playObjectAnimation(this.IMAGES_WALKING, false);
-          this.startMoving();
-        }, 1000);  
+          if (!this.isHurt) {
+            this.playObjectAnimation(this.IMAGES_WALKING, false);
+            this.startMoving();
+          }
+        }, 300);  
       }
     }, 300);
   }

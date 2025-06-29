@@ -148,6 +148,7 @@ class World extends movableObject {
     }
     if (enemy instanceof Endboss) {
       this.endboss.hp -= 50;
+      this.endboss.isHurt = true;
       this.hurtEndboss(this.endboss.hp);
       // if 0 –> play dead animation
     }
@@ -176,6 +177,7 @@ class World extends movableObject {
         clearInterval(this.hurtEndbossInterval);
 
         this.endboss.currentImage = 0;
+        this.endboss.isHurt = false;
         this.endboss.animate();
       }, this.endboss.IMAGES_HURT.length * 400);
     }
