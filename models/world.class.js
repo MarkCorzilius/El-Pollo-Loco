@@ -17,6 +17,7 @@ class World extends movableObject {
   constructor(canvas, keyboard) {
     super();
     this.throwableManager = new ThrowableManager(this);
+    this.chickenHandler = new ChickenHandler(this);
     this.coinCollector = new CoinCollector(this);
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -56,7 +57,7 @@ class World extends movableObject {
   handleEnemyCollisition(enemy) {
     const key = enemy.id;
     if (this.character.isColliding(enemy)) {
-      this.didJumpOnChicken(enemy);
+      this.chickenHandler.didJumpOnChicken(enemy);
       if (!this.collidingEnemies.has(key) && !enemy.isDead) {
         this.character.hit(10);
         this.healthBar.setPercentage(this.character.healthTracker, this.healthBar.HEALTH_STATUS_IMAGES);
@@ -67,22 +68,11 @@ class World extends movableObject {
     }
   }
 
-  didJumpOnChicken(enemy) {
-    if (enemy instanceof Chicken) {
-      this.character.enemyWasJumpedOn = false;
-      const characterBottom = this.character.y + this.character.height;
-      const enemyTop = enemy.y + enemy.offset.top;
 
-      if (this.character.speedY < 0 && characterBottom <= enemyTop + enemy.height / 2) {
-        this.character.enemyWasJumpedOn = true;
-        this.handleEnemyHit(enemy);
-      }
-    }
-  }
 
   handleEnemyHit(enemy) {
     if (enemy instanceof Chicken) {
-      this.showDeadChicken(enemy);
+      this.chickenHandler.showDeadChicken(enemy);
     }
     if (enemy instanceof Endboss) {
       this.endboss.hp -= 50;
@@ -128,17 +118,6 @@ class World extends movableObject {
       }
 
     }
-  }
-
-  showDeadChicken(enemy) {
-    clearInterval(enemy.moveLeftInterval);
-    clearInterval(enemy.walkingInterval);
-    enemy.loadImage("./img/3_enemies_chicken/chicken_normal/2_dead/dead.png");
-    enemy.isDead = true;
-    setTimeout(() => {
-      const index = this.level.enemies.indexOf(enemy);
-      this.level.enemies.indexOf(index, 1);
-    }, 10000);
   }
 
   handleCollectableBottleCollisition(bottle, index) {

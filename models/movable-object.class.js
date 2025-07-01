@@ -67,21 +67,8 @@ class movableObject extends DrawableObject {
         if (this.gravityDisabled) return;
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
-        this.checkGroundImpact();
       }
     }, 1000 / 25);
-  }
-
-  checkGroundImpact() {
-    if (this instanceof ThrowableObjects && this.y >= 380 && !this.hasExploded) {
-      this.hasExploded = true;
-      if (this.world && typeof this.world.bottleHit === "function") {
-        const index = this.world.throwableObjects.indexOf(this);
-        if (index !== -1) {
-          this.world.bottleHit(this, index);
-        }
-      }
-    }
   }
 
   isAboveGround() {

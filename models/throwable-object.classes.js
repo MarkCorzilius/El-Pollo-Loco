@@ -23,6 +23,7 @@ class ThrowableObjects extends movableObject {
   constructor(x, y, character) {
     super().loadImage(`./img/6_salsa_bottle/salsa_bottle.png`);
     this.gravityDisabled = false;
+    this.hasExploded = false;
     this.loadMovementSprites(this.BOTTLE_ROTATION_IMAGES);
     this.loadMovementSprites(this.BOTTLE_SPLASH_IMAGES);
     this.height = 60;
@@ -65,7 +66,16 @@ class ThrowableObjects extends movableObject {
       this.x += 15;
     }, 25);
   }
-}
+
+  checkGroundImpact() {
+    if (this instanceof ThrowableObjects && this.y >= 380 && !this.hasExploded) {
+      this.hasExploded = true;
+      if (this.world && typeof this.world.throwableManager.bottleHit === "function") {
+        this.world.throwableManager.bottleHit(this, this.world.throwableObjects.indexOf(this));
+        }
+      }
+    }
+  }
 
 class ThrowableManager {
   lastBottle = 0;
@@ -97,6 +107,12 @@ class ThrowableManager {
   }
 
   handleBottleAttack() {
+    setInterval(() => {
+      this.world.throwableObjects.forEach(bottle => {
+        bottle.checkGroundImpact();
+      });  
+    }, 60);
+
     this.world.throwableObjects.forEach((bottle) => {
       this.world.level.enemies.forEach((enemy) => {
         const key = enemy.id;
