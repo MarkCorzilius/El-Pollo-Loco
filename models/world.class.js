@@ -11,12 +11,12 @@ class World extends movableObject {
   ctx;
   keyboard;
   camera_x = 0;
-  lastBottle = 0;
   endboss;
   distanceCharacterEndboss;
 
   constructor(canvas, keyboard) {
     super();
+    this.throwableManager = new ThrowableManager(this);
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
@@ -24,7 +24,7 @@ class World extends movableObject {
     this.setWorld();
     this.collidingEnemies = new Set();
     this.collidingCoins = new Set();
-    this.collidingBottleHit = new Set();
+
     this.collidingCollectableBottle = new Set();
     this.endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
     this.collidingEndboss = new Set();
@@ -41,7 +41,7 @@ class World extends movableObject {
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         this.handleEnemyCollisition(enemy);
-        this.checkThrowObjects();
+        this.throwableManager.checkThrowObjects();
       });
       this.level.coins.forEach((coin, index) => {
         this.handleCoinCollisition(coin, index);
@@ -49,30 +49,8 @@ class World extends movableObject {
       this.level.collectableObjects.forEach((collectableBottle, index) => {
         this.handleCollectableBottleCollisition(collectableBottle, index);
       });
-      this.handleBottleAttack();
+      this.throwableManager.handleBottleAttack();
     }, 1000 / 60);
-  }
-
-  checkThrowObjects() {
-    const now = new Date().getTime();
-    if (this.keyboard.D && now - this.lastBottle > 1500 && this.character.bottlesTracker > 0) {
-      let bottle = this.adjustBottleForDirection();
-      bottle.world = this;
-      this.throwableObjects.push(bottle);
-      this.lastBottle = now;
-      this.character.bottlesTracker -= 20;
-      this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
-    }
-  }
-
-  adjustBottleForDirection() {
-    let bottle;
-    if (this.character.otherDirection) {
-      bottle = new ThrowableObjects(this.character.x, this.character.y + 50, this.character); // adjust for direction
-    } else {
-      bottle = new ThrowableObjects(this.character.x + 100, this.character.y + 50, this.character); // adjust for direction
-    }
-    return bottle;
   }
 
   handleEnemyCollisition(enemy) {
@@ -101,48 +79,7 @@ class World extends movableObject {
       }
     }
   }
-
-  handleBottleAttack() {
-    this.throwableObjects.forEach((bottle) => {
-      this.level.enemies.forEach((enemy) => {
-        const key = enemy.id;
-        if (bottle.isColliding(enemy)) {
-          if (!this.collidingBottleHit.has(key)) {
-            this.bottleHit(bottle, enemy);
-            this.collidingBottleHit.add(key);
-          }
-        } else {
-          this.collidingBottleHit.delete(key);
-        }
-      });
-    });
-  }
-
-  bottleHit(bottle, enemy) {
-    bottle.gravityDisabled = true;
-    clearInterval(bottle.rotationInterval);
-    clearInterval(bottle.gravityInterval);
-
-    this.handleEnemyHit(enemy);
-
-    this.playBottleHitAnimation(bottle);
-  }
-
-  playBottleHitAnimation(bottle) {
-    bottle.currentImage = 0;
-    bottle.splashInterval = setInterval(() => {
-      bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
-
-      if (bottle.currentImage >= bottle.BOTTLE_SPLASH_IMAGES.length) {
-        clearInterval(bottle.splashInterval);
-        const index = this.throwableObjects.indexOf(bottle);
-        if (index !== -1) {
-          this.throwableObjects.splice(index, 1);
-        }
-      }
-    }, 50);
-  }
-
+  
   handleEnemyHit(enemy) {
     if (enemy instanceof Chicken) {
       this.showDeadChicken(enemy);
@@ -151,7 +88,6 @@ class World extends movableObject {
       this.endboss.hp -= 50;
       this.endboss.isHurt = true;
       this.hurtEndboss(this.endboss.hp);
-      // if 0 –> play dead animation
     }
   }
 
@@ -338,7 +274,6 @@ class World extends movableObject {
       this.character.hit(20);
       this.character.playCharacterAnimation();
       this.healthBar.setPercentage(this.character.healthTracker, this.healthBar.HEALTH_STATUS_IMAGES);
-      console.log(this.character.healthTracker);
     }
   }
 
