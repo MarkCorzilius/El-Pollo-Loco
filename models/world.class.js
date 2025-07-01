@@ -17,13 +17,13 @@ class World extends movableObject {
   constructor(canvas, keyboard) {
     super();
     this.throwableManager = new ThrowableManager(this);
+    this.coinCollector = new CoinCollector(this);
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
     this.collidingEnemies = new Set();
-    this.collidingCoins = new Set();
 
     this.collidingCollectableBottle = new Set();
     this.endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -44,7 +44,7 @@ class World extends movableObject {
         this.throwableManager.checkThrowObjects();
       });
       this.level.coins.forEach((coin, index) => {
-        this.handleCoinCollisition(coin, index);
+        this.coinCollector.handleCoinCollisition(coin, index);
       });
       this.level.collectableObjects.forEach((collectableBottle, index) => {
         this.handleCollectableBottleCollisition(collectableBottle, index);
@@ -79,7 +79,7 @@ class World extends movableObject {
       }
     }
   }
-  
+
   handleEnemyHit(enemy) {
     if (enemy instanceof Chicken) {
       this.showDeadChicken(enemy);
@@ -139,31 +139,6 @@ class World extends movableObject {
       const index = this.level.enemies.indexOf(enemy);
       this.level.enemies.indexOf(index, 1);
     }, 10000);
-  }
-
-  handleCoinCollisition(coin, index) {
-    const key = coin.id;
-    if (this.character.isColliding(coin)) {
-      if (!this.collidingCoins.has(key)) {
-        this.increaseCoinBar();
-        this.deleteCoinFromUI(index);
-        this.collidingCoins.add(key);
-      }
-    } else {
-      this.collidingCoins.delete(key);
-    }
-  }
-
-  increaseCoinBar() {
-    this.character.coinsTracker += 20;
-    if (this.character.coinsTracker >= 100) {
-      this.character.coinsTracker = 100;
-    }
-    this.coinsBar.setPercentage(this.character.coinsTracker, this.coinsBar.COINS_STATUS_IMAGES);
-  }
-
-  deleteCoinFromUI(index) {
-    this.level.coins.splice(index, 1);
   }
 
   handleCollectableBottleCollisition(bottle, index) {

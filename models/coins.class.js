@@ -18,6 +18,4 @@ class Coins extends DrawableObject {
         this.loadMovementSprites(this.COIN_IMAGES);
         this.id = Coins.coinId++;
     }
-
-
 }
