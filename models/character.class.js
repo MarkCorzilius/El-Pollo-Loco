@@ -46,8 +46,6 @@ class Character extends movableObject {
     left: 35,
     right: 44,
   };
-
-  energy = 100;
   enemyWasJumpedOn;
 
   constructor() {
@@ -82,7 +80,10 @@ class Character extends movableObject {
 
       this.world.camera_x = -this.x + 200;
     }, 1000 / 60);
+    this.playCharacterAnimation();
+  }
 
+  playCharacterAnimation() {
     setInterval(() => {
       if (this.isDead()) {
         this.playObjectAnimation(this.IMAGES_DEAD);
