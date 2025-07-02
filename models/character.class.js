@@ -110,4 +110,26 @@ class Character extends movableObject {
     this.x -= this.speed;
     this.otherDirection = true;
   }
+
+  pushCharacterAway() {
+    clearInterval(this.world.gravityInterval);
+  
+    this.speedY = 18;
+    const pushXSpeed = -8;
+    const floorY = 225;
+  
+    this.pushAwayInterval = setInterval(() => {
+      this.x += pushXSpeed;
+      this.y -= this.speedY;
+  
+      this.speedY -= 0.7;
+  
+      if (this.y > floorY) {
+        this.y = floorY;
+        this.speedY = 0;
+        clearInterval(this.pushAwayInterval);
+        this.world.applyGravity();
+      }
+    }, 1000 / 60);
+  }
 }
