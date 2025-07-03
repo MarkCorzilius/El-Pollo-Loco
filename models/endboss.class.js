@@ -62,16 +62,12 @@ class Endboss extends movableObject {
     this.loadMovementSprites(this.IMAGES_ATTACK);
     this.id = globalEnemyId++;
     this.alertSituation = false;
-    this.hp = 200;
+    this.hp = 100;
     this.speed = 0.3;
     this.animate();
   }
 
   animate() {
-    console.log("isAttacking: ", this.isAttacking);
-    console.log("isHurt: ", this.isHurt);
-    console.log("alertSituation: ", this.alertSituation);
-
     if (this.isAttacking) return;
     clearInterval(this.alertAndWalkingInterval);
     this.alertAndWalkingInterval = setInterval(() => {
@@ -108,7 +104,10 @@ class EndbossManager {
   }
 
   hurtEndboss(hp) {
-    if (!this.world.endboss.isAttacking) {
+    this.world.endboss.hp -= 20;
+    this.isHurt = true;
+    this.world.endbossBar.setPercentage(this.world.endboss.hp, this.world.endbossBar.ENDBOSS_STATUS_IMAGES);
+    if (!this.world.endbossBar.isAttacking) {
       this.stopEndbossAnimations();
       if (hp <= 0) {
         this.playDeathAnimation();
@@ -156,7 +155,7 @@ class EndbossManager {
       let characterCenter = this.world.character.x + this.world.character.width / 2;
       let endbossCenter = this.world.endboss.x + this.world.endboss.width / 2;
       this.distanceCharacterEndboss = Math.abs(characterCenter - endbossCenter);
-      if (this.distanceCharacterEndboss <= 600) {
+      if (this.distanceCharacterEndboss <= 750) {
         this.world.endboss.alertSituation = true;
       }
       this.handleEndbossAttack();

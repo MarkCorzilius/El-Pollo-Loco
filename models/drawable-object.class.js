@@ -11,6 +11,10 @@ class DrawableObject {
   healthTracker = 100;
   bottlesTracker = 100;
 
+  constructor() {
+    this.active = true;
+  }
+
 
   loadImage(path) {
     this.img = new Image();
@@ -18,6 +22,7 @@ class DrawableObject {
   }
 
   draw(ctx) {
+    if (!this.active) return;
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
@@ -42,5 +47,13 @@ class DrawableObject {
       img.src = path;
       this.imageCache[path] = img;
     });
+  }
+
+  show() {
+    this.active = true;
+  }
+
+  hide() {
+    this.active = false;
   }
 }

@@ -1,8 +1,9 @@
 class World extends movableObject {
   character = new Character();
-  weaponBar = new StatusBar(this, 0, "weapon");
-  healthBar = new StatusBar(this, 45, "health");
-  coinsBar = new StatusBar(this, 100, "coins");
+  healthBar = new StatusBar(this, 0, 10, "health");
+  weaponBar = new StatusBar(this, 55, 10, "weapon");
+  coinsBar = new StatusBar(this, 105, 10, "coins");
+  endbossBar = new StatusBar(this, 10, 450, "endboss");
 
   throwableObjects = [];
   level = level1;
@@ -12,6 +13,7 @@ class World extends movableObject {
   keyboard;
   camera_x = 0;
   endboss;
+  endbossFightTime;
 
   constructor(canvas, keyboard) {
     super();
@@ -34,6 +36,7 @@ class World extends movableObject {
   }
 
   setWorld() {
+    this.endbossBar.hide();
     this.character.world = this;
     this.character.animate();
   }
@@ -75,8 +78,6 @@ class World extends movableObject {
       this.chickenHandler.showDeadChicken(enemy);
     }
     if (enemy instanceof Endboss) {
-      this.endboss.hp -= 50;
-      this.endboss.isHurt = true;
       this.endbossManager.hurtEndboss(this.endboss.hp);
     }
   }
@@ -117,6 +118,7 @@ class World extends movableObject {
     this.addToMap(this.healthBar);
     this.addToMap(this.weaponBar);
     this.addToMap(this.coinsBar);
+    this.addToMap(this.endbossBar);
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.enemies);
