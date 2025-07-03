@@ -68,6 +68,10 @@ class Endboss extends movableObject {
   }
 
   animate() {
+    console.log("isAttacking: ", this.isAttacking);
+    console.log("isHurt: ", this.isHurt);
+    console.log("alertSituation: ", this.alertSituation);
+
     if (this.isAttacking) return;
     clearInterval(this.alertAndWalkingInterval);
     this.alertAndWalkingInterval = setInterval(() => {
@@ -191,8 +195,9 @@ class EndbossManager {
   resumeIdleAnimation() {
     setTimeout(() => {
       this.world.endboss.isAttacking = false;
+      this.world.endboss.isHurt = false;
       this.world.endboss.animate();
-    }, this.world.endboss.IMAGES_ATTACK.length * 50);
+    }, this.world.endboss.IMAGES_ATTACK.length * 150);
   }
 
   stopEndbossAnimations() {
