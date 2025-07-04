@@ -28,6 +28,10 @@ class CoinCollector {
     const key = coin.id;
     if (this.world.character.isColliding(coin)) {
       if (!this.collidingCoins.has(key)) {
+
+        this.world.coinCollectSound.volume = soundEnabled ? 0.5 : 0;
+        this.world.coinCollectSound.play();
+
         this.increaseCoinBar();
         this.deleteCoinFromUI(index);
         this.collidingCoins.add(key);

@@ -18,6 +18,8 @@ class movableObject extends DrawableObject {
 
   hit(damage) {
     if (this.enemyWasJumpedOn) return;
+    this.world.characterHurtSound.volume = soundEnabled ? 0.5 : 0;
+    this.world.characterHurtSound.play();
     this.healthTracker -= damage;
     if (this.healthTracker <= 0) {
       this.healthTracker = 0;

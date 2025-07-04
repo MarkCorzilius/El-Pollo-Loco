@@ -44,9 +44,9 @@ class Chicken extends movableObject {
 }
 
 class ChickenHandler {
-    constructor(world) {
-        this.world = world;
-    }
+  constructor(world) {
+    this.world = world;
+  }
   didJumpOnChicken(enemy) {
     if (enemy instanceof Chicken) {
       this.world.character.enemyWasJumpedOn = false;

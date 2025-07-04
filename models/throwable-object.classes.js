@@ -1,4 +1,7 @@
 class ThrowableObjects extends movableObject {
+
+  bottleThrowSound = new Audio('./img/bottle-throw.mov');
+
   BOTTLE_ROTATION_IMAGES = [
     "./img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
     "./img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
@@ -36,6 +39,8 @@ class ThrowableObjects extends movableObject {
     this.x = x;
     this.y = y;
     this.speedY = 15;
+    this.bottleThrowSound.volume = soundEnabled ? 0.5 : 0;
+    this.bottleThrowSound.play();
     if (character.otherDirection) {
       this.throwLeft();
     } else {

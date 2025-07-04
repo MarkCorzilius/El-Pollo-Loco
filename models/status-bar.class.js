@@ -94,7 +94,6 @@ class StatusBar extends DrawableObject {
   decideTimingForEndbossBar() {
     this.startEndbossFightWatcher = setInterval(() => {
       if (this.world.endbossManager.distanceCharacterEndboss <= 750) {
-        console.log(this.world.endbossManager.distanceCharacterEndboss);
         this.world.endbossFightTime = true;
         this.activateEndbossBars();
         clearInterval(this.startEndbossFightWatcher);
@@ -107,5 +106,6 @@ class StatusBar extends DrawableObject {
     if (this.type === "weapon" || this.type === "coins") {
       this.hide();
     }
+    this.world.changeToFinalFightSound();
   }
 }

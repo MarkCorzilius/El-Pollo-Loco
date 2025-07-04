@@ -129,6 +129,8 @@ class EndbossManager {
 
   playDeathAnimation() {
     this.world.endboss.hp = 0;
+    this.world.deadBossSound.volume = soundEnabled ? 0.5 : 0;
+    this.world.deadBossSound.play();
     this.world.deadEndbossInterval = setInterval(() => {
       this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_DEAD, true);
     }, 200);
@@ -186,6 +188,8 @@ class EndbossManager {
   }
 
   startAttackAnimation() {
+    this.world.characterHurtSound.volume = soundEnabled ? 0.5 : 0;
+    this.world.characterHurtSound.play();
     this.endbossAttackInterval = setInterval(() => {
       this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_ATTACK, true);
     }, 200);

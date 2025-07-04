@@ -1,5 +1,4 @@
 let canvas;
-let world;
 let background;
 let keyboard = new Keyboard();
 
