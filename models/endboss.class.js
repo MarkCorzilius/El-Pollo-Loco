@@ -134,6 +134,7 @@ class EndbossManager {
     this.world.deadEndbossInterval = setInterval(() => {
       this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_DEAD, true);
     }, 200);
+      endbossIsDead = true;
   }
 
   playHurtAnimation() {

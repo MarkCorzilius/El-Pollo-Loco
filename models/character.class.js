@@ -56,10 +56,12 @@ class Character extends movableObject {
     this.loadMovementSprites(this.IMAGES_DEAD);
     this.loadMovementSprites(this.IMAGES_HURT);
     this.applyGravity();
+    this.characterMoveLeftInterval;
+    this.characterMoveRightInterval;
   }
 
   animate() {
-    setInterval(() => {
+    this.characterMoveRightInterval = setInterval(() => {
       if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE) {
         this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
       }
@@ -69,7 +71,7 @@ class Character extends movableObject {
       this.world.camera_x = this.x;
     }, 1000 / 60);
 
-    setInterval(() => {
+    this.characterMoveLeftInterval = setInterval(() => {
       if (this.world.keyboard.LEFT && this.x > 0) {
         this.moveLeft();
       }
@@ -86,7 +88,8 @@ class Character extends movableObject {
   playCharacterAnimation() {
     setInterval(() => {
       if (this.isDead()) {
-        this.playObjectAnimation(this.IMAGES_DEAD);
+        this.playObjectAnimation(this.IMAGES_DEAD, true);
+        playerIsDead = true;
       } else if (this.isHurt()) {
         this.playObjectAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
@@ -94,7 +97,7 @@ class Character extends movableObject {
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playObjectAnimation(this.IMAGES_WALKING);
       }
-    }, 50);
+    }, 1000 / 60);
   }
 
   jump() {
@@ -113,17 +116,17 @@ class Character extends movableObject {
 
   pushCharacterAway() {
     clearInterval(this.world.gravityInterval);
-  
+
     this.speedY = 18;
     const pushXSpeed = -8;
     const floorY = 225;
-  
+
     this.pushAwayInterval = setInterval(() => {
       this.x += pushXSpeed;
       this.y -= this.speedY;
-  
+
       this.speedY -= 0.7;
-  
+
       if (this.y > floorY) {
         this.y = floorY;
         this.speedY = 0;

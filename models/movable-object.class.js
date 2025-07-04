@@ -7,6 +7,13 @@ class movableObject extends DrawableObject {
 
   lastHit = 0;
 
+  constructor() {
+    super();
+    this.gameOverInterval = setInterval(() => {
+      gameOver();
+    }, 100);
+  }
+
   isColliding(mo) {
     return (
       this.x + this.width - this.offset.right > mo.x + mo.offset.left && // Right -> Left
@@ -49,17 +56,21 @@ class movableObject extends DrawableObject {
   }
 
   playObjectAnimation(images, stopAtEnd = false) {
-    if (stopAtEnd) {
-      if (this.currentImage < images.length) {
-        let path = images[this.currentImage];
+    if (this.currentAnimation !== images) {
+      this.currentAnimation = images;
+      this.currentImage = 0;
+    }
+      if (stopAtEnd) {
+        if (this.currentImage < images.length) {
+          let path = images[this.currentImage];
+          this.img = this.imageCache[path];
+          this.currentImage++;
+        }
+        
+      } else {
+        let path = images[this.currentImage % images.length];
         this.img = this.imageCache[path];
         this.currentImage++;
-      }
-      // Else: do nothing, animation has ended
-    } else {
-      let path = images[this.currentImage % images.length];
-      this.img = this.imageCache[path];
-      this.currentImage++;
     }
   }
 
