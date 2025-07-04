@@ -27,10 +27,11 @@
 
     <script src="./models/level.class.js"></script>
     <script src="./levels/level1.js"></script>
+    
+    <script src="./js/game.js"></script>
 
     <script src="./models/keyboard.class.js"></script>
 
-    <script src="./js/game.js"></script>
   </head>
   <body onload="init()">
     <nav class="navbar">
@@ -38,7 +39,13 @@
       <button onclick="toggleGameVolume()"><img id="volumeBtn" class="control-icons" src="./img/volume-on.png" alt="sound"></button>
       <button><img class="control-icons" src="./img/information.png" alt="info"></button>
     </nav>
-    <canvas id="canvas" width="720" height="480"></canvas>
+    <div class="game-area">
+      <canvas id="canvas" width="720" height="480"></canvas>
+      <img id="introScreen" class="start-screen d-block" src="./img/9_intro_outro_screens/start/startscreen_1.png" alt="start screen">
+      <button onclick="startGame()" id="startGameBtn" class="start-btn d-block">Start</button>
+
+      <img class="d-none" src="./img/9_intro_outro_screens/game_over/game over.png" alt="game over">
+    </div>
 
     <div class="controls">
       <div class="control">

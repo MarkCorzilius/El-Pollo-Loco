@@ -5,14 +5,12 @@ class World extends movableObject {
   coinsBar = new StatusBar(this, 105, 10, "coins");
   endbossBar = new StatusBar(this, 10, 450, "endboss");
 
-  characterHurtSound = new Audio('./img/player-hurt.wav');
-  chickenHurtSound = new Audio('./img/chicken-clucking.short.mov');
-  chickenBossHurtSound = new Audio('./img/chicken.boss-hurt.mov');
-  deadBossSound = new Audio('./img/dead-boss.mov');
-  bottleCollectSound = new Audio('./img/bottle-collect.mp3');
-  coinCollectSound = new Audio('./img/coin-collect.mp3');
-  finalBackgroundSound = new Audio('./img/final-fight.mp3');
-  basicBackgroundSound = new Audio('./img/basic-background-music.mp3');
+  characterHurtSound = new Audio('./audio/player-hurt.wav');
+  chickenHurtSound = new Audio('./audio/chicken-clucking.short.mov');
+  chickenBossHurtSound = new Audio('./audio/chicken.boss-hurt.mov');
+  deadBossSound = new Audio('./audio/dead-boss.mov');
+  bottleCollectSound = new Audio('./audio/bottle-collect.mp3');
+  coinCollectSound = new Audio('./audio/coin-collect.mp3');
 
   throwableObjects = [];
   level = level1;
@@ -32,9 +30,6 @@ class World extends movableObject {
     this.coinCollector = new CoinCollector(this);
 
     this.finalFight = false;
-    this.basicBackgroundSound.loop = true;
-    this.basicBackgroundSound.volume = 0.02;
-    //this.basicBackgroundSound.play();
 
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -59,11 +54,11 @@ class World extends movableObject {
   changeToFinalFightSound() {
     this.finalFight = true;
     if (soundEnabled) {
-      this.basicBackgroundSound.pause();
-      this.basicBackgroundSound.currentTime = 0;
-      this.finalBackgroundSound.play();
-      this.finalBackgroundSound.loop = true;
-      this.finalBackgroundSound.volume = 0.5;
+      basicBackgroundSound.pause();
+      basicBackgroundSound.currentTime = 0;
+      finalBackgroundSound.play();
+      finalBackgroundSound.loop = true;
+      finalBackgroundSound.volume = 0.5;
     }
   }
 

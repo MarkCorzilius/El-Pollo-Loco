@@ -21,7 +21,7 @@ class DrawableObject {
   }
 
   draw(ctx) {
-    if (!this.active) return;
+    if (!this.active && gameStarted) return;
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 

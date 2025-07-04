@@ -1,7 +1,5 @@
-let world;
-
 let globalEnemyId = 0;
-let soundEnabled = true;
+let world;
 
 function enterFullScreen() {
   const canvas = document.getElementById("canvas");
@@ -20,24 +18,22 @@ function toggleGameVolume() {
 
 function toggleSounds() {
   soundEnabled = soundEnabled ? false : true;
-  updateSoundState(world);
+  if (world === undefined || !world.character) return;
+  updateSoundState();
 }
 
-function updateSoundState(world) {
-  if (!world || !world.character) return;
-
-  const obj = world;
+function updateSoundState() {
 
   if (!soundEnabled) {
-    obj.basicBackgroundSound.pause();
-    obj.finalBackgroundSound.pause();
+    basicBackgroundSound.pause();
+    finalBackgroundSound.pause();
   } else {
     if (world.finalFight) {
-        obj.finalBackgroundSound.play();
-        obj.finalBackgroundSound.volume = 0.5;
+        finalBackgroundSound.play();
+        finalBackgroundSound.volume = 0.5;
     } else {
-        obj.basicBackgroundSound.play();
-        obj.basicBackgroundSound.volume = 0.02; // softer background
+        basicBackgroundSound.play();
+        basicBackgroundSound.volume = 0.02; // softer background
     }
   }
 }
