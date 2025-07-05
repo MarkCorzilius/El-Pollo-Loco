@@ -89,8 +89,10 @@ class Character extends movableObject {
     setInterval(() => {
       if (this.isDead()) {
         this.playObjectAnimation(this.IMAGES_DEAD, true);
-        playerIsDead = true;
-        gameIsOver = true;
+        setTimeout(() => {
+          playerIsDead = true;   
+          gameIsOver = true;
+        }, this.IMAGES_DEAD.length * 50);
       } else if (this.isHurt()) {
         this.playObjectAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {

@@ -18,7 +18,6 @@ basicBackgroundSound.volume = 0.02;
 const finalBackgroundSound = new Audio("./audio/final-fight.mp3");
 
 let soundEnabled = true;
-let gameStarted = false;
 
 function startGame() {
   const btn = document.getElementById("startGameBtn");

@@ -146,8 +146,10 @@ class EndbossManager {
     this.world.deadEndbossInterval = setInterval(() => {
       this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_DEAD, true);
     }, 200);
+    setTimeout(() => {
       endbossIsDead = true;
       gameIsOver = true;
+    }, this.world.endboss.IMAGES_DEAD.length * 400);
   }
 
   playHurtAnimation() {
@@ -186,7 +188,7 @@ class EndbossManager {
 
   characterHitByEndboss() {
     if (this.distanceCharacterEndboss <= 400) {
-      this.world.character.hit(this.damage);
+      this.world.character.hit(this.world.endboss.damage);
       this.world.character.pushCharacterAway();
       this.world.character.playCharacterAnimation();
       this.world.healthBar.setPercentage(this.world.character.healthTracker, this.world.healthBar.HEALTH_STATUS_IMAGES);
@@ -204,7 +206,6 @@ class EndbossManager {
     this.world.characterHurtSound.volume = soundEnabled ? 0.5 : 0;
     this.world.characterHurtSound.play();
     if (!this.attackTimeout) {
-      console.log(this.attackTimeout)
       this.attackTimeout = true;
       this.endbossAttackInterval = setInterval(() => {
         this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_ATTACK, true);

@@ -21,7 +21,7 @@ class DrawableObject {
   }
 
   draw(ctx) {
-    if (!this.active && gameStarted && !playerIsDead && !endbossIsDead) return;
+    if (!this.active) return;
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
