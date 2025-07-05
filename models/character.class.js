@@ -90,6 +90,7 @@ class Character extends movableObject {
       if (this.isDead()) {
         this.playObjectAnimation(this.IMAGES_DEAD, true);
         playerIsDead = true;
+        gameIsOver = true;
       } else if (this.isHurt()) {
         this.playObjectAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {

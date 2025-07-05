@@ -2,6 +2,9 @@ let canvas;
 let background;
 let keyboard;
 
+let hasSpotedCharacter = false;
+let hasEndbossAlerted = false;
+let gameIsOver = false;
 let playerIsDead = false;
 let endbossIsDead = false;
 
@@ -117,4 +120,5 @@ function stopAllCanvasMovements() {
     clearInterval(enemy.moveLeftInterval);
   })
   clearInterval(world.endboss.movingInterval);
+  clearInterval(world.endboss.alertAndWalkingInterval);
 }
