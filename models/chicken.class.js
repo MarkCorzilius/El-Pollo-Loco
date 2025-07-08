@@ -13,7 +13,7 @@ class Chicken extends movableObject {
   height = 80;
   width = 80;
   y = 345;
-  x = 300 + Math.random() * 500;
+  x = 800;
   IMAGES_WALKING = [
     "./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
     "./img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
@@ -45,6 +45,7 @@ class Chicken extends movableObject {
 }
 
 class SmallChicken extends movableObject {
+  chickenHandler = new ChickenHandler();
   moveLeftInterval;
   walkingInterval;
   isDead = false;
@@ -59,7 +60,7 @@ class SmallChicken extends movableObject {
   height = 80;
   width = 80;
   y = 345;
-  x = 300 + Math.random() * 500;
+  x = 800;
   IMAGES_WALKING = [
     "./img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "./img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
@@ -93,7 +94,24 @@ class SmallChicken extends movableObject {
 class ChickenHandler {
   constructor(world) {
     this.world = world;
+    this.chickenPositions = [];
+    this.minDistance = 100;
   }
+
+  generateValidX(start = 300, range = 400) {
+    let x;
+    let isValid = false;
+
+    for (let i = 0; i < 100; i++) {
+      x = start + Math.random() * range;
+      isValid = this.chickenPositions.every((pos) => Math.abs(pos - x) >= this.minDistance);
+      if (isValid) break;
+      
+    }
+    this.chickenPositions.push(x);
+    return x;
+  }
+
   didJumpOnChicken(enemy) {
     if (enemy instanceof Chicken || enemy instanceof SmallChicken) {
       this.world.character.enemyWasJumpedOn = false;

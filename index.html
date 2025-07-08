@@ -28,12 +28,13 @@
 
     <script src="./models/level.class.js"></script>
     <script src="./levels/level1.js"></script>
+    <script src="./models/result-messages.class.js"></script>
     
 
     <script src="./models/keyboard.class.js"></script>
 
   </head>
-  <body onload="init()">
+  <body id="body" onload="init()">
     <nav class="navbar">
       <button onclick="enterFullScreen()"><img class="control-icons" src="./img/fullscreen.png" alt="fullscreen"></button>
       <button onclick="toggleGameVolume()"><img id="volumeBtn" class="control-icons" src="./img/volume-on.png" alt="sound"></button>
@@ -41,8 +42,10 @@
     </nav>
     <div class="game-area">
       <canvas id="canvas" width="720" height="480"></canvas>
-      <img id="introScreen" class="start-screen d-block" src="./img/9_intro_outro_screens/start/startscreen_1.png" alt="start screen">
-      <button onclick="startGame()" id="startGameBtn" class="start-btn d-block">Start</button>
+      <div id="startScreenElements">
+        <img id="introScreen" class="start-screen d-block" src="./img/9_intro_outro_screens/start/startscreen_1.png" alt="start screen">
+        <button onclick="startGame()" id="startGameBtn" class="start-btn d-block">Start</button>
+      </div>
 
       
       <img id="gameOverMessage" class="over-canvas-message d-none" src="./img/You won, you lost/Game Over.png" alt="game over">

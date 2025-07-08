@@ -34,15 +34,25 @@ class World extends movableObject {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+
     this.draw();
     this.setWorld();
-    this.collidingEnemies = new Set();
 
+    this.level.enemies.forEach(enemy => {
+      if (enemy instanceof Chicken || enemy instanceof SmallChicken){
+        enemy.world = this;
+        enemy.x = this.chickenHandler.generateValidX();
+      }
+    });
+
+    this.collidingEnemies = new Set();
     this.collidingCollectableBottle = new Set();
-    this.endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     this.collidingEndboss = new Set();
+
+    this.endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     this.startCollisitionCheck();
     this.endbossManager.getDistanceBetweenEndbossAndCharacter();
+
   }
 
   setWorld() {

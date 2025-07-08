@@ -1,9 +1,19 @@
 let globalEnemyId = 0;
 let world;
 
+let startScreen = true;
+let fullScreen = false;
+
 function enterFullScreen() {
+  fullScreen = true;
+  const introScreen = document.getElementById('startScreenElements');
   const canvas = document.getElementById("canvas");
-  canvas.requestFullscreen();
+  if (startScreen && fullScreen) {
+    introScreen.requestFullscreen();
+  }
+  if (!startScreen && fullScreen) {
+    canvas.requestFullscreen();
+  }
 }
 
 function toggleGameVolume() {

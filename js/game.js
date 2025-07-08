@@ -20,6 +20,8 @@ const finalBackgroundSound = new Audio("./audio/final-fight.mp3");
 let soundEnabled = true;
 
 function startGame() {
+  startScreen = false;
+  enterFullScreen();
   const btn = document.getElementById("startGameBtn");
   const intro = document.getElementById("introScreen");
 
