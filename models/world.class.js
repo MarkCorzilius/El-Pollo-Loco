@@ -84,7 +84,7 @@ class World extends movableObject {
     if (this.character.isColliding(enemy)) {
       this.chickenHandler.didJumpOnChicken(enemy);
       if (!this.collidingEnemies.has(key) && !enemy.isDead) {
-        this.character.hit(10);
+        this.character.hit(enemy.damage);
         this.healthBar.setPercentage(this.character.healthTracker, this.healthBar.HEALTH_STATUS_IMAGES);
         this.collidingEnemies.add(key);
       }
@@ -99,7 +99,14 @@ class World extends movableObject {
         this.chickenHurtSound.volume = soundEnabled ? 0.5 : 0;
         this.chickenHurtSound.play();
       }
-      this.chickenHandler.showDeadChicken(enemy);
+      this.chickenHandler.showDeadChicken(enemy, "./img/3_enemies_chicken/chicken_normal/2_dead/dead.png");
+    }
+    if (enemy instanceof SmallChicken) {
+      if (!enemy.isDead) {
+        this.chickenHurtSound.volume = soundEnabled ? 0.5 : 0;
+        this.chickenHurtSound.play();
+      }
+      this.chickenHandler.showDeadChicken(enemy, "./img/3_enemies_chicken/chicken_small/2_dead/dead.png");
     }
     if (enemy instanceof Endboss) {
       this.chickenBossHurtSound.volume = soundEnabled ? 0.5 : 0;

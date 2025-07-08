@@ -111,7 +111,7 @@ class EndbossManager {
 
   hurtEndboss(hp) {
     this.world.endboss.hp -= 20;
-    this.isHurt = true;
+    this.world.endboss.isHurt = true;
     this.increaseEndbossPower();
     this.world.endbossBar.setPercentage(this.world.endboss.hp, this.world.endbossBar.ENDBOSS_STATUS_IMAGES);
     if (!this.world.endbossBar.isAttacking) {
