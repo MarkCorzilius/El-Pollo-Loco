@@ -121,8 +121,9 @@ function stopAllCanvasMovements() {
   clearInterval(world.endboss.alertAndWalkingInterval);
 }
 
-window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
+window.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
     fullScreen = false;
+    removeObjectFitContain();
   }
 })

@@ -8,11 +8,12 @@ let fullScreen = false;
 function enterFullScreen() {
   fullScreen = true;
   applyFullScreen();
+  objectFitContain();
 }
 
 function applyFullScreen() {
   const introScreen = document.getElementById('startScreenElements');
-  
+
   if (startScreen && fullScreen) {
     introScreen.requestFullscreen();
   }
@@ -50,4 +51,16 @@ function updateSoundState() {
       basicBackgroundSound.volume = 0.02; // softer background
     }
   }
+}
+
+function objectFitContain() {
+  const introScreen = document.getElementById('introScreen');
+    if (fullScreen && startScreen) {
+      introScreen.classList.add('object-fit-contain');
+    }
+}
+
+function removeObjectFitContain() {
+  const introScreen = document.getElementById('introScreen');
+  introScreen.classList.remove('object-fit-contain');
 }

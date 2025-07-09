@@ -29,6 +29,3 @@ class WinMessage extends DrawableObject {
       this.active = false;
     }
   }
-
-
-  // add graphics to canvas
