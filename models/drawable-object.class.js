@@ -1,4 +1,5 @@
 class DrawableObject {
+  otherDirection = false;
   img;
   x = 120;
   y = 325;

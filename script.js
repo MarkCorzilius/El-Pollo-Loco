@@ -4,10 +4,15 @@ let world;
 let startScreen = true;
 let fullScreen = false;
 
+
 function enterFullScreen() {
   fullScreen = true;
+  applyFullScreen();
+}
+
+function applyFullScreen() {
   const introScreen = document.getElementById('startScreenElements');
-  const canvas = document.getElementById("canvas");
+  
   if (startScreen && fullScreen) {
     introScreen.requestFullscreen();
   }
@@ -33,17 +38,16 @@ function toggleSounds() {
 }
 
 function updateSoundState() {
-
   if (!soundEnabled) {
     basicBackgroundSound.pause();
     finalBackgroundSound.pause();
   } else {
     if (world.finalFight) {
-        finalBackgroundSound.play();
-        finalBackgroundSound.volume = 0.5;
+      finalBackgroundSound.play();
+      finalBackgroundSound.volume = 0.5;
     } else {
-        basicBackgroundSound.play();
-        basicBackgroundSound.volume = 0.02; // softer background
+      basicBackgroundSound.play();
+      basicBackgroundSound.volume = 0.02; // softer background
     }
   }
 }

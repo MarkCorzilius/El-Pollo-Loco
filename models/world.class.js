@@ -11,6 +11,8 @@ class World extends movableObject {
   deadBossSound = new Audio('./audio/dead-boss.mov');
   bottleCollectSound = new Audio('./audio/bottle-collect.mp3');
   coinCollectSound = new Audio('./audio/coin-collect.mp3');
+  gameWonSound = new Audio('./audio/win-sound.mov');
+  gameLostSound = new Audio('./audio/lost-sound.mov');
 
   throwableObjects = [];
   level = level1;
@@ -35,6 +37,9 @@ class World extends movableObject {
     this.canvas = canvas;
     this.keyboard = keyboard;
 
+    this.loseMessage = new LoseMessage(this, this.canvas);
+    this.winMessage = new WinMessage(this, this.canvas);
+
     this.draw();
     this.setWorld();
 
@@ -42,7 +47,7 @@ class World extends movableObject {
       if (enemy instanceof Chicken || enemy instanceof SmallChicken){
         enemy.world = this;
         enemy.x = this.chickenHandler.generateValidX();
-      }
+      }  
     });
 
     this.collidingEnemies = new Set();
@@ -165,6 +170,9 @@ class World extends movableObject {
     this.addToMap(this.weaponBar);
     this.addToMap(this.coinsBar);
     this.addToMap(this.endbossBar);
+
+    this.addToMap(this.loseMessage);
+    this.addToMap(this.winMessage);
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.enemies);

@@ -21,13 +21,11 @@ let soundEnabled = true;
 
 function startGame() {
   startScreen = false;
-  enterFullScreen();
-  const btn = document.getElementById("startGameBtn");
-  const intro = document.getElementById("introScreen");
+  applyFullScreen();
+  const intro = document.getElementById("startScreenElements");
 
   keyboard = new Keyboard();
   world = new World(canvas, keyboard);
-  btn.classList.replace("d-block", "d-none");
   intro.classList.replace("d-block", "d-none");
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));
@@ -75,40 +73,39 @@ function init() {
   });
 }
 
-function playPlayerLoseAnimations() {
-  const gameOverScreen = document.getElementById("gameOverMessage");
-  const gameLostScreen = document.getElementById("gameLostMessage");
-
-  gameOverScreen.classList.replace("d-none", "d-block");
-
-  setTimeout(() => {
-    gameOverScreen.classList.replace("d-block", "d-none");
-    gameLostScreen.classList.replace("d-none", "d-block");
-  }, 1500);
-}
-
-function playPlayerWonAnimations() {
-  const gameOverScreen = document.getElementById("gameSuccessfullyOverMessage");
-  const gameWonScreen = document.getElementById("gameWonMessage");
-
-  gameOverScreen.classList.replace("d-none", "d-block");
-
-  setTimeout(() => {
-    gameOverScreen.classList.replace("d-block", "d-none");
-    gameWonScreen.classList.replace("d-none", "d-block");
-  }, 1500);
-}
-
 function gameOver() {
   if (playerIsDead && !playerAnimationPlayed) {
     playerAnimationPlayed = true;
+    finalBackgroundSound.pause();
     stopAllCanvasMovements();
-    playPlayerLoseAnimations();
+    playLoseAnimations()
+    //this.loseMessage.show();
   } else if (endbossIsDead && !bossAnimationPlayed) {
     bossAnimationPlayed = true;
+    finalBackgroundSound.pause();
     stopAllCanvasMovements();
-    playPlayerWonAnimations();
+    playWinAnimations();
+    //this.winMessage.show();
   }
+}
+
+function playWinAnimations() {
+  world.gameWonSound.play();
+  world.winMessage.show();
+
+  setTimeout(() => {
+    world.winMessage.loadImage('./img/You won, you lost/You won A.png')
+  }, 1500);
+
+}
+
+function playLoseAnimations() {
+  world.gameLostSound.play();
+  world.loseMessage.show();
+
+  setTimeout(() => {
+    world.winMessage.loadImage('./img/You won, you lost/You lost.png')
+  }, 1500);
 }
 
 function stopAllCanvasMovements() {
@@ -123,3 +120,9 @@ function stopAllCanvasMovements() {
   clearInterval(world.endboss.movingInterval);
   clearInterval(world.endboss.alertAndWalkingInterval);
 }
+
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    fullScreen = false;
+  }
+})
