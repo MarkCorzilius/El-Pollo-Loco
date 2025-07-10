@@ -1,3 +1,6 @@
+let currentLevel = 1;
+let coinsCollected = 0;
+
 let canvas;
 let background;
 let keyboard;
@@ -74,18 +77,17 @@ function init() {
 }
 
 function gameOver() {
+  insertAchievementsBlock();
   if (playerIsDead && !playerAnimationPlayed) {
     playerAnimationPlayed = true;
     finalBackgroundSound.pause();
     stopAllCanvasMovements();
     playLoseAnimations()
-    //this.loseMessage.show();
   } else if (endbossIsDead && !bossAnimationPlayed) {
     bossAnimationPlayed = true;
     finalBackgroundSound.pause();
     stopAllCanvasMovements();
     playWinAnimations();
-    //this.winMessage.show();
   }
 }
 
@@ -96,7 +98,9 @@ function playWinAnimations() {
   setTimeout(() => {
     world.winMessage.loadImage('./img/You won, you lost/You won A.png')
   }, 1500);
-
+  setTimeout(() => {
+    showAfterGameOverScreen();
+  }, 3000);
 }
 
 function playLoseAnimations() {
@@ -104,8 +108,11 @@ function playLoseAnimations() {
   world.loseMessage.show();
 
   setTimeout(() => {
-    world.winMessage.loadImage('./img/You won, you lost/You lost.png')
+    world.loseMessage.loadImage('./img/You won, you lost/You lost.png')
   }, 1500);
+  setTimeout(() => {
+    showAfterGameOverScreen();
+  }, 3000);
 }
 
 function stopAllCanvasMovements() {
@@ -127,3 +134,20 @@ window.addEventListener('fullscreenchange', () => {
     removeObjectFitContain();
   }
 })
+
+function playPreviousLevel() {
+  const overlay = document.getElementById('afterLevelOverlay');
+  const dialog = document.getElementById('afterLevelDialog');
+  currentLevel -= 1;
+  level = `level${currentLevel}`;
+  overlay.classList.add('d-none');
+  dialog.classList.replace('show', 'd-none');
+
+}
+
+function repeatCurrentLevel() {
+}
+
+function playNextLevel() {
+  
+}

@@ -38,7 +38,7 @@ class ThrowableObjects extends movableObject {
   throw(x, y, character) {
     this.x = x;
     this.y = y;
-    this.speedY = 15;
+    this.speedY = 10;
     this.bottleThrowSound.volume = soundEnabled ? 0.5 : 0;
     this.bottleThrowSound.play();
     if (character.otherDirection) {
@@ -56,7 +56,7 @@ class ThrowableObjects extends movableObject {
     this.applyGravity();
     this.gravityInterval = setInterval(() => {
       if (this.gravityDisabled) return;
-      this.x -= 15;
+      this.x -= 12;
     }, 25);
   }
 
@@ -68,7 +68,7 @@ class ThrowableObjects extends movableObject {
     this.applyGravity();
     this.gravityInterval = setInterval(() => {
       if (this.gravityDisabled) return;
-      this.x += 15;
+      this.x += 12;
     }, 25);
   }
 

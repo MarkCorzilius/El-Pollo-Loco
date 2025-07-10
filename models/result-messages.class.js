@@ -1,6 +1,6 @@
 class LoseMessage extends DrawableObject {
-    height = 400;
-    width = 700;
+    height = 420;
+    width = 680;
     constructor(world) {
       super();
       this.world = world;
@@ -15,7 +15,7 @@ class LoseMessage extends DrawableObject {
   }
 
 class WinMessage extends DrawableObject {
-    height = 420;
+    height = 480;
     width = 720;
     constructor(world) {
       super();

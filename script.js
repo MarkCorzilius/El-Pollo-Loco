@@ -64,3 +64,18 @@ function removeObjectFitContain() {
   const introScreen = document.getElementById('introScreen');
   introScreen.classList.remove('object-fit-contain');
 }
+
+function showAfterGameOverScreen() {
+  const overlay = document.getElementById('afterLevelOverlay');
+  const dialog = document.getElementById('afterLevelDialog');
+  overlay.classList.remove('d-none');
+  dialog.classList.remove('d-none');
+  setTimeout(() => {
+    dialog.classList.add('show');
+  }, 50);
+}
+
+function insertAchievementsBlock() {
+  const container = document.getElementById('achievements');
+  container.innerHTML = achievementsTemplate();
+}

@@ -15,7 +15,7 @@ class World extends movableObject {
   gameLostSound = new Audio('./audio/lost-sound.mov');
 
   throwableObjects = [];
-  level = level1;
+  level = level5;
 
   canvas;
   ctx;
@@ -170,9 +170,6 @@ class World extends movableObject {
     this.addToMap(this.weaponBar);
     this.addToMap(this.coinsBar);
     this.addToMap(this.endbossBar);
-
-    this.addToMap(this.loseMessage);
-    this.addToMap(this.winMessage);
     this.ctx.translate(this.camera_x, 0);
 
     this.addObjectsToMap(this.level.enemies);
@@ -182,6 +179,9 @@ class World extends movableObject {
     this.addObjectsToMap(this.throwableObjects);
 
     this.ctx.translate(-this.camera_x, 0);
+
+    this.addToMap(this.loseMessage);
+    this.addToMap(this.winMessage);
 
     let self = this;
     requestAnimationFrame(function draw() {

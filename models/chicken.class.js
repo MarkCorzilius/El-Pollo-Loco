@@ -98,11 +98,11 @@ class ChickenHandler {
     this.minDistance = 100;
   }
 
-  generateValidX(start = 300, range = 400) {
+  generateValidX(start = 300, range = 2500) {
     let x;
     let isValid = false;
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1000; i++) {
       x = start + Math.random() * range;
       isValid = this.chickenPositions.every((pos) => Math.abs(pos - x) >= this.minDistance);
       if (isValid) break;

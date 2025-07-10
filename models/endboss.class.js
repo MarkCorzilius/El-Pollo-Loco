@@ -1,7 +1,6 @@
 class Endboss extends movableObject {
   width = 280;
   height = 320;
-  x = 1600;
   y = 120;
 
   offset = {
@@ -53,8 +52,9 @@ class Endboss extends movableObject {
     "./img/4_enemie_boss_chicken/3_attack/G20.png",
   ];
 
-  constructor() {
+  constructor(x) {
     super();
+    this.x = x;
     this.loadImage(this.IMAGES_WALKING[0]);
     this.loadMovementSprites(this.IMAGES_WALKING);
     this.loadMovementSprites(this.IMAGES_ALERT);

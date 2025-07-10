@@ -42,7 +42,8 @@ class CoinCollector {
   }
 
   increaseCoinBar() {
-    this.coinsTracker += 20;
+    coinsCollected += 1;
+    this.coinsTracker += 10;
     if (this.coinsTracker >= 100) {
       this.coinsTracker = 100;
     }

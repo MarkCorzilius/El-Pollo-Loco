@@ -1,5 +1,5 @@
 class Level {
-    level_end_x = 2100;
+    level_end_x = 4000;
 
     enemies;
     clouds;

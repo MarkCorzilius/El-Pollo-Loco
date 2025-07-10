@@ -170,3 +170,81 @@ strong {
 .object-fit-contain {
   object-fit: contain;
 }
+
+.after-level-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(251, 117, 79, 1);
+}
+
+.after-level-dialog {
+  background-color: rgba(255, 255, 255, 0.85);
+  width: clamp(300px, 70vw, 500px);
+  height: clamp(480px, 80vw, 600px);
+  border-radius: 30px;
+  position: fixed;
+  left: 50%;
+  color: black;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  transform: translate(-50%, 200%);
+  transition: transform 0.4s ease;
+}
+
+.after-level-dialog.show {
+  transform: translate(-50%, -50%);
+  top: 50%;
+}
+
+.result-overlay-buttons {
+  position: absolute;
+  width: 100%;
+  bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  gap: clamp(10px, 5vw, 40px);
+}
+
+.result-overlay-buttons button {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(255, 229, 192, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  outline: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 40px;
+  width: clamp(200px, 20vw, 400px);
+}
+
+.result-overlay-buttons button:hover {
+  background-color: rgba(255, 214, 165, 1);
+}
+
+.achievements {
+  color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  gap: 40px;
+}
+
+.results-title {
+  color: rgba(0, 0, 0, 0.85);
+  margin: 40px 0 40px;
+}
+
+.achievement {
+  display: flex;
+  align-items: center;
+  justify-content: baseline;
+  gap: 8px;
+}
