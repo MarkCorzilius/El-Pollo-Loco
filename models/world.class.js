@@ -15,7 +15,6 @@ class World extends movableObject {
   gameLostSound = new Audio('./audio/lost-sound.mov');
 
   throwableObjects = [];
-  level = level5;
 
   canvas;
   ctx;
@@ -24,8 +23,9 @@ class World extends movableObject {
   endboss;
   endbossFightTime;
 
-  constructor(canvas, keyboard) {
+  constructor(canvas, keyboard, level) {
     super();
+    this.level = level
     this.throwableManager = new ThrowableManager(this);
     this.chickenHandler = new ChickenHandler(this);
     this.endbossManager = new EndbossManager(this);
@@ -49,6 +49,10 @@ class World extends movableObject {
         enemy.x = this.chickenHandler.generateValidX();
       }  
     });
+
+    this.level.coins.forEach((coin) => {
+      coin.world = this;
+    })
 
     this.collidingEnemies = new Set();
     this.collidingCollectableBottle = new Set();

@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'gameFont';
+  src: url(./fonts/DM_Serif_Display/DMSerifDisplay-Italic.ttf);
+}
+
 canvas {
   display: block;
   background-color: black;
@@ -19,6 +24,7 @@ canvas {
 }
 
 body {
+  font-family: 'gameFont';
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -287,7 +293,7 @@ strong {
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  padding: 40px 20px 20px;
+  padding: 0 20px 20px;
   font-size: clamp(1rem, 1.5vw, 1rem);
 }
 
@@ -295,9 +301,8 @@ strong {
   display: none;
 }
 
-.game-info-content h1 {
+.description-title {
   font-size: clamp(2rem, 3vw, 2rem);
-  margin-bottom: 10px;
 }
 
 .game-info-content h2 {
@@ -342,4 +347,57 @@ strong {
 .close-overlay-wrapper:hover {
   background-color: rgba(249, 151, 124, 1);
   border-radius: 50%;
+}
+
+.mobile-buttons {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 9999;
+  width: 80%;
+  height: 80px;
+}
+
+.mobile-buttons-stack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.mobile-buttons-stack button {
+  outline: none;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.mobile-buttons-stack button:active {
+  transform: scale(1.1);
+  border: 3px solid rgba(251, 117, 79, 1);
+}
+
+.mobile-button-img {
+  height: 40px;
+  width: auto;
+}
+
+
+@media (max-width: 750px) {
+  .controls {
+    display: none;
+  }
+
+  .navbar {
+    display: none;
+  }
+
+  .mobile-buttons {
+    display: flex;
+  }
 }

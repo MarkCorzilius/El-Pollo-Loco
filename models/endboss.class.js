@@ -172,7 +172,7 @@ class EndbossManager {
       let characterCenter = this.world.character.x + this.world.character.width / 2;
       let endbossCenter = this.world.endboss.x + this.world.endboss.width / 2;
       this.distanceCharacterEndboss = Math.abs(characterCenter - endbossCenter);
-      if (this.distanceCharacterEndboss <= 750) {
+      if (this.distanceCharacterEndboss <= 500) {
         hasSpotedCharacter = true;
       }
       this.handleEndbossAttack();

@@ -1,4 +1,8 @@
-const level3 = new Level(
+let level3;
+
+function initLevel3() {
+
+level3 = new Level(
     [
         new SmallChicken(),
         new Chicken(),
@@ -97,3 +101,4 @@ const level3 = new Level(
         new CollectableObject('./img/6_salsa_bottle/2_salsa_bottle_on_ground.png', 1200, 345),
     ]
 );
+}

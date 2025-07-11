@@ -23,12 +23,13 @@ const finalBackgroundSound = new Audio("./audio/final-fight.mp3");
 let soundEnabled = true;
 
 function startGame() {
+  initLevel1();
   startScreen = false;
   applyFullScreen();
   const intro = document.getElementById("startScreenElements");
 
   keyboard = new Keyboard();
-  world = new World(canvas, keyboard);
+  world = new World(canvas, keyboard, level1);
   intro.classList.replace("d-block", "d-none");
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));

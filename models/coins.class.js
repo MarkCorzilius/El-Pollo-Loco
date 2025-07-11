@@ -1,5 +1,7 @@
-class Coins extends DrawableObject {
+class Coins extends movableObject {
   static coinId = 0;
+
+  world;
 
   COIN_IMAGES = ["./img/8_coin/coin_1.png", "./img/8_coin/coin_2.png"];
 
@@ -8,12 +10,19 @@ class Coins extends DrawableObject {
   constructor(x, y) {
     super();
     this.loadImage(this.COIN_IMAGES[0]);
+    this.animateCoins();
     this.x = x;
     this.y = y;
     this.width = 200;
     this.height = 200;
     this.loadMovementSprites(this.COIN_IMAGES);
     this.id = Coins.coinId++;
+  }
+
+  animateCoins(){
+    setInterval(() => {
+      this.playObjectAnimation(this.COIN_IMAGES);
+    }, 100);
   }
 }
 

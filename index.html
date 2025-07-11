@@ -38,30 +38,36 @@
     <script src="./models/keyboard.class.js"></script>
   </head>
   <body id="body" onload="init()">
-
     <div id="gameInfoOverlay" class="game-info-overlay d-none" onclick="toggleGameInfoOverlay()">
       <div class="game-info-dialog d-none" id="gameInfoDialog" onclick="event.stopPropagation()">
         <div onclick="toggleGameInfoOverlay()" class="close-overlay-wrapper">
-          <img src="./img/close-overlay.png" alt="close">
+          <img src="./img/close-overlay.png" alt="close" />
         </div>
+        <h1 class="description-title">Game Description</h1>
         <div class="game-info-content">
-          <h1>Game Description</h1>
+          <h2>Controls</h2>
+          <ul>
+            <li><strong>Arrow Right:</strong> Move right</li>
+            <li><strong>Arrow Left:</strong> Move left</li>
+            <li><strong>Space:</strong> Jump</li>
+            <li><strong>D:</strong> Attack (throw bottle)</li>
+          </ul>
 
           <h2>Enemies</h2>
           <ul>
             <li><strong>Chickens:</strong> Small, normal, and big chickens block your way.</li>
             <li><strong>End Boss:</strong> Stronger enemy at the end with 100 HP.</li>
           </ul>
-    
+
           <h2>How to Attack</h2>
           <ul>
             <li><strong>Jump Attack:</strong> Jump on any chicken from above to defeat it.</li>
             <li><strong>Bottle Attack:</strong> Throw bottles to kill all enemies, including the boss.</li>
           </ul>
-    
+
           <h2>Boss Fight</h2>
           <p>Only bottles can damage the boss. Each bottle deals 20 HP damage — hit the boss 5 times to win.</p>
-    
+
           <h2>Bottles & Coins</h2>
           <ul>
             <li>Start with 5 bottles.</li>
@@ -75,8 +81,7 @@
     <div id="afterLevelOverlay" class="after-level-overlay d-none">
       <div id="afterLevelDialog" class="after-level-dialog d-none">
         <h1 class="results-title">Results</h1>
-        <div id="achievements" class="achievements">
-        </div>
+        <div id="achievements" class="achievements"></div>
         <div class="result-overlay-buttons">
           <button onclick="playPreviousLevel()">Previous Level</button>
           <button onclick="repeatCurrentLevel()">Repeat</button>
@@ -104,6 +109,17 @@
 
       <img id="gameSuccessfullyOverMessage" class="over-canvas-message d-none" src="./img/You won, you lost/Game over A.png" alt="game over" />
       <img id="gameWonMessage" class="over-canvas-message d-none" src="./img/You won, you lost/You Win A.png" alt="you won" />
+    </div>
+
+    <div class="mobile-buttons">
+      <div class="mobile-buttons-stack">
+        <button><img class="mobile-button-img" src="./img/arrow-left.png" alt="left"></button>
+        <button><img class="mobile-button-img" src="./img/arrow-right.png" alt="right"></button>
+      </div>
+      <div class="mobile-buttons-stack">
+        <button><img class="mobile-button-img" src="./img/jump.png" alt="jumo"></button>
+        <button><img class="mobile-button-img" src="./img/attack.png" alt="attack"></button>
+      </div>
     </div>
 
     <div class="controls">
