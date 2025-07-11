@@ -79,3 +79,18 @@ function insertAchievementsBlock() {
   const container = document.getElementById('achievements');
   container.innerHTML = achievementsTemplate();
 }
+
+function toggleGameInfoOverlay() {
+  const overlay = document.getElementById('gameInfoOverlay');
+  const dialog = document.getElementById('gameInfoDialog');
+  if (overlay.classList.contains('d-none')) {
+    overlay.classList.remove('d-none');
+    dialog.classList.remove('d-none');
+    setTimeout(() => {
+      dialog.classList.add('show');
+    }, 50);
+  } else {
+    overlay.classList.add('d-none');
+    dialog.classList.replace('show', 'd-none');
+  }
+}
