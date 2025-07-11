@@ -34,11 +34,66 @@ function startGame() {
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));
   }
+  document.getElementById("mobileBtnLeft").addEventListener("touchstart", () => console.log("Touched left button!"));
+}
+
+function addMobileButtonListeners() {
+  const leftBtn = document.getElementById("mobileBtnLeft");
+  const rightBtn = document.getElementById("mobileBtnRight");
+  const jumpBtn = document.getElementById('mobileBtnJump');
+  const attackBtn = document.getElementById('mobileBtnAttack');
+
+  if (!leftBtn || !rightBtn) {
+    console.error("Mobile buttons not found in DOM!");
+    return;
+  }
+
+  leftBtn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    keyboard.LEFT = true;
+  });
+
+  leftBtn.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    keyboard.LEFT = false;
+  });
+
+  rightBtn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    keyboard.RIGHT = true;
+  });
+
+  rightBtn.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    keyboard.RIGHT = false;
+  });
+
+  jumpBtn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    keyboard.SPACE = true;
+  });
+
+  jumpBtn.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    keyboard.SPACE = false;
+  });
+
+  attackBtn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    keyboard.D = true;
+  });
+
+  attackBtn.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    keyboard.D = false;
+  });
 }
 
 function init() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
+
+  addMobileButtonListeners();
 
   window.addEventListener("keydown", (event) => {
     if (!keyboard) return;
@@ -83,7 +138,7 @@ function gameOver() {
     playerAnimationPlayed = true;
     finalBackgroundSound.pause();
     stopAllCanvasMovements();
-    playLoseAnimations()
+    playLoseAnimations();
   } else if (endbossIsDead && !bossAnimationPlayed) {
     bossAnimationPlayed = true;
     finalBackgroundSound.pause();
@@ -97,7 +152,7 @@ function playWinAnimations() {
   world.winMessage.show();
 
   setTimeout(() => {
-    world.winMessage.loadImage('./img/You won, you lost/You won A.png')
+    world.winMessage.loadImage("./img/You won, you lost/You won A.png");
   }, 1500);
   setTimeout(() => {
     showAfterGameOverScreen();
@@ -109,7 +164,7 @@ function playLoseAnimations() {
   world.loseMessage.show();
 
   setTimeout(() => {
-    world.loseMessage.loadImage('./img/You won, you lost/You lost.png')
+    world.loseMessage.loadImage("./img/You won, you lost/You lost.png");
   }, 1500);
   setTimeout(() => {
     showAfterGameOverScreen();
@@ -124,31 +179,32 @@ function stopAllCanvasMovements() {
   });
   world.level.enemies.forEach((enemy) => {
     clearInterval(enemy.moveLeftInterval);
-  })
+  });
   clearInterval(world.endboss.movingInterval);
   clearInterval(world.endboss.alertAndWalkingInterval);
 }
 
-window.addEventListener('fullscreenchange', () => {
+window.addEventListener("fullscreenchange", () => {
   if (!document.fullscreenElement) {
     fullScreen = false;
     removeObjectFitContain();
   }
-})
+});
 
 function playPreviousLevel() {
-  const overlay = document.getElementById('afterLevelOverlay');
-  const dialog = document.getElementById('afterLevelDialog');
+  const overlay = document.getElementById("afterLevelOverlay");
+  const dialog = document.getElementById("afterLevelDialog");
   currentLevel -= 1;
   level = `level${currentLevel}`;
-  overlay.classList.add('d-none');
-  dialog.classList.replace('show', 'd-none');
-
+  overlay.classList.add("d-none");
+  dialog.classList.replace("show", "d-none");
 }
 
-function repeatCurrentLevel() {
-}
+function repeatCurrentLevel() {}
 
-function playNextLevel() {
-  
+function playNextLevel() {}
+
+
+function logClick() {
+  console.log('clicked')
 }

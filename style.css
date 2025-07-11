@@ -366,6 +366,7 @@ strong {
 }
 
 .mobile-buttons-stack button {
+  cursor: pointer;
   outline: none;
   border: 3px solid transparent;
   border-radius: 50%;
