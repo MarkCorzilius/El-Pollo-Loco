@@ -37,7 +37,7 @@
 
     <script src="./models/keyboard.class.js"></script>
   </head>
-  <body id="body" onload="init()">
+  <body onresize="showMobileButtons(), showMobileMenu()" id="body" onload="init()">
     <div id="gameInfoOverlay" class="game-info-overlay d-none" onclick="toggleGameInfoOverlay()">
       <div class="game-info-dialog d-none" id="gameInfoDialog" onclick="event.stopPropagation()">
         <div onclick="toggleGameInfoOverlay()" class="close-overlay-wrapper">
@@ -94,7 +94,7 @@
 
     <nav class="navbar">
       <button onclick="enterFullScreen()"><img class="control-icons" src="./img/fullscreen.png" alt="fullscreen" /></button>
-      <button onclick="toggleGameVolume()"><img id="volumeBtn" class="control-icons" src="./img/volume-on.png" alt="sound" /></button>
+      <button onclick="toggleGameVolume('volumeBtn')"><img id="volumeBtn" class="control-icons" src="./img/volume-on.png" alt="sound" /></button>
       <button onclick="toggleGameInfoOverlay()"><img class="control-icons" src="./img/information.png" alt="info" /></button>
     </nav>
     <div class="game-area">
@@ -104,14 +104,20 @@
         <button onclick="startGame()" id="startGameBtn" class="start-btn">Start</button>
       </div>
 
-      <img id="gameOverMessage" class="over-canvas-message d-none" src="./img/You won, you lost/Game Over.png" alt="game over" />
-      <img id="gameLostMessage" class="over-canvas-message d-none" src="./img/9_intro_outro_screens/game_over/you lost.png" alt="you lost" />
-
-      <img id="gameSuccessfullyOverMessage" class="over-canvas-message d-none" src="./img/You won, you lost/Game over A.png" alt="game over" />
-      <img id="gameWonMessage" class="over-canvas-message d-none" src="./img/You won, you lost/You Win A.png" alt="you won" />
+      <div id="mobileMenu" class="mobile-menu">
+        <img onclick="toggleMobileMenu()" src="./img/menu.png" alt="menu">
+        <div id="mobileMenuElements" class="d-none">
+          <div class="mobile-menu-element-wrapper">
+            <button class="mobile-menu-element" onclick="toggleGameVolume('mobileVolumeBtn')"><img id="mobileVolumeBtn" src="./img/volume-on.png" alt=""></button>
+          </div>
+          <div class="mobile-menu-element-wrapper">
+            <button class="mobile-menu-element" onclick="toggleGameInfoOverlay()"><img src="./img/information.png" alt=""></button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mobile-buttons">
+    <div id="mobileButtons" class="mobile-buttons d-none">
       <div class="mobile-buttons-stack">
         <button id="mobileBtnLeft"><img class="mobile-button-img" src="./img/arrow-left.png" alt="left"></button>
         <button id="mobileBtnRight"><img class="mobile-button-img" src="./img/arrow-right.png" alt="right"></button>

@@ -26,15 +26,14 @@ function startGame() {
   initLevel1();
   startScreen = false;
   applyFullScreen();
-  const intro = document.getElementById("startScreenElements");
-
   keyboard = new Keyboard();
   world = new World(canvas, keyboard, level1);
+  const intro = document.getElementById("startScreenElements");
   intro.classList.replace("d-block", "d-none");
+  showMobileButtons();
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));
   }
-  document.getElementById("mobileBtnLeft").addEventListener("touchstart", () => console.log("Touched left button!"));
 }
 
 function addMobileButtonListeners() {
@@ -44,7 +43,6 @@ function addMobileButtonListeners() {
   const attackBtn = document.getElementById('mobileBtnAttack');
 
   if (!leftBtn || !rightBtn) {
-    console.error("Mobile buttons not found in DOM!");
     return;
   }
 
@@ -94,6 +92,8 @@ function init() {
   ctx = canvas.getContext("2d");
 
   addMobileButtonListeners();
+  showMobileButtons(); 
+  showMobileMenu();
 
   window.addEventListener("keydown", (event) => {
     if (!keyboard) return;
@@ -205,6 +205,25 @@ function repeatCurrentLevel() {}
 function playNextLevel() {}
 
 
-function logClick() {
-  console.log('clicked')
+function showMobileButtons() {
+  const btnsContainer = document.getElementById('mobileButtons');
+  if (!startScreen && window.innerWidth <= 750) {
+    btnsContainer.classList.replace('d-none', 'd-flex');
+  } else {
+    btnsContainer.classList.replace('d-flex', 'd-none');
+  }
 }
+
+function showMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  
+  // Remove both classes to ensure no conflict
+  menu.classList.remove('d-none', 'd-flex');
+
+  if (window.innerWidth <= 750) {
+    menu.classList.add('d-flex'); // show
+  } else {
+    menu.classList.add('d-none'); // hide
+  }
+}
+

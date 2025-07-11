@@ -22,8 +22,8 @@ function applyFullScreen() {
   }
 }
 
-function toggleGameVolume() {
-  const button = document.getElementById("volumeBtn");
+function toggleGameVolume(id) {
+  const button = document.getElementById(id);
   toggleSounds();
   if (button.src.includes("volume-on.png")) {
     button.src = "./img/volume-off.png";
@@ -52,6 +52,7 @@ function updateSoundState() {
     }
   }
 }
+
 
 function objectFitContain() {
   const introScreen = document.getElementById('introScreen');
@@ -92,5 +93,14 @@ function toggleGameInfoOverlay() {
   } else {
     overlay.classList.add('d-none');
     dialog.classList.replace('show', 'd-none');
+  }
+}
+
+function toggleMobileMenu() {
+  const elements = document.getElementById('mobileMenuElements');
+  if (elements.classList.contains('d-block')) {
+    elements.classList.replace('d-block', 'd-none');
+  } else {
+    elements.classList.replace('d-none', 'd-block');
   }
 }
