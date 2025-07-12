@@ -7,6 +7,8 @@ class Coins extends movableObject {
 
   offset = { top: 77, left: 77, right: 77, bottom: 77 };
 
+  coinAnimationInterval;
+
   constructor(x, y) {
     super();
     this.loadImage(this.COIN_IMAGES[0]);
@@ -20,7 +22,7 @@ class Coins extends movableObject {
   }
 
   animateCoins(){
-    setInterval(() => {
+    this.coinAnimationInterval = setInterval(() => {
       this.playObjectAnimation(this.COIN_IMAGES);
     }, 100);
   }
@@ -42,7 +44,7 @@ class CoinCollector {
         this.world.coinCollectSound.play();
 
         this.increaseCoinBar();
-        this.deleteCoinFromUI(index);
+        this.deleteCoinFromUI(index, coin);
         this.collidingCoins.add(key);
       }
     } else {
@@ -59,7 +61,8 @@ class CoinCollector {
     this.world.coinsBar.setPercentage(this.coinsTracker, this.world.coinsBar.COINS_STATUS_IMAGES);
   }
 
-  deleteCoinFromUI(index) {
+  deleteCoinFromUI(index, coin) {
+    clearInterval(coin.coinAnimationInterval);
     this.world.level.coins.splice(index, 1);
   }
 }

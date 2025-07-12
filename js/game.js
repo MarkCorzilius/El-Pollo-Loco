@@ -1,4 +1,5 @@
-let currentLevel = 1;
+let level = 1;
+let currentLevel = 5;
 let coinsCollected = 0;
 
 let canvas;
@@ -23,11 +24,11 @@ const finalBackgroundSound = new Audio("./audio/final-fight.mp3");
 let soundEnabled = true;
 
 function startGame() {
-  initLevel1();
+  initLevel(currentLevel);
   startScreen = false;
   applyFullScreen();
   keyboard = new Keyboard();
-  world = new World(canvas, keyboard, level1);
+  world = new World(canvas, keyboard, level);
   const intro = document.getElementById("startScreenElements");
   intro.classList.replace("d-block", "d-none");
   showMobileButtons();
@@ -39,8 +40,8 @@ function startGame() {
 function addMobileButtonListeners() {
   const leftBtn = document.getElementById("mobileBtnLeft");
   const rightBtn = document.getElementById("mobileBtnRight");
-  const jumpBtn = document.getElementById('mobileBtnJump');
-  const attackBtn = document.getElementById('mobileBtnAttack');
+  const jumpBtn = document.getElementById("mobileBtnJump");
+  const attackBtn = document.getElementById("mobileBtnAttack");
 
   if (!leftBtn || !rightBtn) {
     return;
@@ -92,7 +93,7 @@ function init() {
   ctx = canvas.getContext("2d");
 
   addMobileButtonListeners();
-  showMobileButtons(); 
+  showMobileButtons();
   showMobileMenu();
 
   window.addEventListener("keydown", (event) => {
@@ -133,6 +134,7 @@ function init() {
 }
 
 function gameOver() {
+  updateOverlayButtons();
   insertAchievementsBlock();
   if (playerIsDead && !playerAnimationPlayed) {
     playerAnimationPlayed = true;
@@ -192,38 +194,148 @@ window.addEventListener("fullscreenchange", () => {
 });
 
 function playPreviousLevel() {
+  clearAllCanvasIntervals();
+  startGame();
+  playerIsDead = false;
+  playerAnimationPlayed = false;
+  endbossIsDead = false;
+  bossAnimationPlayed = false;
+  gameIsOver = false;
+  coinsCollected = 0;
+  currentLevel -= 1;
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
-  currentLevel -= 1;
-  level = `level${currentLevel}`;
   overlay.classList.add("d-none");
   dialog.classList.replace("show", "d-none");
 }
 
-function repeatCurrentLevel() {}
+function repeatCurrentLevel() {
+  clearAllCanvasIntervals();
+  console.log(world.character.healthTracker);
+  world.character.healthTracker = 100;
+  playerIsDead = false;
+  playerAnimationPlayed = false;
+  endbossIsDead = false;
+  bossAnimationPlayed = false;
+  gameIsOver = false;
+  coinsCollected = 0;
+  startGame();
+  const overlay = document.getElementById("afterLevelOverlay");
+  const dialog = document.getElementById("afterLevelDialog");
+  overlay.classList.add("d-none");
+  dialog.classList.replace("show", "d-none");
+}
 
-function playNextLevel() {}
-
+function playNextLevel() {
+  clearAllCanvasIntervals();
+  startGame();
+  playerIsDead = false;
+  playerAnimationPlayed = false;
+  endbossIsDead = false;
+  bossAnimationPlayed = false;
+  gameIsOver = false;
+  coinsCollected = 0;
+  currentLevel += 1;
+  const overlay = document.getElementById("afterLevelOverlay");
+  const dialog = document.getElementById("afterLevelDialog");
+  overlay.classList.add("d-none");
+  dialog.classList.replace("show", "d-none");
+}
 
 function showMobileButtons() {
-  const btnsContainer = document.getElementById('mobileButtons');
+  const btnsContainer = document.getElementById("mobileButtons");
   if (!startScreen && window.innerWidth <= 750) {
-    btnsContainer.classList.replace('d-none', 'd-flex');
+    btnsContainer.classList.replace("d-none", "d-flex");
   } else {
-    btnsContainer.classList.replace('d-flex', 'd-none');
+    btnsContainer.classList.replace("d-flex", "d-none");
   }
 }
 
 function showMobileMenu() {
-  const menu = document.getElementById('mobileMenu');
-  
+  const menu = document.getElementById("mobileMenu");
+
   // Remove both classes to ensure no conflict
-  menu.classList.remove('d-none', 'd-flex');
+  menu.classList.remove("d-none", "d-flex");
 
   if (window.innerWidth <= 750) {
-    menu.classList.add('d-flex'); // show
+    menu.classList.add("d-flex"); // show
   } else {
-    menu.classList.add('d-none'); // hide
+    menu.classList.add("d-none"); // hide
   }
 }
 
+function initLevel(level) {
+  switch (level) {
+    case 1:
+      initLevel1();
+      break;
+    case 2:
+      initLevel2();
+      break;
+    case 3:
+      initLevel3();
+      break;
+    case 4:
+      initLevel4();
+      break;
+    case 5:
+      initLevel5();
+      break;
+
+    default:
+      initLevel1();
+      break;
+  }
+}
+
+function updateOverlayButtons() {
+  const lastLevel = restartGame();
+  if (lastLevel) {
+    return;
+  }
+  updatePreviousLevelBtn();
+  updateNextLevelBtn();
+  updateRepeatLevelBtn();
+}
+
+function updatePreviousLevelBtn() {
+  const prevBtn = document.getElementById("previousLevelBtn");
+  if (currentLevel === 1 || currentLevel === 5) {
+    prevBtn.classList.add("d-none");
+  } else {
+    prevBtn.classList.remove("d-none");
+  }
+}
+
+function updateNextLevelBtn() {
+  const nextBtn = document.getElementById("nextLevelBtn");
+  if (!world.character.isDead() || currentLevel !== 5) {
+    nextBtn.classList.remove("d-none");
+  } else {
+    nextBtn.classList.add("d-none");
+  }
+}
+
+function updateRepeatLevelBtn() {
+  const repeatBtn = document.getElementById('repeatLevelBtn');
+
+  if (currentLevel !== 5) {
+    repeatBtn.classList.remove('d-none');
+  } else {
+    repeatBtn.classList.add('d-none')
+  }
+}
+
+function restartGame() {
+  const prevBtn = document.getElementById("previousLevelBtn");
+  const nextBtn = document.getElementById("nextLevelBtn");
+  const repeatBtn = document.getElementById('repeatLevelBtn');
+
+  const congrats = document.getElementById('congratulations');
+  const restartBtn = document.getElementById('restartBtn');
+  if (currentLevel === 5) {
+    congrats.classList.remove('d-none');
+    restartBtn.classList.remove('d-none');
+    return true;
+  }
+}

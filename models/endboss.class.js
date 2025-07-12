@@ -168,7 +168,7 @@ class EndbossManager {
   }
 
   getDistanceBetweenEndbossAndCharacter() {
-    setInterval(() => {
+    this.distanceCharacterEndbossInterval = setInterval(() => {
       let characterCenter = this.world.character.x + this.world.character.width / 2;
       let endbossCenter = this.world.endboss.x + this.world.endboss.width / 2;
       this.distanceCharacterEndboss = Math.abs(characterCenter - endbossCenter);

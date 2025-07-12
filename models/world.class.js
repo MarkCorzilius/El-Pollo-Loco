@@ -25,7 +25,7 @@ class World extends movableObject {
 
   constructor(canvas, keyboard, level) {
     super();
-    this.level = level
+    this.level = level;
     this.throwableManager = new ThrowableManager(this);
     this.chickenHandler = new ChickenHandler(this);
     this.endbossManager = new EndbossManager(this);

@@ -82,10 +82,15 @@
       <div id="afterLevelDialog" class="after-level-dialog d-none">
         <h1 class="results-title">Results</h1>
         <div id="achievements" class="achievements"></div>
+        <div id="congratulations" class="congratulations d-none">
+          <h2>Congratulations!</h2>
+          <span>You reached the max level!</span>
+        </div>
         <div class="result-overlay-buttons">
-          <button onclick="playPreviousLevel()">Previous Level</button>
-          <button onclick="repeatCurrentLevel()">Repeat</button>
-          <button onclick="playNextLevel()">Next Level</button>
+          <button id="restartBtn" class="d-none" onclick="restartGame()">Restart</button>
+          <button class="d-none" id="previousLevelBtn" onclick="playPreviousLevel()">Previous Level</button>
+          <button class="d-none" id="repeatLevelBtn" onclick="repeatCurrentLevel()">Repeat</button>
+          <button class="d-none" id="nextLevelBtn" onclick="playNextLevel()">Next Level</button>
         </div>
       </div>
     </div>

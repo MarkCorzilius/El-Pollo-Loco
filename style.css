@@ -439,6 +439,10 @@
     width: auto;
   }
 
+  .congratulations {
+    
+  }
+
   @media (max-width: 750px) {
     .controls {
       display: none;
@@ -463,5 +467,4 @@
       border: none;
       border-radius: 0;
     }
-
   }

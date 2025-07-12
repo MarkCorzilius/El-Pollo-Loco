@@ -104,3 +104,31 @@ function toggleMobileMenu() {
     elements.classList.replace('d-none', 'd-block');
   }
 }
+
+function clearAllCanvasIntervals() {
+  clearInterval(world.character.characterAnimationInterval);
+
+  world.level.enemies.forEach(enemy => {
+    clearInterval(enemy.walkingInterval);
+    clearInterval(enemy.moveLeftInterval);
+  });
+  clearInterval(world.endboss.alertAndWalkingInterval);
+  clearInterval(world.endbossManager.movingInterval);
+
+  clearInterval(world.deadEndbossInterval);
+  clearInterval(world.hurtEndbossInterval);
+  clearInterval(world.endbossManager.distanceCharacterEndbossInterval);
+  clearInterval(world.endbossManager.endbossAttackInterval)
+
+  clearInterval(world.gameOverInterval);
+  clearInterval(world.moveLeftInterval);
+  clearInterval(world.gravityInterval);
+
+  world.level.clouds.forEach(cloud => {
+    clearInterval(cloud.moveLeftInterval);
+  })
+
+  world.level.coins.forEach(coin => {
+    clearInterval(coin.coinAnimationInterval);
+  })
+}
