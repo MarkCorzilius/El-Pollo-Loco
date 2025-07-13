@@ -20,10 +20,7 @@ function showMobileMenu() {
 }
 
 function updateOverlayButtons() {
-  const lastLevel = restartGame(); //check for no sense
-  if (lastLevel) {
-    return;
-  }
+  updateRestartGameBtnAndText();
   updatePreviousLevelBtn();
   updateNextLevelBtn();
   updateRepeatLevelBtn();
@@ -40,7 +37,7 @@ function updatePreviousLevelBtn() {
 
 function updateNextLevelBtn() {
   const nextBtn = document.getElementById("nextLevelBtn");
-  if (!world.character.isDead() || currentLevel !== 5) {
+  if (!gameLost && currentLevel !== 5) {
     nextBtn.classList.remove("d-none");
   } else {
     nextBtn.classList.add("d-none");
@@ -54,6 +51,16 @@ function updateRepeatLevelBtn() {
     repeatBtn.classList.remove("d-none");
   } else {
     repeatBtn.classList.add("d-none");
+  }
+}
+
+function updateRestartGameBtnAndText() {
+  const congrats = document.getElementById("congratulations");
+  const restartBtn = document.getElementById("restartBtn");
+  if (currentLevel === 5) {
+    congrats.classList.remove("d-none");
+    restartBtn.classList.remove("d-none");
+    return true;
   }
 }
 

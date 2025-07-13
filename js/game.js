@@ -1,12 +1,14 @@
 function gameOver() {
   showMobileButtons();
-  updateOverlayButtons();
   insertAchievementsBlock();
   if (playerIsDead && !playerAnimationPlayed) {
     handleGameOverLoss();
+    clearAllCanvasIntervals();
   } else if (endbossIsDead && !bossAnimationPlayed) {
     handleGameOverWin();
+    clearAllCanvasIntervals();
   }
+  updateOverlayButtons();
 }
 
 function handleGameOverLoss() {

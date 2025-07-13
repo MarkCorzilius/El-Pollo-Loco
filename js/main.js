@@ -1,5 +1,5 @@
 let level = 1;
-let currentLevel = 2;
+let currentLevel = 5;
 let coinsCollected = 0;
 
 let canvas;
@@ -28,6 +28,8 @@ let world;
 
 let startScreen = true;
 let fullScreen = false;
+
+let gameLost = false;
 
 function startGame() {
   initLevel(currentLevel);
@@ -78,14 +80,15 @@ function initLevel(level) {
 }
 
 function playPreviousLevel() {
-  clearAllCanvasIntervals();
+  gameLost = false;
+  world.character.healthTracker = 100;
+  gameIsOver = false;
+  coinsCollected = 0;
+  currentLevel -= 1;
   playerIsDead = false; // shorten via sharing func() resetFlags()
   playerAnimationPlayed = false;
   endbossIsDead = false;
   bossAnimationPlayed = false;
-  gameIsOver = false;
-  coinsCollected = 0;
-  currentLevel -= 1;
   startGame();
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
@@ -94,15 +97,14 @@ function playPreviousLevel() {
 }
 
 function repeatCurrentLevel() {
-  clearAllCanvasIntervals();
-  console.log(world.character.healthTracker);
+  gameLost = false;
   world.character.healthTracker = 100;
+  gameIsOver = false;
+  coinsCollected = 0;
   playerIsDead = false;
   playerAnimationPlayed = false;
   endbossIsDead = false;
   bossAnimationPlayed = false;
-  gameIsOver = false;
-  coinsCollected = 0;
   startGame();
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
@@ -111,14 +113,15 @@ function repeatCurrentLevel() {
 }
 
 function playNextLevel() {
-  clearAllCanvasIntervals();
-  playerIsDead = false;
-  playerAnimationPlayed = false;
-  endbossIsDead = false;
-  bossAnimationPlayed = false;
+  gameLost = false;
+  world.character.healthTracker = 100;
   gameIsOver = false;
   coinsCollected = 0;
   currentLevel += 1;
+  endbossIsDead = false;
+  bossAnimationPlayed = false;
+  playerAnimationPlayed = false;
+  playerIsDead = false;
   startGame();
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
@@ -127,11 +130,5 @@ function playNextLevel() {
 }
 
 function restartGame() {
-  const congrats = document.getElementById("congratulations");
-  const restartBtn = document.getElementById("restartBtn");
-  if (currentLevel === 5) {
-    congrats.classList.remove("d-none");
-    restartBtn.classList.remove("d-none");
-    return true;
-  }
+  location.reload();
 }

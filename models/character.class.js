@@ -58,6 +58,7 @@ class Character extends movableObject {
     this.applyGravity();
     this.characterMoveLeftInterval;
     this.characterMoveRightInterval;
+    this.characterAnimationInterval;
   }
 
   animate() {
@@ -89,7 +90,8 @@ class Character extends movableObject {
     this.characterAnimationInterval = setInterval(() => {
       if (this.isDead()) {
         this.playObjectAnimation(this.IMAGES_DEAD, true);
-        setTimeout(() => {
+        gameLost = true;
+        this.deathAnimationTimeOut = setTimeout(() => {
           playerIsDead = true;   
           gameIsOver = true;
         }, this.IMAGES_DEAD.length * 50);
