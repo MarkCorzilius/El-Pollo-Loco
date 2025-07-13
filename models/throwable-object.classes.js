@@ -112,7 +112,7 @@ class ThrowableManager {
   }
 
   handleBottleAttack() {
-    setInterval(() => {
+    this.groundCheckInterval = setInterval(() => {
       this.world.throwableObjects.forEach(bottle => {
         bottle.checkGroundImpact();
       });  

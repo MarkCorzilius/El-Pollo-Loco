@@ -131,4 +131,6 @@ function clearAllCanvasIntervals() {
   world.level.coins.forEach(coin => {
     clearInterval(coin.coinAnimationInterval);
   })
+
+  clearInterval(world.throwableManager.groundCheckInterval);
 }

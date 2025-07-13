@@ -1,5 +1,5 @@
 let level = 1;
-let currentLevel = 5;
+let currentLevel = 2;
 let coinsCollected = 0;
 
 let canvas;
@@ -195,7 +195,6 @@ window.addEventListener("fullscreenchange", () => {
 
 function playPreviousLevel() {
   clearAllCanvasIntervals();
-  startGame();
   playerIsDead = false;
   playerAnimationPlayed = false;
   endbossIsDead = false;
@@ -203,6 +202,7 @@ function playPreviousLevel() {
   gameIsOver = false;
   coinsCollected = 0;
   currentLevel -= 1;
+  startGame();
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
   overlay.classList.add("d-none");
@@ -228,7 +228,6 @@ function repeatCurrentLevel() {
 
 function playNextLevel() {
   clearAllCanvasIntervals();
-  startGame();
   playerIsDead = false;
   playerAnimationPlayed = false;
   endbossIsDead = false;
@@ -236,6 +235,7 @@ function playNextLevel() {
   gameIsOver = false;
   coinsCollected = 0;
   currentLevel += 1;
+  startGame();
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
   overlay.classList.add("d-none");
