@@ -17,9 +17,10 @@ let bossAnimationPlayed = false;
 
 const basicBackgroundSound = new Audio("./audio/basic-background-music.mp3");
 basicBackgroundSound.loop = true;
-basicBackgroundSound.volume = 0.02;
+basicBackgroundSound.volume = 0.1;
 
 const finalBackgroundSound = new Audio("./audio/final-fight.mp3");
+
 
 let soundEnabled = true;
 

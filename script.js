@@ -45,10 +45,10 @@ function updateSoundState() {
   } else {
     if (world.finalFight) {
       finalBackgroundSound.play();
-      finalBackgroundSound.volume = 0.5;
+      finalBackgroundSound.volume = 0.05;
     } else {
       basicBackgroundSound.play();
-      basicBackgroundSound.volume = 0.02; // softer background
+      basicBackgroundSound.volume = 0.1;
     }
   }
 }

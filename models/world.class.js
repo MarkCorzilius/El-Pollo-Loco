@@ -77,7 +77,7 @@ class World extends movableObject {
       basicBackgroundSound.currentTime = 0;
       finalBackgroundSound.play();
       finalBackgroundSound.loop = true;
-      finalBackgroundSound.volume = 0.5;
+      finalBackgroundSound.volume = 0.05;
     }
   }
 
