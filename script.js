@@ -1,10 +1,3 @@
-let globalEnemyId = 0;
-let world;
-
-let startScreen = true;
-let fullScreen = false;
-
-
 function enterFullScreen() {
   fullScreen = true;
   applyFullScreen();
