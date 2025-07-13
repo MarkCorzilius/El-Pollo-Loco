@@ -28,7 +28,7 @@ function updateOverlayButtons() {
 
 function updatePreviousLevelBtn() {
   const prevBtn = document.getElementById("previousLevelBtn");
-  if (currentLevel === 1 || currentLevel === 5) {
+  if (currentLevel === 1 || currentLevel === 5 && !gameLost) {
     prevBtn.classList.add("d-none");
   } else {
     prevBtn.classList.remove("d-none");
@@ -47,7 +47,7 @@ function updateNextLevelBtn() {
 function updateRepeatLevelBtn() {
   const repeatBtn = document.getElementById("repeatLevelBtn");
 
-  if (currentLevel !== 5) {
+  if (currentLevel !== 5 || gameLost) {
     repeatBtn.classList.remove("d-none");
   } else {
     repeatBtn.classList.add("d-none");
@@ -57,10 +57,12 @@ function updateRepeatLevelBtn() {
 function updateRestartGameBtnAndText() {
   const congrats = document.getElementById("congratulations");
   const restartBtn = document.getElementById("restartBtn");
-  if (currentLevel === 5) {
+  if (currentLevel === 5 && !gameLost) {
     congrats.classList.remove("d-none");
     restartBtn.classList.remove("d-none");
-    return true;
+  } else {
+    congrats.classList.add("d-none");
+    restartBtn.classList.add("d-none");
   }
 }
 

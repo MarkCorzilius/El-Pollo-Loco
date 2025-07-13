@@ -1,5 +1,5 @@
 let level = 1;
-let currentLevel = 5;
+let currentLevel = 2;
 let coinsCollected = 0;
 
 let canvas;
@@ -80,39 +80,35 @@ function initLevel(level) {
 }
 
 function playPreviousLevel() {
-  gameLost = false;
-  world.character.healthTracker = 100;
-  gameIsOver = false;
-  coinsCollected = 0;
-  currentLevel -= 1;
-  playerIsDead = false; // shorten via sharing func() resetFlags()
-  playerAnimationPlayed = false;
-  endbossIsDead = false;
-  bossAnimationPlayed = false;
+  resetGameStateFlags();
   startGame();
-  const overlay = document.getElementById("afterLevelOverlay");
-  const dialog = document.getElementById("afterLevelDialog");
-  overlay.classList.add("d-none");
-  dialog.classList.replace("show", "d-none");
+  closeAfterGameOverlay();
 }
 
 function repeatCurrentLevel() {
-  gameLost = false;
-  world.character.healthTracker = 100;
-  gameIsOver = false;
-  coinsCollected = 0;
-  playerIsDead = false;
-  playerAnimationPlayed = false;
-  endbossIsDead = false;
-  bossAnimationPlayed = false;
+  resetGameStateFlags();
   startGame();
+  closeAfterGameOverlay();
+}
+
+function playNextLevel() {
+  resetGameStateFlags();
+  startGame();
+  closeAfterGameOverlay();
+}
+
+function closeAfterGameOverlay() {
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
   overlay.classList.add("d-none");
   dialog.classList.replace("show", "d-none");
 }
 
-function playNextLevel() {
+function restartGame() {
+  location.reload();
+}
+
+function resetGameStateFlags() {
   gameLost = false;
   world.character.healthTracker = 100;
   gameIsOver = false;
@@ -122,13 +118,4 @@ function playNextLevel() {
   bossAnimationPlayed = false;
   playerAnimationPlayed = false;
   playerIsDead = false;
-  startGame();
-  const overlay = document.getElementById("afterLevelOverlay");
-  const dialog = document.getElementById("afterLevelDialog");
-  overlay.classList.add("d-none");
-  dialog.classList.replace("show", "d-none");
-}
-
-function restartGame() {
-  location.reload();
 }

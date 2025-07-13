@@ -14,14 +14,12 @@ function gameOver() {
 function handleGameOverLoss() {
   playerAnimationPlayed = true;
   finalBackgroundSound.pause();
-  stopAllCanvasMovements();
   playLoseAnimations();
 }
 
 function handleGameOverWin() {
   bossAnimationPlayed = true;
   finalBackgroundSound.pause();
-  stopAllCanvasMovements();
   playWinAnimations();
 }
 
