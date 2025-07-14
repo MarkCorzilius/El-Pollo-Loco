@@ -50,11 +50,13 @@ class ThrowableObjects extends movableObject {
 
   throwLeft() {
     this.rotationInterval = setInterval(() => {
+      gameIntervals.push(this.rotationInterval);
       this.playObjectAnimation(this.BOTTLE_ROTATION_IMAGES);
     }, 50);
 
     this.applyGravity();
     this.gravityInterval = setInterval(() => {
+      gameIntervals.push(this.gravityInterval);
       if (this.gravityDisabled) return;
       this.x -= 12;
     }, 25);
@@ -62,11 +64,13 @@ class ThrowableObjects extends movableObject {
 
   throwRight() {
     this.rotationInterval = setInterval(() => {
+      gameIntervals.push(this.rotationInterval);
       this.playObjectAnimation(this.BOTTLE_ROTATION_IMAGES);
     }, 50);
 
     this.applyGravity();
     this.gravityInterval = setInterval(() => {
+      gameIntervals.push(this.gravityInterval);
       if (this.gravityDisabled) return;
       this.x += 12;
     }, 25);
@@ -113,6 +117,7 @@ class ThrowableManager {
 
   handleBottleAttack() {
     this.groundCheckInterval = setInterval(() => {
+      gameIntervals.push(this.groundCheckInterval);
       this.world.throwableObjects.forEach(bottle => {
         bottle.checkGroundImpact();
       });  
@@ -146,6 +151,7 @@ class ThrowableManager {
   playBottleHitAnimation(bottle) {
     bottle.currentImage = 0;
     bottle.splashInterval = setInterval(() => {
+      gameIntervals.push(bottle.splashInterval);
       bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
 
       if (bottle.currentImage >= bottle.BOTTLE_SPLASH_IMAGES.length) {

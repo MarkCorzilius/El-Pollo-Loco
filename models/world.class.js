@@ -83,7 +83,8 @@ class World extends movableObject {
 
 
   startCollisitionCheck() {
-    setInterval(() => {
+    this.collisionCheckInterval = setInterval(() => {
+      gameIntervals.push(this.collisionCheckInterval)
       this.level.enemies.forEach((enemy) => {
         this.handleEnemyCollisition(enemy);
         this.throwableManager.checkThrowObjects();

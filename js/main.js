@@ -1,5 +1,8 @@
+let gameIntervals = [];
+let gameTimeouts = [];
+
 let level = 1;
-let currentLevel = 2;
+let currentLevel = 1;
 let coinsCollected = 0;
 
 let canvas;
@@ -37,12 +40,16 @@ function startGame() {
   applyFullScreen();
   keyboard = new Keyboard();
   world = new World(canvas, keyboard, level);
-  const intro = document.getElementById("startScreenElements");
-  intro.classList.replace("d-block", "d-none");
+  hideStartScreen();
   showMobileButtons();
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));
   }
+}
+
+function hideStartScreen() {
+  const intro = document.getElementById("startScreenElements");
+  intro.classList.replace("d-block", "d-none");
 }
 
 function init() {
@@ -80,19 +87,19 @@ function initLevel(level) {
 }
 
 function playPreviousLevel() {
-  resetGameStateFlags();
+  resetGameStateFlags(currentLevel -= 1);
   startGame();
   closeAfterGameOverlay();
 }
 
 function repeatCurrentLevel() {
-  resetGameStateFlags();
+  resetGameStateFlags(currentLevel);
   startGame();
   closeAfterGameOverlay();
 }
 
 function playNextLevel() {
-  resetGameStateFlags();
+  resetGameStateFlags(currentLevel += 1);
   startGame();
   closeAfterGameOverlay();
 }
@@ -108,12 +115,12 @@ function restartGame() {
   location.reload();
 }
 
-function resetGameStateFlags() {
+function resetGameStateFlags(newLevel) {
+  currentLevel = newLevel;
   gameLost = false;
   world.character.healthTracker = 100;
   gameIsOver = false;
   coinsCollected = 0;
-  currentLevel += 1;
   endbossIsDead = false;
   bossAnimationPlayed = false;
   playerAnimationPlayed = false;

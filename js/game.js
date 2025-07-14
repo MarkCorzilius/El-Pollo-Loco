@@ -3,10 +3,10 @@ function gameOver() {
   insertAchievementsBlock();
   if (playerIsDead && !playerAnimationPlayed) {
     handleGameOverLoss();
-    clearAllCanvasIntervals();
+    stopGame();
   } else if (endbossIsDead && !bossAnimationPlayed) {
     handleGameOverWin();
-    clearAllCanvasIntervals();
+    stopGame();
   }
   updateOverlayButtons();
 }
@@ -47,15 +47,17 @@ function playLoseAnimations() {
   }, 3000);
 }
 
-function stopAllCanvasMovements() { // check for doubling
-  clearInterval(world.character.characterMoveRightInterval);
-  clearInterval(world.character.characterMoveLeftInterval);
-  world.level.enemies.forEach((enemy) => {
-    clearInterval(enemy.walkingInterval);
-  });
-  world.level.enemies.forEach((enemy) => {
-    clearInterval(enemy.moveLeftInterval);
-  });
-  clearInterval(world.endboss.movingInterval);
-  clearInterval(world.endboss.alertAndWalkingInterval);
+function setStoppableIntervals(fn, time) {
+  let id = setInterval(fn, time);
+  gameIntervals.push(id);
+}
+
+function setStoppableTimeouts(fn, time) {
+  let id = setTimeout(fn, time);
+  gameTimeouts.push(id);
+}
+
+function stopGame() {
+  gameIntervals.forEach(clearInterval);
+  gameTimeouts.forEach(clearTimeout);
 }

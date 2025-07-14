@@ -31,6 +31,7 @@ class Chicken extends movableObject {
 
   animate() {
     this.walkingInterval = setInterval(() => {
+      gameIntervals.push(this.walkingInterval);
       this.playObjectAnimation(this.IMAGES_WALKING);
     }, 200);
 
@@ -39,6 +40,7 @@ class Chicken extends movableObject {
 
   moveLeft() {
     this.moveLeftInterval = setInterval(() => {
+      gameIntervals.push(this.moveLeftInterval);
       this.x -= this.speed;
     }, 1000 / 60);
   }
@@ -78,6 +80,7 @@ class SmallChicken extends movableObject {
 
   animate() {
     this.walkingInterval = setInterval(() => {
+      gameIntervals.push(this.walkingInterval);
       this.playObjectAnimation(this.IMAGES_WALKING);
     }, 200);
 
@@ -86,6 +89,7 @@ class SmallChicken extends movableObject {
 
   moveLeft() {
     this.moveLeftInterval = setInterval(() => {
+      gameIntervals.push(this.moveLeftInterval);
       this.x -= this.speed;
     }, 1000 / 60);
   }

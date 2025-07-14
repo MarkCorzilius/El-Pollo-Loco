@@ -71,6 +71,7 @@ class Endboss extends movableObject {
     if (this.isAttacking || gameIsOver) return;
     clearInterval(this.alertAndWalkingInterval);
     this.alertAndWalkingInterval = setInterval(() => {
+      gameIntervals.push(this.alertAndWalkingInterval);
       if (hasSpotedCharacter) {
         if (!hasEndbossAlerted) {
           this.playObjectAnimation(this.IMAGES_ALERT, true);
@@ -90,6 +91,7 @@ class Endboss extends movableObject {
     if (this.movingInterval || this.isAttacking || gameIsOver) return;
 
     this.movingInterval = setInterval(() => {
+      gameIntervals.push(this.movingInterval);
       if (this.otherDirection) {
         this.x += this.speed;
       } else {
@@ -144,6 +146,7 @@ class EndbossManager {
     this.world.deadBossSound.volume = soundEnabled ? 0.5 : 0;
     this.world.deadBossSound.play();
     this.world.deadEndbossInterval = setInterval(() => {
+      gameIntervals.push(this.world.deadEndbossInterval)
       this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_DEAD, true);
     }, 200);
     setTimeout(() => {
@@ -154,6 +157,7 @@ class EndbossManager {
 
   playHurtAnimation() {
     this.world.hurtEndbossInterval = setInterval(() => {
+      gameIntervals.push(this.world.hurtEndbossInterval);
       this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_HURT, true);
     }, 200);
   }
@@ -169,6 +173,7 @@ class EndbossManager {
 
   getDistanceBetweenEndbossAndCharacter() {
     this.distanceCharacterEndbossInterval = setInterval(() => {
+      gameIntervals.push(this.distanceCharacterEndbossInterval);
       let characterCenter = this.world.character.x + this.world.character.width / 2;
       let endbossCenter = this.world.endboss.x + this.world.endboss.width / 2;
       this.distanceCharacterEndboss = Math.abs(characterCenter - endbossCenter);
@@ -208,6 +213,7 @@ class EndbossManager {
     if (!this.attackTimeout) {
       this.attackTimeout = true;
       this.endbossAttackInterval = setInterval(() => {
+        gameIntervals.push(this.endbossAttackInterval);
         this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_ATTACK, true);
       }, 1000 / 60);
     }
@@ -236,7 +242,8 @@ class EndbossManager {
   }
 
   decideEnbossDirection() {
-    setInterval(() => {
+    this.decideEndbossDirectionInterval = setInterval(() => {
+      gameIntervals.push(this.decideEndbossDirectionInterval);
       this.world.endboss.otherDirection = false;
       if (this.world.character.x > this.world.endboss.x) {
         this.world.endboss.otherDirection = true;

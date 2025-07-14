@@ -93,6 +93,7 @@ class StatusBar extends DrawableObject {
 
   decideTimingForEndbossBar() {
     this.startEndbossFightWatcher = setInterval(() => {
+      gameIntervals.push(this.startEndbossFightWatcher);
       if (this.world.endbossManager.distanceCharacterEndboss <= 750) {
         this.world.endbossFightTime = true;
         this.activateEndbossBars();

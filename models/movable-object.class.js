@@ -10,6 +10,7 @@ class movableObject extends DrawableObject {
   constructor() {
     super();
     this.gameOverInterval = setInterval(() => {
+      gameIntervals.push(this.gameOverInterval);
       gameOver();
     }, 100);
   }
@@ -51,6 +52,7 @@ class movableObject extends DrawableObject {
 
   moveLeft() {
     this.moveLeftInterval = setInterval(() => {
+      gameIntervals.push(this.moveLeftInterval);
       this.x -= this.speed;
     }, 1000 / 60);
   }
@@ -76,6 +78,7 @@ class movableObject extends DrawableObject {
 
   applyGravity() {
     this.gravityInterval = setInterval(() => {
+      gameIntervals.push(this.gravityInterval);
       if (this.isAboveGround() || this.speedY > 0) {
         if (this.gravityDisabled) return;
         this.y -= this.speedY;

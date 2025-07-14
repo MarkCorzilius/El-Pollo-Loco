@@ -63,6 +63,7 @@ class Character extends movableObject {
 
   animate() {
     this.characterMoveRightInterval = setInterval(() => {
+      gameIntervals.push(this.characterMoveRightInterval);
       if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE) {
         this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
       }
@@ -73,6 +74,7 @@ class Character extends movableObject {
     }, 1000 / 60);
 
     this.characterMoveLeftInterval = setInterval(() => {
+      gameIntervals.push(this.characterMoveLeftInterval);
       if (this.world.keyboard.LEFT && this.x > 0) {
         this.moveLeft();
       }
@@ -88,10 +90,12 @@ class Character extends movableObject {
 
   playCharacterAnimation() {
     this.characterAnimationInterval = setInterval(() => {
+      gameIntervals.push(this.characterAnimationInterval);
       if (this.isDead()) {
         this.playObjectAnimation(this.IMAGES_DEAD, true);
         gameLost = true;
         this.deathAnimationTimeOut = setTimeout(() => {
+          gameTimeouts.push(this.deathAnimationTimeOut);
           playerIsDead = true;   
           gameIsOver = true;
         }, this.IMAGES_DEAD.length * 50);
@@ -127,6 +131,7 @@ class Character extends movableObject {
     const floorY = 225;
 
     this.pushAwayInterval = setInterval(() => {
+      gameIntervals.push(this.pushAwayInterval);
       this.x += pushXSpeed;
       this.y -= this.speedY;
 
