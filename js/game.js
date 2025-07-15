@@ -24,7 +24,7 @@ function handleGameOverWin() {
 }
 
 function playWinAnimations() {
-  world.gameWonSound.play();
+  playWinSound();
   world.winMessage.show();
 
   setTimeout(() => {
@@ -35,8 +35,14 @@ function playWinAnimations() {
   }, 3000);
 }
 
+function playWinSound() {
+  if (soundEnabled) {
+    world.gameWonSound.play();
+  }
+}
+
 function playLoseAnimations() {
-  world.gameLostSound.play();
+  playLostSound();
   world.loseMessage.show();
 
   setTimeout(() => {
@@ -45,6 +51,12 @@ function playLoseAnimations() {
   setTimeout(() => {
     showAfterGameOverScreen();
   }, 3000);
+}
+
+function playLostSound() {
+  if (soundEnabled) {
+    world.gameLostSound.play();
+  }
 }
 
 function setStoppableIntervals(fn, time) {

@@ -153,6 +153,7 @@ class World extends movableObject {
     if (enemy instanceof SmallChicken) {
       this.playDeadChickenSound(enemy);
       this.chickenHandler.showDeadChicken(enemy, "./img/3_enemies_chicken/chicken_small/2_dead/dead.png");
+      this.removeDeadChickenBody(enemy);
     }
   }
 
@@ -160,8 +161,17 @@ class World extends movableObject {
     if (enemy instanceof Chicken) {
       this.playDeadChickenSound(enemy);
       this.chickenHandler.showDeadChicken(enemy, "./img/3_enemies_chicken/chicken_normal/2_dead/dead.png");
+      this.removeDeadChickenBody(enemy);
     }
   }
+
+  removeDeadChickenBody(enemy) {
+    const index = this.level.enemies.indexOf(enemy);
+    setTimeout(() => {
+      this.level.enemies.splice(index, 1);
+    }, 5000);
+  }
+
   playEndbossHurtSound() {
     this.chickenBossHurtSound.volume = soundEnabled ? 0.5 : 0;
     this.chickenBossHurtSound.play();
@@ -177,7 +187,7 @@ class World extends movableObject {
   handleCollectableBottleCollisition(bottle, index) {
     const key = bottle.id;
     if (this.character.isColliding(bottle)) {
-      this.attemptBottleCollection(key, bottle);
+      this.attemptBottleCollection(key, index);
     } else {
       this.resetBottleCollision(key);
     }
