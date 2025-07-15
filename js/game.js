@@ -61,3 +61,10 @@ function stopGame() {
   gameIntervals.forEach(clearInterval);
   gameTimeouts.forEach(clearTimeout);
 }
+
+function startGameOverCheckInterval() {
+  gameOverInterval = setInterval(() => {
+    gameIntervals.push(gameOverInterval);
+    gameOver();
+  }, 100);
+}

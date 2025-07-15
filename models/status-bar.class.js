@@ -48,7 +48,7 @@ class StatusBar extends DrawableObject {
     this.width = 250;
     this.height = 70;
     this.decideCurrentBar(type);
-    this.decideTimingForEndbossBar();
+    this.startEndbossBarWatcher();
   }
 
   decideCurrentBar(type) {
@@ -91,15 +91,23 @@ class StatusBar extends DrawableObject {
     }
   }
 
-  decideTimingForEndbossBar() {
+  startEndbossBarWatcher() {
     this.startEndbossFightWatcher = setInterval(() => {
       gameIntervals.push(this.startEndbossFightWatcher);
-      if (this.world.endbossManager.distanceCharacterEndboss <= 750) {
-        this.world.endbossFightTime = true;
-        this.activateEndbossBars();
-        clearInterval(this.startEndbossFightWatcher);
-      }
+      this.enteredFinalFightZone();
     }, 200);
+  }
+
+  enteredFinalFightZone() {
+    if (this.isWithinFinalFightDistance()) {
+      this.world.endbossFightTime = true;
+      this.activateEndbossBars();
+      clearInterval(this.startEndbossFightWatcher);
+    }
+  }
+
+  isWithinFinalFightDistance() {
+    return this.world.endbossManager.distanceCharacterEndboss <= 750;
   }
 
   activateEndbossBars() {

@@ -40,17 +40,23 @@ class CoinCollector {
     const key = coin.id;
     if (this.world.character.isColliding(coin)) {
       if (!this.collidingCoins.has(key)) {
-
-        this.world.coinCollectSound.volume = soundEnabled ? 0.3 : 0;
-        this.world.coinCollectSound.play();
-
-        this.increaseCoinBar();
-        this.deleteCoinFromUI(index, coin);
-        this.collidingCoins.add(key);
+        this.handleCoinSounds();
+        this.applyCoinCollection(coin, index, key);
       }
     } else {
       this.collidingCoins.delete(key);
     }
+  }
+
+  applyCoinCollection(coin, index, key) {
+    this.increaseCoinBar();
+    this.deleteCoinFromUI(index, coin);
+    this.collidingCoins.add(key);
+  }
+
+  handleCoinSounds() {
+    this.world.coinCollectSound.volume = soundEnabled ? 0.3 : 0;
+    this.world.coinCollectSound.play();
   }
 
   increaseCoinBar() {

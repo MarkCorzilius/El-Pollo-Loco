@@ -3,6 +3,8 @@ class Character extends movableObject {
   width = 130;
   y = 225;
   x = 100;
+  pushXSpeed = -8;
+  floorY = 225;
 
   IMAGES_WALKING = [
     "./img/2_character_pepe/2_walk/W-22.png",
@@ -56,63 +58,89 @@ class Character extends movableObject {
     this.loadMovementSprites(this.IMAGES_DEAD);
     this.loadMovementSprites(this.IMAGES_HURT);
     this.applyGravity();
-    this.characterMoveLeftInterval;
-    this.characterMoveRightInterval;
-    this.characterAnimationInterval;
   }
 
   animate() {
+    this.startMoveRightInterval();
+    this.startMoveLeftAndJumpInterval();
+    this.playCharacterAnimation();
+  }
+
+  startMoveLeftAndJumpInterval() {
+    this.characterMoveLeftInterval = setInterval(() => {
+      gameIntervals.push(this.characterMoveLeftInterval);
+      if (this.canMoveLeft()) {
+        this.moveLeft();
+      }
+      if (this.canJump()) {
+        this.jump();
+      }
+      this.world.camera_x = -this.x + 200;
+    }, 1000 / 60);
+  }
+
+  startMoveRightInterval() {
     this.characterMoveRightInterval = setInterval(() => {
       gameIntervals.push(this.characterMoveRightInterval);
-      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE) {
+      if (this.isNotMoving()) {
         this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
       }
-      if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+      if (this.canMoveRight()) {
         this.moveRight();
       }
       this.world.camera_x = this.x;
     }, 1000 / 60);
+  }
 
-    this.characterMoveLeftInterval = setInterval(() => {
-      gameIntervals.push(this.characterMoveLeftInterval);
-      if (this.world.keyboard.LEFT && this.x > 0) {
-        this.moveLeft();
-      }
-
-      if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-        this.jump();
-      }
-
-      this.world.camera_x = -this.x + 200;
-    }, 1000 / 60);
-    this.playCharacterAnimation();
+  shouldAnimateWalk() {
+    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+  }
+  
+  canMoveLeft() {
+    return this.world.keyboard.LEFT && this.x > 0;
+  }
+  
+  canMoveRight() {
+    return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
+  }
+  
+  canJump() {
+    return this.world.keyboard.SPACE && !this.isAboveGround();
+  }
+  
+  isNotMoving() {
+    return !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE;
   }
 
   playCharacterAnimation() {
     this.characterAnimationInterval = setInterval(() => {
       gameIntervals.push(this.characterAnimationInterval);
       if (this.isDead()) {
-        this.playObjectAnimation(this.IMAGES_DEAD, true);
-        gameLost = true;
-        this.deathAnimationTimeOut = setTimeout(() => {
-          gameTimeouts.push(this.deathAnimationTimeOut);
-          playerIsDead = true;   
-          gameIsOver = true;
-        }, this.IMAGES_DEAD.length * 50);
+        this.handleDeathAnimation();
       } else if (this.isHurt()) {
         this.playObjectAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.playObjectAnimation(this.IMAGES_JUMPING);
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      } else if (this.shouldAnimateWalk()) {
         this.playObjectAnimation(this.IMAGES_WALKING);
       }
     }, 1000 / 60);
   }
 
+  handleDeathAnimation() {
+    this.playObjectAnimation(this.IMAGES_DEAD, true);
+    gameLost = true;
+    this.deathAnimationTimeOut = setTimeout(() => {
+      gameTimeouts.push(this.deathAnimationTimeOut);
+      playerIsDead = true;
+      gameIsOver = true;
+    }, this.IMAGES_DEAD.length * 50);
+  }
+
+  
   jump() {
     this.speedY = 22;
   }
-
   moveRight() {
     this.x += this.speed;
     this.otherDirection = false;
@@ -126,23 +154,30 @@ class Character extends movableObject {
   pushCharacterAway() {
     clearInterval(this.world.gravityInterval);
 
-    this.speedY = 18;
-    const pushXSpeed = -8;
-    const floorY = 225;
+    this.startPushAwayInterval();
+  }
 
+  startPushAwayInterval() {
+    this.speedY = 18;
     this.pushAwayInterval = setInterval(() => {
       gameIntervals.push(this.pushAwayInterval);
-      this.x += pushXSpeed;
-      this.y -= this.speedY;
-
-      this.speedY -= 0.7;
-
-      if (this.y > floorY) {
-        this.y = floorY;
-        this.speedY = 0;
-        clearInterval(this.pushAwayInterval);
-        this.world.applyGravity();
-      }
+      this.updatePushAwayConditions();
+      this.handlePushAwayLanding();
     }, 1000 / 60);
+  }
+
+  updatePushAwayConditions() {
+    this.x += this.pushXSpeed;
+    this.y -= this.speedY;
+    this.speedY -= 0.7;
+  }
+
+  handlePushAwayLanding() {
+    if (this.y > this.floorY) {
+      this.y = this.floorY;
+      this.speedY = 0;
+      clearInterval(this.pushAwayInterval);
+      this.world.applyGravity();
+    }
   }
 }

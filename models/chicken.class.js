@@ -30,11 +30,7 @@ class Chicken extends movableObject {
   }
 
   animate() {
-    this.walkingInterval = setInterval(() => {
-      gameIntervals.push(this.walkingInterval);
-      this.playObjectAnimation(this.IMAGES_WALKING);
-    }, 200);
-
+    this.startWalkingInterval();
     this.moveLeft();
   }
 
@@ -43,6 +39,13 @@ class Chicken extends movableObject {
       gameIntervals.push(this.moveLeftInterval);
       this.x -= this.speed;
     }, 1000 / 60);
+  }
+
+  startWalkingInterval() {
+    this.walkingInterval = setInterval(() => {
+      gameIntervals.push(this.walkingInterval);
+      this.playObjectAnimation(this.IMAGES_WALKING);
+    }, 200);
   }
 }
 
@@ -63,6 +66,7 @@ class SmallChicken extends movableObject {
   width = 80;
   y = 345;
   x = 800;
+
   IMAGES_WALKING = [
     "./img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "./img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
@@ -103,21 +107,24 @@ class ChickenHandler {
   }
 
   generateValidX(start = 300, range = 2500) {
+    const x = this.findValidChickenPosition(start, range);
+    this.chickenPositions.push(x);
+    return x;
+  }
+
+  findValidChickenPosition(start, range) {
     let x;
     let isValid = false;
 
     for (let i = 0; i < 1000; i++) {
       x = start + Math.random() * range;
       isValid = this.chickenPositions.every((pos) => Math.abs(pos - x) >= this.minDistance);
-      if (isValid) break;
-      
+      if (isValid) return x;
     }
-    this.chickenPositions.push(x);
-    return x;
   }
 
   didJumpOnChicken(enemy) {
-    if (enemy instanceof Chicken || enemy instanceof SmallChicken) {
+    if (this.isNormalEnemy(enemy)) {
       this.world.character.enemyWasJumpedOn = false;
       const characterBottom = this.world.character.y + this.world.character.height;
       const enemyTop = enemy.y + enemy.offset.top;
@@ -127,6 +134,10 @@ class ChickenHandler {
         this.world.handleEnemyHit(enemy);
       }
     }
+  }
+
+  isNormalEnemy(enemy) {
+    return enemy instanceof Chicken || enemy instanceof SmallChicken
   }
 
   showDeadChicken(enemy, deadImages) {

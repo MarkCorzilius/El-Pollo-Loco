@@ -62,6 +62,8 @@ class World extends movableObject {
     this.startCollisitionCheck();
     this.endbossManager.getDistanceBetweenEndbossAndCharacter();
 
+    startGameOverCheckInterval();
+
   }
 
   setWorld() {
