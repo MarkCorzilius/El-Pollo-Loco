@@ -47,6 +47,7 @@
           <img src="./img/close-overlay.png" alt="close" />
         </div>
         <h1 class="description-title">Game Description</h1>
+
         <div class="game-info-content">
           <h2>Controls</h2>
           <ul>
@@ -70,6 +71,7 @@
 
           <h2>Boss Fight</h2>
           <p>Only bottles can damage the boss. Each bottle deals 20 HP damage — hit the boss 5 times to win.</p>
+          <p><strong>Note:</strong> Every time you hit the End Boss, he starts running faster and causes more damage.</p>
 
           <h2>Bottles & Coins</h2>
           <ul>
@@ -104,6 +106,9 @@
       <button onclick="enterFullScreen()"><img class="control-icons" src="./img/fullscreen.png" alt="fullscreen" /></button>
       <button onclick="toggleGameVolume('volumeBtn')"><img id="volumeBtn" class="control-icons" src="./img/volume-on.png" alt="sound" /></button>
       <button onclick="toggleGameInfoOverlay()"><img class="control-icons" src="./img/information.png" alt="info" /></button>
+      <a target="_blank" href="./impressum.html"
+        ><button><img class="control-icons" src="./img/impressum.png" alt="impressum" /></button
+      ></a>
     </nav>
     <div class="game-area">
       <canvas id="canvas" width="720" height="480"></canvas>
@@ -113,13 +118,19 @@
       </div>
 
       <div id="mobileMenu" class="mobile-menu">
-        <img onclick="toggleMobileMenu()" src="./img/menu.png" alt="menu">
+        <img onclick="toggleMobileMenu()" src="./img/menu.png" alt="menu" />
         <div id="mobileMenuElements" class="d-none">
           <div class="mobile-menu-element-wrapper">
-            <button class="mobile-menu-element" onclick="toggleGameVolume('mobileVolumeBtn')"><img id="mobileVolumeBtn" src="./img/volume-on.png" alt=""></button>
+            <button class="mobile-menu-element" onclick="toggleGameVolume('mobileVolumeBtn')">
+              <img id="mobileVolumeBtn" src="./img/volume-on.png" alt="" />
+            </button>
           </div>
           <div class="mobile-menu-element-wrapper">
-            <button class="mobile-menu-element" onclick="toggleGameInfoOverlay()"><img src="./img/information.png" alt=""></button>
+            <button class="mobile-menu-element" onclick="toggleGameInfoOverlay()"><img src="./img/information.png" alt="" /></button>
+          </div>
+          <div class="mobile-menu-element-wrapper">
+            <a class="mobile-menu-element impressum" target="_blank" href="./impressum.html"
+              ><img src="./img/impressum.png" alt="impressum" /></a>
           </div>
         </div>
       </div>
@@ -127,12 +138,12 @@
 
     <div id="mobileButtons" class="mobile-buttons d-none">
       <div class="mobile-buttons-stack">
-        <button id="mobileBtnLeft"><img class="mobile-button-img" src="./img/arrow-left.png" alt="left"></button>
-        <button id="mobileBtnRight"><img class="mobile-button-img" src="./img/arrow-right.png" alt="right"></button>
+        <button class="mobile-touch-buttons" id="mobileBtnLeft"><img class="mobile-button-img" src="./img/arrow-left.png" alt="left" /></button>
+        <button class="mobile-touch-buttons" id="mobileBtnRight"><img class="mobile-button-img" src="./img/arrow-right.png" alt="right" /></button>
       </div>
       <div class="mobile-buttons-stack">
-        <button id="mobileBtnJump"><img class="mobile-button-img" src="./img/jump.png" alt="jump"></button>
-        <button id="mobileBtnAttack"><img class="mobile-button-img" src="./img/attack.png" alt="attack"></button>
+        <button class="mobile-touch-buttons" id="mobileBtnJump"><img class="mobile-button-img" src="./img/jump.png" alt="jump" /></button>
+        <button class="mobile-touch-buttons" id="mobileBtnAttack"><img class="mobile-button-img" src="./img/attack.png" alt="attack" /></button>
       </div>
     </div>
 

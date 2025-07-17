@@ -55,7 +55,7 @@ class CoinCollector {
   }
 
   handleCoinSounds() {
-    this.world.coinCollectSound.volume = soundEnabled ? 0.3 : 0;
+    this.world.coinCollectSound.volume = soundEnabled ? 0.1 : 0;
     this.world.coinCollectSound.play();
   }
 

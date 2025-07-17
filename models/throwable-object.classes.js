@@ -47,7 +47,7 @@ class ThrowableObjects extends movableObject {
   }
 
   playBottleThrowSound() {
-    this.bottleThrowSound.volume = soundEnabled ? 0.5 : 0;
+    this.bottleThrowSound.volume = soundEnabled ? 0.1 : 0;
     this.bottleThrowSound.play();
   }
 

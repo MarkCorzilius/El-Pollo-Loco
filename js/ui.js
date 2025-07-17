@@ -1,18 +1,24 @@
 function showMobileButtons() {
   const btnsContainer = document.getElementById("mobileButtons");
-  if (!gameIsOver && !startScreen && window.innerWidth <= 750) {
+  if (!gameIsOver && !startScreen && window.innerWidth <= 1024) {
     btnsContainer.classList.replace("d-none", "d-flex");
+
+    document.querySelectorAll(".mobile-touch-buttons").forEach((btn) => {
+      if (!btn.hasListener) {
+        btn.addEventListener("contextmenu", (e) => e.preventDefault());
+        btn.hasListener = true;
+      }
+    });
   } else {
     btnsContainer.classList.replace("d-flex", "d-none");
   }
 }
-
 function showMobileMenu() {
   const menu = document.getElementById("mobileMenu");
 
   menu.classList.remove("d-none", "d-flex");
 
-  if (window.innerWidth <= 750) {
+  if (window.innerWidth < 1024) {
     menu.classList.add("d-flex"); // show
   } else {
     menu.classList.add("d-none"); // hide

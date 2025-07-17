@@ -2,7 +2,7 @@ let gameIntervals = [];
 let gameTimeouts = [];
 
 let level = 1;
-let currentLevel = 1;
+let currentLevel = 5;
 let coinsCollected = 0;
 
 let canvas;
@@ -53,6 +53,7 @@ function hideStartScreen() {
 }
 
 function init() {
+  toggleGameInfoOverlay();
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
 
@@ -118,7 +119,6 @@ function restartGame() {
 function resetGameStateFlags(newLevel) {
   currentLevel = newLevel;
   gameLost = false;
-  world.character.healthTracker = 100;
   gameIsOver = false;
   coinsCollected = 0;
   endbossIsDead = false;

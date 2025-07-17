@@ -32,7 +32,7 @@ class movableObject extends DrawableObject {
   }
 
   playCharacterHurtSound() {
-    this.world.characterHurtSound.volume = soundEnabled ? 0.5 : 0;
+    this.world.characterHurtSound.volume = soundEnabled ? 0.2 : 0;
     this.world.characterHurtSound.play();
   }
 
@@ -44,10 +44,6 @@ class movableObject extends DrawableObject {
 
   isDead() {
     return this.healthTracker == 0;
-  }
-
-  moveRight() {
-    console.log("Go right!");
   }
 
   moveLeft() {

@@ -173,13 +173,13 @@ class World extends movableObject {
   }
 
   playEndbossHurtSound() {
-    this.chickenBossHurtSound.volume = soundEnabled ? 0.5 : 0;
+    this.chickenBossHurtSound.volume = soundEnabled ? 0.1 : 0;
     this.chickenBossHurtSound.play();
   }
 
   playDeadChickenSound(enemy) {
     if (!enemy.isDead) {
-      this.chickenHurtSound.volume = soundEnabled ? 0.5 : 0;
+      this.chickenHurtSound.volume = soundEnabled ? 0.1 : 0;
       this.chickenHurtSound.play();
     }
   }
@@ -218,7 +218,7 @@ class World extends movableObject {
   }
 
   playBottleCollectSound() {
-    this.bottleCollectSound.volume = soundEnabled ? 0.5 : 0;
+    this.bottleCollectSound.volume = soundEnabled ? 0.1 : 0;
     this.bottleCollectSound.play();
   }
 

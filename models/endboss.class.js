@@ -9,7 +9,7 @@ class Endboss extends movableObject {
     left: 30,
     right: 35,
   };
-  speed = 0.3;
+  speed = 0.4;
   hp;
   isDead = false;
   isHurt = false;
@@ -154,8 +154,13 @@ class EndbossManager {
   }
 
   increaseEndbossPower() {
-    this.world.endboss.speed += 0.2;
-    this.world.endboss.damage += 5;
+    if (currentLevel === 4 || currentLevel === 5) {
+      this.world.endboss.speed += 0.3;
+      this.world.endboss.damage += 10;
+    } else {
+      this.world.endboss.speed += 0.2;
+      this.world.endboss.damage += 5;
+    }
   }
 
   removeEndbossFromLevel() {
@@ -188,7 +193,7 @@ class EndbossManager {
   }
 
   playEndbossDeathSound() {
-    this.world.deadBossSound.volume = soundEnabled ? 0.5 : 0;
+    this.world.deadBossSound.volume = soundEnabled ? 0.2 : 0;
     this.world.deadBossSound.play();
   }
 
@@ -257,7 +262,7 @@ class EndbossManager {
   }
 
   startAttackAnimation() {
-    this.playEndbossHurtSound();
+    this.world.playEndbossHurtSound();
     this.startAttackInterval();
 
     setTimeout(() => {
@@ -268,11 +273,6 @@ class EndbossManager {
   stopAttackInterval() {
     clearInterval(this.endbossAttackInterval);
     this.attackTimeout = false;
-  }
-
-  playEndbossHurtSound() {
-    this.world.characterHurtSound.volume = soundEnabled ? 0.5 : 0;
-    this.world.characterHurtSound.play();
   }
 
   startAttackInterval() {
