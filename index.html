@@ -7,10 +7,10 @@
 
     <link rel="icon" href="./img/7_statusbars/3_icons/icon_coin.png" type="image/png" />
 
-    <link rel="stylesheet" href="./css/responsive.css" />
     <link rel="stylesheet" href="./css/ui-elements.css" />
     <link rel="stylesheet" href="./css/game-screens.css" />
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./css/responsive.css" />
 
     <script src="./js/templates.js"></script>
     <script src="./script.js"></script>
@@ -115,7 +115,24 @@
       ></a>
     </nav>
     <div class="game-area">
-      <canvas id="canvas" width="720" height="480"></canvas>
+
+      <div class="game-window">
+
+        <canvas id="canvas" width="720" height="480"></canvas>
+
+        <div id="mobileButtons" class="mobile-buttons d-none">
+          <div class="mobile-buttons-stack">
+            <button class="mobile-touch-buttons" id="mobileBtnLeft"><img class="mobile-button-img" src="./img/arrow-left.png" alt="left" /></button>
+            <button class="mobile-touch-buttons" id="mobileBtnRight"><img class="mobile-button-img" src="./img/arrow-right.png" alt="right" /></button>
+          </div>
+          <div class="mobile-buttons-stack">
+            <button class="mobile-touch-buttons" id="mobileBtnJump"><img class="mobile-button-img" src="./img/jump.png" alt="jump" /></button>
+            <button class="mobile-touch-buttons" id="mobileBtnAttack"><img class="mobile-button-img" src="./img/attack.png" alt="attack" /></button>
+          </div>
+        </div>
+
+      </div>
+
       <div id="startScreenElements" class="d-block">
         <img id="introScreen" class="start-screen" src="./img/9_intro_outro_screens/start/startscreen_1.png" alt="start screen" />
         <button onclick="startGame()" id="startGameBtn" class="start-btn">Start</button>
@@ -137,17 +154,6 @@
               ><img src="./img/privacy-policy.png" alt="privacy-policy" /></a>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div id="mobileButtons" class="mobile-buttons d-none">
-      <div class="mobile-buttons-stack">
-        <button class="mobile-touch-buttons" id="mobileBtnLeft"><img class="mobile-button-img" src="./img/arrow-left.png" alt="left" /></button>
-        <button class="mobile-touch-buttons" id="mobileBtnRight"><img class="mobile-button-img" src="./img/arrow-right.png" alt="right" /></button>
-      </div>
-      <div class="mobile-buttons-stack">
-        <button class="mobile-touch-buttons" id="mobileBtnJump"><img class="mobile-button-img" src="./img/jump.png" alt="jump" /></button>
-        <button class="mobile-touch-buttons" id="mobileBtnAttack"><img class="mobile-button-img" src="./img/attack.png" alt="attack" /></button>
       </div>
     </div>
 
