@@ -1,3 +1,6 @@
+/**
+ * Base class for all movable game objects. Extends DrawableObject.
+ */
 class movableObject extends DrawableObject {
   world;
   speed = 0.15;
@@ -7,6 +10,11 @@ class movableObject extends DrawableObject {
 
   lastHit = 0;
 
+  /**
+   * Checks for collision with another movable object.
+   * @param {Object} mo - Object to check collision with.
+   * @returns {boolean}
+   */
   isColliding(mo) {
     return (
       this.x + this.width - this.offset.right > mo.x + mo.offset.left && // Right -> Left
@@ -16,12 +24,20 @@ class movableObject extends DrawableObject {
     ); // Top -> Bottom
   }
 
+  /**
+   * Applies damage unless enemy was jumped on.
+   * @param {number} damage
+   */
   hit(damage) {
     if (this.enemyWasJumpedOn) return;
     this.playCharacterHurtSound();
     this.applyDamage(damage);
   }
 
+  /**
+   * Reduces health based on damage.
+   * @param {number} damage
+   */
   applyDamage(damage) {
     this.healthTracker -= damage;
     if (this.healthTracker <= 0) {
@@ -31,21 +47,35 @@ class movableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Plays the character hurt sound.
+   */
   playCharacterHurtSound() {
     this.world.characterHurtSound.volume = soundEnabled ? 0.2 : 0;
     this.world.characterHurtSound.play();
   }
 
+  /**
+   * Checks if the object was recently hit.
+   * @returns {boolean}
+   */
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;
     timepassed = timepassed / 1000;
     return timepassed < 1;
   }
 
+  /**
+   * Checks if the object is dead (health = 0).
+   * @returns {boolean}
+   */
   isDead() {
     return this.healthTracker == 0;
   }
 
+  /**
+   * Starts moving the object left continuously.
+   */
   moveLeft() {
     this.moveLeftInterval = setInterval(() => {
       gameIntervals.push(this.moveLeftInterval);
@@ -53,6 +83,11 @@ class movableObject extends DrawableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Plays animation from a set of images.
+   * @param {Array} images
+   * @param {boolean} [stopAtEnd=false]
+   */
   playObjectAnimation(images, stopAtEnd = false) {
     this.resetImagesIfChanged(images);
     if (stopAtEnd) {
@@ -62,6 +97,10 @@ class movableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Plays animation and stops at the end.
+   * @param {Array} images
+   */
   playAnimationStopAtEnd(images) {
     if (this.currentImage < images.length) {
       let path = images[this.currentImage];
@@ -70,12 +109,20 @@ class movableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Plays a looping animation.
+   * @param {Array} images
+   */
   playLoopingAnimation(images) {
     let path = images[this.currentImage % images.length];
     this.img = this.imageCache[path];
     this.currentImage++;
   }
 
+  /**
+   * Resets animation images if changed.
+   * @param {Array} images
+   */
   resetImagesIfChanged(images) {
     if (this.currentAnimation !== images) {
       this.currentAnimation = images;
@@ -83,6 +130,9 @@ class movableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Applies gravity to the object.
+   */
   applyGravity() {
     this.gravityInterval = setInterval(() => {
       gameIntervals.push(this.gravityInterval);
@@ -90,6 +140,9 @@ class movableObject extends DrawableObject {
     }, 1000 / 25);
   }
 
+  /**
+   * Updates the vertical position based on gravity.
+   */
   updateVerticalPosition() {
     if (this.isInAirOrMovingUp()) {
       if (this.gravityDisabled) return;
@@ -98,10 +151,18 @@ class movableObject extends DrawableObject {
     }
   }
 
+  /**
+   * Checks if the object is above ground or moving up.
+   * @returns {boolean}
+   */
   isInAirOrMovingUp() {
     return this.isAboveGround() || this.speedY > 0;
   }
 
+  /**
+   * Checks if the object is above the ground threshold.
+   * @returns {boolean}
+   */
   isAboveGround() {
     if (this instanceof ThrowableObjects) {
       return this.y <= 380;

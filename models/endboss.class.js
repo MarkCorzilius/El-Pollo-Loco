@@ -1,3 +1,7 @@
+/**
+ * Represents the Endboss enemy with multiple animation states and behaviors.
+ * Extends movableObject.
+ */
 class Endboss extends movableObject {
   width = 280;
   height = 320;
@@ -51,6 +55,9 @@ class Endboss extends movableObject {
     "./img/4_enemie_boss_chicken/3_attack/G20.png",
   ];
 
+  /**
+   * @param {number} x - Initial horizontal position of the endboss.
+   */
   constructor(x) {
     super();
     this.x = x;
@@ -66,12 +73,18 @@ class Endboss extends movableObject {
     this.animate();
   }
 
+  /**
+   * Initiates the endboss behavior unless attacking or game is over.
+   */
   animate() {
     if (this.isAttacking || gameIsOver) return;
     clearInterval(this.alertAndWalkingInterval);
     this.handleAlertAndWalkingInterval();
   }
 
+  /**
+   * Starts the alert or walking behavior when character is nearby.
+   */
   handleAlertAndWalkingInterval() {
     this.alertAndWalkingInterval = setInterval(() => {
       gameIntervals.push(this.alertAndWalkingInterval);
@@ -82,6 +95,9 @@ class Endboss extends movableObject {
     }, 100);
   }
 
+  /**
+   * Starts walking animation and movement if not hurt.
+   */
   startWalkingIfNotHurt() {
     if (!this.isHurt) {
       this.playObjectAnimation(this.IMAGES_WALKING, false);
@@ -89,16 +105,25 @@ class Endboss extends movableObject {
     }
   }
 
+  /**
+   * Plays the alert animation once.
+   */
   alertEndboss() {
     this.playObjectAnimation(this.IMAGES_ALERT, true);
     hasEndbossAlerted = true;
   }
 
+  /**
+   * Begins movement logic if allowed.
+   */
   startMoving() {
     if (!this.allowMoving()) return;
     this.startMovingInterval();
   }
 
+  /**
+   * Repeatedly moves the endboss left or right.
+   */
   startMovingInterval() {
     this.movingInterval = setInterval(() => {
       gameIntervals.push(this.movingInterval);
@@ -110,213 +135,11 @@ class Endboss extends movableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Checks if the endboss can start moving.
+   * @returns {boolean}
+   */
   allowMoving() {
     return !this.movingInterval && !this.isAttacking && !gameIsOver;
-  }
-}
-
-class EndbossManager {
-  attackTimeout = false;
-
-  constructor(world) {
-    this.world = world;
-    this.distanceCharacterEndboss = 0;
-    this.startDecidingEndbossDirection();
-  }
-
-  hurtEndboss(hp) {
-    this.reduceEndbossHpAndSetHurt();
-    this.increaseEndbossPower();
-    this.updateEnbossHealthBar();
-    this.handleEndbossAfterHit(hp);
-  }
-
-  handleEndbossAfterHit(hp) {
-    if (!this.world.endbossBar.isAttacking) {
-      this.stopEndbossAnimations();
-      if (hp <= 0) {
-        this.playDeathAnimation();
-        this.removeEndbossFromLevel();
-      } else {
-        this.playHurtAnimation();
-        this.resetAndResumeAnimation();
-      }
-    }
-  }
-
-  updateEnbossHealthBar() {
-    this.world.endbossBar.setPercentage(this.world.endboss.hp, this.world.endbossBar.ENDBOSS_STATUS_IMAGES);
-  }
-
-  reduceEndbossHpAndSetHurt() {
-    this.world.endboss.hp -= 20;
-    this.world.endboss.isHurt = true;
-  }
-
-  increaseEndbossPower() {
-    if (currentLevel === 4 || currentLevel === 5) {
-      this.world.endboss.speed += 0.3;
-      this.world.endboss.damage += 10;
-    } else {
-      this.world.endboss.speed += 0.2;
-      this.world.endboss.damage += 5;
-    }
-  }
-
-  removeEndbossFromLevel() {
-    setTimeout(() => {
-      this.world.endboss.hasDied = true;
-      const index = this.world.level.enemies.indexOf(this.endboss);
-      this.world.level.enemies.splice(index, 1);
-    }, this.world.endboss.IMAGES_DEAD.length * 300);
-  }
-
-  playDeathAnimation() {
-    this.world.endboss.hp = 0;
-    this.playEndbossDeathSound();
-    this.startDeadEndbossInterval();
-    setTimeout(() => {
-      this.setEndGameFlags();
-    }, this.world.endboss.IMAGES_DEAD.length * 400);
-  }
-
-  setEndGameFlags() {
-    endbossIsDead = true;
-    gameIsOver = true;
-  }
-
-  startDeadEndbossInterval() {
-    this.world.deadEndbossInterval = setInterval(() => {
-      gameIntervals.push(this.world.deadEndbossInterval);
-      this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_DEAD, true);
-    }, 200);
-  }
-
-  playEndbossDeathSound() {
-    this.world.deadBossSound.volume = soundEnabled ? 0.2 : 0;
-    this.world.deadBossSound.play();
-  }
-
-  playHurtAnimation() {
-    this.world.hurtEndbossInterval = setInterval(() => {
-      gameIntervals.push(this.world.hurtEndbossInterval);
-      this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_HURT, true);
-    }, 200);
-  }
-
-  resetAndResumeAnimation() {
-    setTimeout(() => {
-      clearInterval(this.world.hurtEndbossInterval);
-      this.world.endboss.currentImage = 0;
-      this.world.endboss.isHurt = false;
-      this.world.endboss.animate();
-    }, this.world.endboss.IMAGES_HURT.length * 100);
-  }
-
-  getDistanceBetweenEndbossAndCharacter() {
-    this.distanceCharacterEndbossInterval = setInterval(() => {
-      gameIntervals.push(this.distanceCharacterEndbossInterval);
-      this.updateDistanceCharacterEndboss();
-      this.checkIfCharacterSpotted();
-      this.handleEndbossAttack();
-    }, 50);
-  }
-
-  checkIfCharacterSpotted() {
-    if (this.distanceCharacterEndboss <= 500) {
-      hasSpotedCharacter = true;
-    }
-  }
-
-  updateDistanceCharacterEndboss() {
-    let characterCenter = this.calculateCenterX(this.world.character);
-    let endbossCenter = this.calculateCenterX(this.world.endboss);
-    this.distanceCharacterEndboss = Math.abs(characterCenter - endbossCenter);
-  }
-
-  calculateCenterX(object) {
-    return object.x + object.width / 2;
-  }
-
-  handleEndbossAttack() {
-    if (this.distanceCharacterEndboss <= 310 && !this.world.endboss.isAttacking) {
-      this.world.endboss.isAttacking = true;
-      this.animateEndbossAttack();
-    }
-  }
-
-  characterHitByEndboss() {
-    if (this.distanceCharacterEndboss <= 400) {
-      this.world.character.hit(this.world.endboss.damage);
-      this.world.character.pushCharacterAway();
-      this.world.character.playCharacterAnimation();
-      this.world.healthBar.setPercentage(this.world.character.healthTracker, this.world.healthBar.HEALTH_STATUS_IMAGES);
-    }
-  }
-
-  animateEndbossAttack() {
-    this.stopEndbossAnimations();
-    this.startAttackAnimation();
-    this.characterHitByEndboss();
-    this.resumeIdleAnimation();
-  }
-
-  startAttackAnimation() {
-    this.world.playEndbossHurtSound();
-    this.startAttackInterval();
-
-    setTimeout(() => {
-      this.stopAttackInterval();
-    }, this.world.endboss.IMAGES_ATTACK.length * 50); // problem
-  }
-
-  stopAttackInterval() {
-    clearInterval(this.endbossAttackInterval);
-    this.attackTimeout = false;
-  }
-
-  startAttackInterval() {
-    if (!this.attackTimeout) {
-      this.attackTimeout = true;
-      this.endbossAttackInterval = setInterval(() => {
-        gameIntervals.push(this.endbossAttackInterval);
-        this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_ATTACK, true);
-      }, 1000 / 60);
-    }
-  }
-
-  resumeIdleAnimation() {
-    setTimeout(() => {
-      this.resetEndbossStates();
-      this.world.endboss.animate();
-    }, this.world.endboss.IMAGES_ATTACK.length * 50);
-  }
-
-  resetEndbossStates() {
-    this.world.endboss.isAttacking = false;
-    this.world.endboss.isHurt = false;
-  }
-
-  stopEndbossAnimations() {
-    this.world.endboss.currentImage = 0;
-    clearInterval(this.world.endboss.alertAndWalkingInterval);
-    clearInterval(this.world.endboss.movingInterval);
-    this.world.endboss.movingInterval = null;
-    clearInterval(this.world.hurtEndbossInterval);
-    clearInterval(this.world.endbossAttackInterval);
-  }
-
-  startDecidingEndbossDirection() {
-    this.decideEndbossDirectionInterval = setInterval(() => {
-      gameIntervals.push(this.decideEndbossDirectionInterval);
-      this.decideEnbossDirection()
-    }, 1000);
-  }
-
-  decideEnbossDirection() {
-    this.world.endboss.otherDirection = false;
-    if (this.world.character.x > this.world.endboss.x) {
-      this.world.endboss.otherDirection = true;
-    }
   }
 }

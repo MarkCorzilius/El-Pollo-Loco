@@ -1,3 +1,6 @@
+/**
+ * Displays different types of status bars (health, coins, weapon, endboss).
+ */
 class StatusBar extends DrawableObject {
   HEALTH_STATUS_IMAGES = [
     "./img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png",
@@ -35,6 +38,12 @@ class StatusBar extends DrawableObject {
     "./img/7_statusbars/2_statusbar_endboss/orange/orange100.png",
   ];
 
+  /**
+   * @param {Object} world - The game world.
+   * @param {number} y - Vertical position.
+   * @param {number} x - Horizontal position.
+   * @param {string} type - Type of status bar.
+   */
   constructor(world, y, x, type) {
     super();
     this.world = world;
@@ -51,6 +60,10 @@ class StatusBar extends DrawableObject {
     this.startEndbossBarWatcher();
   }
 
+  /**
+   * Chooses the correct bar type and sets its initial value.
+   * @param {string} type
+   */
   decideCurrentBar(type) {
     if (type === "health") {
       this.statusImages = this.HEALTH_STATUS_IMAGES;
@@ -70,11 +83,21 @@ class StatusBar extends DrawableObject {
     }
   }
 
+  /**
+   * Sets the bar image based on percentage value.
+   * @param {number} percentange
+   * @param {Array} barImages
+   */
   setPercentage(percentange, barImages) {
     let path = barImages[this.resolveImageIndex(percentange)];
     this.img = this.imageCache[path];
   }
 
+  /**
+   * Maps a percentage value to a bar image index.
+   * @param {number} resource
+   * @returns {number}
+   */
   resolveImageIndex(resource) {
     if (resource >= 100) {
       return 5;
@@ -91,6 +114,9 @@ class StatusBar extends DrawableObject {
     }
   }
 
+  /**
+   * Starts watching if the player enters the final boss zone.
+   */
   startEndbossBarWatcher() {
     this.startEndbossFightWatcher = setInterval(() => {
       gameIntervals.push(this.startEndbossFightWatcher);
@@ -98,6 +124,9 @@ class StatusBar extends DrawableObject {
     }, 200);
   }
 
+  /**
+   * Triggers activation of the endboss bar if in range.
+   */
   enteredFinalFightZone() {
     if (this.isWithinFinalFightDistance()) {
       this.world.endbossFightTime = true;
@@ -106,10 +135,17 @@ class StatusBar extends DrawableObject {
     }
   }
 
+  /**
+   * Checks if the character is within range of the endboss.
+   * @returns {boolean}
+   */
   isWithinFinalFightDistance() {
     return this.world.endbossManager.distanceCharacterEndboss <= 750;
   }
 
+  /**
+   * Shows the endboss health bar and plays boss music.
+   */
   activateEndbossBars() {
     this.show();
     if (this.type === "weapon" || this.type === "coins") {

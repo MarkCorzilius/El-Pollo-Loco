@@ -1,3 +1,7 @@
+/**
+ * Initializes and sets up the fifth level with enemies, clouds,
+ * background layers, coins, and collectable objects.
+ */
 function initLevel5() {
 
 level = new Level(

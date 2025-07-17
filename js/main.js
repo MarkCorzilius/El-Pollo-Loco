@@ -34,6 +34,10 @@ let fullScreen = false;
 
 let gameLost = false;
 
+/**
+ * Starts the game by initializing the level, world, keyboard, and audio.
+ * Hides the start screen and shows mobile buttons.
+ */
 function startGame() {
   initLevel(currentLevel);
   startScreen = false;
@@ -47,11 +51,18 @@ function startGame() {
   }
 }
 
+/**
+ * Hides the start screen UI elements when the game starts.
+ */
 function hideStartScreen() {
   const intro = document.getElementById("startScreenElements");
   intro.classList.replace("d-block", "d-none");
 }
 
+/**
+ * Initializes the game on load.
+ * Sets up canvas, control listeners, and UI elements.
+ */
 function init() {
   toggleGameInfoOverlay();
   canvas = document.getElementById("canvas");
@@ -63,6 +74,10 @@ function init() {
   showMobileMenu();
 }
 
+/**
+ * Initializes the appropriate level based on the current level number.
+ * @param {number} level - The level number to initialize.
+ */
 function initLevel(level) {
   switch (level) {
     case 1:
@@ -87,24 +102,39 @@ function initLevel(level) {
   }
 }
 
+/**
+ * Decreases the current level and restarts the game from the previous level.
+ * Also closes the after-game overlay.
+ */
 function playPreviousLevel() {
   resetGameStateFlags(currentLevel -= 1);
   startGame();
   closeAfterGameOverlay();
 }
 
+/**
+ * Restarts the current level from the beginning.
+ * Also closes the after-game overlay.
+ */
 function repeatCurrentLevel() {
   resetGameStateFlags(currentLevel);
   startGame();
   closeAfterGameOverlay();
 }
 
+/**
+ * Increases the current level and starts the next level.
+ * Also closes the after-game overlay.
+ */
 function playNextLevel() {
   resetGameStateFlags(currentLevel += 1);
   startGame();
   closeAfterGameOverlay();
 }
 
+/**
+ * Hides the overlay and dialog shown after a level is completed or failed.
+ */
 function closeAfterGameOverlay() {
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
@@ -112,10 +142,17 @@ function closeAfterGameOverlay() {
   dialog.classList.replace("show", "d-none");
 }
 
+/**
+ * Reloads the browser window to restart the entire game from scratch.
+ */
 function restartGame() {
   location.reload();
 }
 
+/**
+ * Resets all flags and counters necessary to restart or load a new level.
+ * @param {number} newLevel - The new level number to set.
+ */
 function resetGameStateFlags(newLevel) {
   currentLevel = newLevel;
   gameLost = false;

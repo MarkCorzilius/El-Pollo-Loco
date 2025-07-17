@@ -1,3 +1,7 @@
+/**
+ * Initializes and sets up the second level with enemies, clouds,
+ * background layers, coins, and collectable objects.
+ */
 function initLevel2() {
 
 level = new Level(

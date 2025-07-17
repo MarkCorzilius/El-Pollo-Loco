@@ -1,3 +1,7 @@
+/**
+ * Returns the HTML template for displaying achievements like level and coins.
+ * @returns {string} HTML string containing achievement elements.
+ */
 function achievementsTemplate() {
     return `
              <div class="achievement">

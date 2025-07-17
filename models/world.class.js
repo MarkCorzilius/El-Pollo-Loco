@@ -1,3 +1,7 @@
+/**
+ * Represents the game world, managing rendering, collisions, object states, and gameplay logic.
+ * Extends movableObject to gain movement-related properties.
+ */
 class World extends movableObject {
   character = new Character();
   healthBar = new StatusBar(this, 0, 10, "health");
@@ -23,6 +27,12 @@ class World extends movableObject {
   endboss;
   endbossFightTime;
 
+  /**
+   * Creates a new game world that includes the character, enemies, items, UI bars, sounds, and game logic.
+   * @param {HTMLCanvasElement} canvas - The canvas element on which the game is rendered.
+   * @param {Object} keyboard - The object tracking keyboard input states.
+   * @param {Level} level - The level object containing enemies, objects, coins, and background elements.
+   */
   constructor(canvas, keyboard, level) {
     super();
     this.level = level;
@@ -65,12 +75,18 @@ class World extends movableObject {
     startGameOverCheckInterval();
   }
 
+  /**
+   * Initializes world references and animations for the main character.
+   */
   setWorld() {
     this.endbossBar.hide();
     this.character.world = this;
     this.character.animate();
   }
 
+  /**
+   * Transitions the background music and state to the final fight mode.
+   */
   changeToFinalFightSound() {
     this.finalFight = true;
     if (soundEnabled) {
@@ -78,6 +94,9 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Plays the final background soundtrack with adjusted volume and loop settings.
+   */
   activateFinalBackgroundSound() {
     basicBackgroundSound.pause();
     basicBackgroundSound.currentTime = 0;
@@ -86,6 +105,9 @@ class World extends movableObject {
     finalBackgroundSound.volume = 0.05;
   }
 
+  /**
+   * Starts the interval for continuous collision checks within the world.
+   */
   startCollisitionCheck() {
     this.collisionCheckInterval = setInterval(() => {
       gameIntervals.push(this.collisionCheckInterval);
@@ -96,18 +118,28 @@ class World extends movableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Checks for collisions between the character and collectable bottles.
+   */
   checkCollectableObjectsCollision() {
     this.level.collectableObjects.forEach((collectableBottle, index) => {
       this.handleCollectableBottleCollisition(collectableBottle, index);
     });
   }
 
+  /**
+   * Checks for collisions between the character and coins.
+   */
   checkCoinsForCollision() {
     this.level.coins.forEach((coin, index) => {
       this.coinCollector.handleCoinCollisition(coin, index);
     });
   }
 
+  /**
+   * Checks for collisions between the character and enemies,
+   * and also initiates bottle throw checks.
+   */
   checkEnemiesForCollision() {
     this.level.enemies.forEach((enemy) => {
       this.handleEnemyCollision(enemy);
@@ -115,6 +147,10 @@ class World extends movableObject {
     });
   }
 
+  /**
+   * Processes collision logic when the character touches an enemy.
+   * @param {Enemy} enemy - The enemy object being checked for collision.
+   */
   handleEnemyCollision(enemy) {
     const key = enemy.id;
     if (this.character.isColliding(enemy)) {
@@ -125,10 +161,19 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Removes the enemy's key from the collision tracking set.
+   * @param {string|number} key - The unique ID of the enemy.
+   */
   processEnemyRemoval(key) {
     this.collidingEnemies.delete(key);
   }
 
+  /**
+   * Handles the damage dealt to the character by an enemy.
+   * @param {Enemy} enemy - The enemy causing the damage.
+   * @param {string|number} key - The enemy's unique ID for collision tracking.
+   */
   processEnemyDamage(enemy, key) {
     if (!this.collidingEnemies.has(key) && !enemy.isDead) {
       this.character.hit(enemy.damage);
@@ -137,18 +182,30 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Processes what happens when a bottle hits an enemy.
+   * @param {Enemy} enemy - The enemy that was hit.
+   */
   handleEnemyHit(enemy) {
     this.processChickenHit(enemy);
     this.processSmallChickenHit(enemy);
     this.processEndbossHit(enemy);
   }
 
+  /**
+   * Applies damage logic to the endboss enemy.
+   * @param {Enemy} enemy - The enemy being processed (assumed to be Endboss).
+   */
   processEndbossHit(enemy) {
     if (enemy instanceof Endboss) {
       this.endbossManager.hurtEndboss(this.endboss.hp);
     }
   }
 
+  /**
+   * Processes the hit logic for small chickens.
+   * @param {Enemy} enemy - The small chicken enemy hit by a bottle.
+   */
   processSmallChickenHit(enemy) {
     if (enemy instanceof SmallChicken) {
       this.playDeadChickenSound(enemy);
@@ -157,6 +214,10 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Processes the hit logic for regular chickens.
+   * @param {Enemy} enemy - The chicken enemy hit by a bottle.
+   */
   processChickenHit(enemy) {
     if (enemy instanceof Chicken) {
       this.playDeadChickenSound(enemy);
@@ -165,6 +226,10 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Removes a chicken enemy from the level after a delay.
+   * @param {Enemy} enemy - The enemy to remove.
+   */
   removeDeadChickenBody(enemy) {
     const index = this.level.enemies.indexOf(enemy);
     setTimeout(() => {
@@ -172,11 +237,18 @@ class World extends movableObject {
     }, 5000);
   }
 
+  /**
+   * Plays the sound effect for the endboss being hurt.
+   */
   playEndbossHurtSound() {
     this.chickenBossHurtSound.volume = soundEnabled ? 0.1 : 0;
     this.chickenBossHurtSound.play();
   }
 
+  /**
+   * Plays the death sound for a chicken enemy if it hasn't already died.
+   * @param {Enemy} enemy - The chicken enemy.
+   */
   playDeadChickenSound(enemy) {
     if (!enemy.isDead) {
       this.chickenHurtSound.volume = soundEnabled ? 0.1 : 0;
@@ -184,6 +256,11 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Handles the logic when the character collides with a collectable bottle.
+   * @param {Object} bottle - The bottle object.
+   * @param {number} index - The index of the bottle in the level array.
+   */
   handleCollectableBottleCollisition(bottle, index) {
     const key = bottle.id;
     if (this.character.isColliding(bottle)) {
@@ -193,10 +270,19 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Removes a bottle's key from the collision tracking set.
+   * @param {string|number} key - The unique ID of the bottle.
+   */
   resetBottleCollision(key) {
     this.collidingCollectableBottle.delete(key);
   }
 
+  /**
+   * Attempts to collect a bottle if not already processed.
+   * @param {string|number} key - The bottle's unique ID.
+   * @param {number} index - The index of the bottle in the level array.
+   */
   attemptBottleCollection(key, index) {
     if (!this.collidingCollectableBottle.has(key)) {
       this.collectBottle(index);
@@ -204,6 +290,10 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Increases bottle ammo and removes the collected bottle from the level.
+   * @param {number} index - The index of the bottle to remove.
+   */
   collectBottle(index) {
     if (this.character.bottlesTracker >= 100) return;
 
@@ -211,17 +301,27 @@ class World extends movableObject {
     this.updateBottleStatus(index);
   }
 
+  /**
+   * Updates the character’s weapon bar after bottle collection.
+   * @param {number} index - The index of the bottle in the array.
+   */
   updateBottleStatus(index) {
     this.character.bottlesTracker += 20;
     this.level.collectableObjects.splice(index, 1);
     this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
   }
 
+  /**
+   * Plays the sound effect for collecting a bottle.
+   */
   playBottleCollectSound() {
     this.bottleCollectSound.volume = soundEnabled ? 0.1 : 0;
     this.bottleCollectSound.play();
   }
 
+  /**
+   * Draws all game elements onto the canvas for the current frame.
+   */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
@@ -239,11 +339,17 @@ class World extends movableObject {
     this.createDrawAnimationFrame();
   }
 
+  /**
+   * Adds the win/lose messages to the canvas.
+   */
   addEndgameMessagesToMap() {
     this.addToMap(this.loseMessage);
     this.addToMap(this.winMessage);
   }
 
+  /**
+   * Adds collectable items (coins and throwable objects) to the canvas.
+   */
   addItemsToMap() {
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.throwableObjects);
@@ -255,6 +361,9 @@ class World extends movableObject {
     this.addObjectsToMap(this.level.clouds);
   }
 
+  /**
+   * Draws UI status bars like health, weapon, and coin indicators.
+   */
   addBarsToMap() {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.healthBar);
@@ -264,6 +373,9 @@ class World extends movableObject {
     this.ctx.translate(this.camera_x, 0);
   }
 
+  /**
+   * Continuously redraws the canvas using requestAnimationFrame.
+   */
   createDrawAnimationFrame() {
     let self = this;
     requestAnimationFrame(function draw() {
@@ -271,12 +383,20 @@ class World extends movableObject {
     });
   }
 
+  /**
+   * Adds multiple objects to the canvas.
+   * @param {Array<Object>} objects - Array of drawable objects.
+   */
   addObjectsToMap(objects) {
     objects.forEach((object) => {
       this.addToMap(object);
     });
   }
 
+  /**
+   * Draws a single object on the canvas, flipping it if it's facing the other direction.
+   * @param {Object} object - The object to draw.
+   */
   addToMap(object) {
     if (object.otherDirection) {
       this.flipImage(object);
@@ -289,6 +409,10 @@ class World extends movableObject {
     }
   }
 
+  /**
+   * Flips an object horizontally before drawing to simulate left-facing direction.
+   * @param {Object} object - The object to flip.
+   */
   flipImage(object) {
     this.ctx.save();
     this.ctx.translate(object.width, 0);
@@ -296,6 +420,10 @@ class World extends movableObject {
     object.x = object.x * -1;
   }
 
+  /**
+   * Restores the original orientation after drawing a flipped object.
+   * @param {Object} object - The object to restore.
+   */
   flipImageBack(object) {
     this.ctx.restore();
     object.x = object.x * -1;

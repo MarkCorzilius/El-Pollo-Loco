@@ -1,3 +1,6 @@
+/**
+ * Shows or hides mobile control buttons based on screen size and game state.
+ */
 function showMobileButtons() {
   const btnsContainer = document.getElementById("mobileButtons");
   if (!gameIsOver && !startScreen && window.innerWidth <= 1024) {
@@ -13,6 +16,10 @@ function showMobileButtons() {
     btnsContainer.classList.replace("d-flex", "d-none");
   }
 }
+
+/**
+ * Shows or hides the mobile menu depending on the screen width.
+ */
 function showMobileMenu() {
   const menu = document.getElementById("mobileMenu");
 
@@ -25,6 +32,9 @@ function showMobileMenu() {
   }
 }
 
+/**
+ * Updates the visibility of overlay buttons after game over.
+ */
 function updateOverlayButtons() {
   updateRestartGameBtnAndText();
   updatePreviousLevelBtn();
@@ -32,6 +42,9 @@ function updateOverlayButtons() {
   updateRepeatLevelBtn();
 }
 
+/**
+ * Updates the visibility of the "Previous Level" button based on the current level.
+ */
 function updatePreviousLevelBtn() {
   const prevBtn = document.getElementById("previousLevelBtn");
   if (currentLevel === 1 || (currentLevel === 5 && !gameLost)) {
@@ -41,6 +54,9 @@ function updatePreviousLevelBtn() {
   }
 }
 
+/**
+ * Updates the visibility of the "Next Level" button based on the current level and game state.
+ */
 function updateNextLevelBtn() {
   const nextBtn = document.getElementById("nextLevelBtn");
   if (!gameLost && currentLevel !== 5) {
@@ -50,6 +66,9 @@ function updateNextLevelBtn() {
   }
 }
 
+/**
+ * Updates the visibility of the "Repeat Level" button based on current level and game result.
+ */
 function updateRepeatLevelBtn() {
   const repeatBtn = document.getElementById("repeatLevelBtn");
 
@@ -60,6 +79,9 @@ function updateRepeatLevelBtn() {
   }
 }
 
+/**
+ * Updates the restart button and congratulatory text if final level is completed.
+ */
 function updateRestartGameBtnAndText() {
   const congrats = document.getElementById("congratulations");
   const restartBtn = document.getElementById("restartBtn");
@@ -72,6 +94,10 @@ function updateRestartGameBtnAndText() {
   }
 }
 
+/**
+ * Listens for changes to fullscreen mode and resets fullscreen
+ * state and UI adjustments when exiting fullscreen.
+ */
 window.addEventListener("fullscreenchange", () => {
   if (!document.fullscreenElement) {
     fullScreen = false;
@@ -79,6 +105,9 @@ window.addEventListener("fullscreenchange", () => {
   }
 });
 
+/**
+ * Displays the game over overlay and dialog after level completion or loss.
+ */
 function showAfterGameOverScreen() {
   const overlay = document.getElementById("afterLevelOverlay");
   const dialog = document.getElementById("afterLevelDialog");
@@ -89,11 +118,17 @@ function showAfterGameOverScreen() {
   }, 50);
 }
 
+/**
+ * Inserts the achievements HTML block into the achievements container.
+ */
 function insertAchievementsBlock() {
   const container = document.getElementById("achievements");
   container.innerHTML = achievementsTemplate();
 }
 
+/**
+ * Toggles visibility of the game info overlay and its dialog.
+ */
 function toggleGameInfoOverlay() {
   const overlay = document.getElementById("gameInfoOverlay");
   const dialog = document.getElementById("gameInfoDialog");
@@ -104,6 +139,11 @@ function toggleGameInfoOverlay() {
   }
 }
 
+/**
+ * Displays the game info overlay and dialog with a slight animation delay.
+ * @param {HTMLElement} overlay - The overlay element to show.
+ * @param {HTMLElement} dialog - The dialog element to show.
+ */
 function showInfoOverlayAndDialog(overlay, dialog) {
   overlay.classList.remove("d-none");
   dialog.classList.remove("d-none");
@@ -112,11 +152,19 @@ function showInfoOverlayAndDialog(overlay, dialog) {
   }, 50);
 }
 
+/**
+ * Hides the game info overlay and dialog.
+ * @param {HTMLElement} overlay - The overlay element to hide.
+ * @param {HTMLElement} dialog - The dialog element to hide.
+ */
 function hideInfoOverlayAndDialog(overlay, dialog) {
   overlay.classList.add("d-none");
   dialog.classList.replace("show", "d-none");
 }
 
+/**
+ * Toggles the visibility of mobile menu elements.
+ */
 function toggleMobileMenu() {
   const elements = document.getElementById("mobileMenuElements");
   if (elements.classList.contains("d-block")) {
@@ -126,6 +174,9 @@ function toggleMobileMenu() {
   }
 }
 
+/**
+ * Adds 'object-fit-contain' to the intro screen if full screen and on start screen.
+ */
 function objectFitContain() {
   const introScreen = document.getElementById("introScreen");
   if (fullScreen && startScreen) {
@@ -133,17 +184,27 @@ function objectFitContain() {
   }
 }
 
+/**
+ * Removes 'object-fit-contain' class from the intro screen.
+ */
 function removeObjectFitContain() {
   const introScreen = document.getElementById("introScreen");
   introScreen.classList.remove("object-fit-contain");
 }
 
+/**
+ * Enters full screen mode and adjusts screen fitting styles.
+ */
 function enterFullScreen() {
   fullScreen = true;
   applyFullScreen();
   objectFitContain();
 }
 
+/**
+ * Applies full screen mode to the start screen or game canvas
+ * depending on the current game state.
+ */
 function applyFullScreen() {
   const introScreen = document.getElementById("startScreenElements");
 
@@ -155,6 +216,10 @@ function applyFullScreen() {
   }
 }
 
+/**
+ * Toggles game volume and updates the volume icon image.
+ * @param {string} id - The DOM ID of the volume button image.
+ */
 function toggleGameVolume(id) {
   const button = document.getElementById(id);
   toggleSounds();
@@ -165,12 +230,18 @@ function toggleGameVolume(id) {
   }
 }
 
+/**
+ * Enables or disables all game sounds and updates audio state accordingly.
+ */
 function toggleSounds() {
   soundEnabled = soundEnabled ? false : true;
   if (world === undefined || !world.character) return;
   updateSoundState();
 }
 
+/**
+ * Updates sound playback state based on whether sounds are enabled.
+ */
 function updateSoundState() {
   if (!soundEnabled) {
     basicBackgroundSound.pause();
@@ -180,6 +251,9 @@ function updateSoundState() {
   }
 }
 
+/**
+ * Plays the appropriate background sound based on the game phase (normal or final fight).
+ */
 function playAppropriateBackgroundSound() {
   if (world.finalFight) {
     finalBackgroundSound.play();

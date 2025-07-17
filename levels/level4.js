@@ -1,3 +1,7 @@
+/**
+ * Initializes and sets up the fourth level with enemies, clouds,
+ * background layers, coins, and collectable objects.
+ */
 function initLevel4() {
 
 level = new Level(

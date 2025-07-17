@@ -1,3 +1,7 @@
+/**
+ * Initializes and sets up the third level with enemies, clouds,
+ * background layers, coins, and collectable objects.
+ */
 function initLevel3() {
 
 level = new Level(

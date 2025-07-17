@@ -1,3 +1,8 @@
+/**
+ * Represents the main game character with movement, animation,
+ * jumping, and interaction capabilities.
+ * Extends movableObject.
+ */
 class Character extends movableObject {
   height = 200;
   width = 130;
@@ -50,6 +55,10 @@ class Character extends movableObject {
   };
   enemyWasJumpedOn;
 
+  /**
+   * Initializes the character with default position, size,
+   * sprite images, and starts gravity.
+   */
   constructor() {
     super();
     this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
@@ -60,12 +69,18 @@ class Character extends movableObject {
     this.applyGravity();
   }
 
+  /**
+   * Starts character animation and movement intervals.
+   */
   animate() {
     this.startMoveRightInterval();
     this.startMoveLeftAndJumpInterval();
     this.playCharacterAnimation();
   }
 
+  /**
+   * Starts interval to move character left and jump.
+   */
   startMoveLeftAndJumpInterval() {
     this.characterMoveLeftInterval = setInterval(() => {
       gameIntervals.push(this.characterMoveLeftInterval);
@@ -79,6 +94,9 @@ class Character extends movableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Starts interval to move character right.
+   */
   startMoveRightInterval() {
     this.characterMoveRightInterval = setInterval(() => {
       gameIntervals.push(this.characterMoveRightInterval);
@@ -92,26 +110,49 @@ class Character extends movableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Checks if character should play walking animation.
+   * @returns {boolean}
+   */
   shouldAnimateWalk() {
     return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
   }
-  
+
+  /**
+   * Checks if character can move left.
+   * @returns {boolean}
+   */
   canMoveLeft() {
     return this.world.keyboard.LEFT && this.x > 0;
   }
-  
+
+  /**
+   * Checks if character can move right.
+   * @returns {boolean}
+   */
   canMoveRight() {
     return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
   }
-  
+
+  /**
+   * Checks if character can jump.
+   * @returns {boolean}
+   */
   canJump() {
     return this.world.keyboard.SPACE && !this.isAboveGround();
   }
-  
+
+  /**
+   * Checks if character is not moving.
+   * @returns {boolean}
+   */
   isNotMoving() {
     return !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE;
   }
 
+  /**
+   * Plays the appropriate animation based on character state.
+   */
   playCharacterAnimation() {
     this.characterAnimationInterval = setInterval(() => {
       gameIntervals.push(this.characterAnimationInterval);
@@ -127,6 +168,9 @@ class Character extends movableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Handles the death animation and game over state.
+   */
   handleDeathAnimation() {
     this.playObjectAnimation(this.IMAGES_DEAD, true);
     gameLost = true;
@@ -137,26 +181,41 @@ class Character extends movableObject {
     }, this.IMAGES_DEAD.length * 50);
   }
 
-  
+  /**
+   * Makes the character jump by setting vertical speed.
+   */
   jump() {
     this.speedY = 22;
   }
+
+  /**
+   * Moves the character to the right.
+   */
   moveRight() {
     this.x += this.speed;
     this.otherDirection = false;
   }
 
+  /**
+   * Moves the character to the left.
+   */
   moveLeft() {
     this.x -= this.speed;
     this.otherDirection = true;
   }
 
+  /**
+   * Starts the push away effect when character is hit.
+   */
   pushCharacterAway() {
     clearInterval(this.world.gravityInterval);
 
     this.startPushAwayInterval();
   }
 
+  /**
+   * Starts the interval to handle the push away movement.
+   */
   startPushAwayInterval() {
     this.speedY = 18;
     this.pushAwayInterval = setInterval(() => {
@@ -166,12 +225,18 @@ class Character extends movableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Updates character position and speed during push away.
+   */
   updatePushAwayConditions() {
     this.x += this.pushXSpeed;
     this.y -= this.speedY;
     this.speedY -= 0.7;
   }
 
+  /**
+   * Handles landing after push away effect ends.
+   */
   handlePushAwayLanding() {
     if (this.y > this.floorY) {
       this.y = this.floorY;

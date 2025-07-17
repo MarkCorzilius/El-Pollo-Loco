@@ -1,3 +1,7 @@
+/**
+ * Coin object that animates and can be collected.
+ * Extends movableObject.
+ */
 class Coins extends movableObject {
   static coinId = 0;
 
@@ -9,6 +13,10 @@ class Coins extends movableObject {
 
   coinAnimationInterval;
 
+  /**
+   * @param {number} x - Initial x position.
+   * @param {number} y - Initial y position.
+   */
   constructor(x, y) {
     super();
     this.loadImage(this.COIN_IMAGES[0]);
@@ -21,7 +29,10 @@ class Coins extends movableObject {
     this.id = Coins.coinId++;
   }
 
-  animateCoins(){
+  /**
+   * Animates coin sprite cycling.
+   */
+  animateCoins() {
     this.coinAnimationInterval = setInterval(() => {
       gameIntervals.push(this.coinAnimationInterval);
       this.playObjectAnimation(this.COIN_IMAGES);
@@ -29,6 +40,9 @@ class Coins extends movableObject {
   }
 }
 
+/**
+ * @param {Object} world - Reference to game world.
+ */
 class CoinCollector {
   constructor(world) {
     this.world = world;
@@ -36,6 +50,11 @@ class CoinCollector {
     this.coinsTracker = 0;
   }
 
+  /**
+   * Checks and handles collision of character with a coin.
+   * @param {Coins} coin - The coin object.
+   * @param {number} index - Coin index in the coin list.
+   */
   handleCoinCollisition(coin, index) {
     const key = coin.id;
     if (this.world.character.isColliding(coin)) {
@@ -48,17 +67,29 @@ class CoinCollector {
     }
   }
 
+  /**
+   * Applies the coin collection effects.
+   * @param {Coins} coin
+   * @param {number} index
+   * @param {number} key - Unique coin id.
+   */
   applyCoinCollection(coin, index, key) {
     this.increaseCoinBar();
     this.deleteCoinFromUI(index, coin);
     this.collidingCoins.add(key);
   }
 
+  /**
+   * Plays coin collection sound.
+   */
   handleCoinSounds() {
     this.world.coinCollectSound.volume = soundEnabled ? 0.1 : 0;
     this.world.coinCollectSound.play();
   }
 
+  /**
+   * Updates the coin progress bar UI.
+   */
   increaseCoinBar() {
     coinsCollected += 1;
     this.coinsTracker += 10;
@@ -68,6 +99,11 @@ class CoinCollector {
     this.world.coinsBar.setPercentage(this.coinsTracker, this.world.coinsBar.COINS_STATUS_IMAGES);
   }
 
+  /**
+   * Removes collected coin from the UI and game state.
+   * @param {number} index
+   * @param {Coins} coin
+   */
   deleteCoinFromUI(index, coin) {
     clearInterval(coin.coinAnimationInterval);
     this.world.level.coins.splice(index, 1);
