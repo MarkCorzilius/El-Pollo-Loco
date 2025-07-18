@@ -123,6 +123,7 @@ class EndbossManager {
      * Plays the hurt animation repeatedly.
      */
     playHurtAnimation() {
+      this.world.playEndbossHurtSound();
       this.world.hurtEndbossInterval = setInterval(() => {
         gameIntervals.push(this.world.hurtEndbossInterval);
         this.world.endboss.playObjectAnimation(this.world.endboss.IMAGES_HURT, true);
@@ -216,7 +217,6 @@ class EndbossManager {
      * Starts the attack animation interval.
      */
     startAttackAnimation() {
-      this.world.playEndbossHurtSound();
       this.startAttackInterval();
   
       setTimeout(() => {

@@ -1,8 +1,6 @@
 .game-info-dialog {
   position: absolute;
   left: 50%;
-  width: clamp(300px, 70vw, 500px);
-  height: clamp(480px, 80vw, 600px);
   background-color: rgba(255, 255, 255, 0.85);
   transform: translate(-50%, 200%);
   transition: transform 0.3s ease;
@@ -16,6 +14,17 @@
   backdrop-filter: blur(6px); /* optional: for a "frosted glass" look */
   border-radius: 12px; /* smooth corners to match the soft shadow */
 }
+
+.mobile-info-size {
+  width: 80vw;
+  height: 90vh;
+}
+
+.desktop-info-size {
+  width: clamp(300px, 70vw, 500px);
+  height: clamp(480px, 80vh, 600px);
+}
+
 
 .game-info-content {
   overflow-y: auto;
@@ -54,7 +63,7 @@
   left: 0;
   height: 100vh;
   width: 100vw;
-  z-index: 9999;
+  z-index: 50;
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -173,4 +182,53 @@
 
 .description-title {
   font-size: clamp(2rem, 3vw, 2rem);
+}
+
+#rotateOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.5rem;
+  font-family: sans-serif;
+}
+
+.rotate-message {
+  max-width: 90%;
+  line-height: 1.4;
+}
+
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid rgba(251, 117, 79, 0.2);
+  border-top: 6px solid rgba(251, 117, 79, 1);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

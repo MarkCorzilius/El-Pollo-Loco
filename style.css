@@ -127,3 +127,7 @@ strong {
   width: 720px;
   height: 480px;
 }
+
+.red-color {
+  color:rgb(255, 40, 40);
+}

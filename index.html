@@ -45,8 +45,19 @@
     <script src="./models/keyboard.class.js"></script>
   </head>
   <body onresize="showMobileButtons(), showMobileMenu()" id="body" onload="init()">
+    
+    <div class="spinner-overlay d-none" id="spinner">
+      <div class="spinner"></div>
+    </div>
+
+    <div id="rotateOverlay" class="d-none">
+      <div class="rotate-message">
+        Please rotate your device to <p class="red-color">landscape</p> mode.
+      </div>
+    </div>
+
     <div id="gameInfoOverlay" class="game-info-overlay d-none" onclick="toggleGameInfoOverlay()">
-      <div class="game-info-dialog d-none" id="gameInfoDialog" onclick="event.stopPropagation()">
+      <div class="game-info-dialog desktop-info-size d-none" id="gameInfoDialog" onclick="event.stopPropagation()">
         <div onclick="toggleGameInfoOverlay()" class="close-overlay-wrapper">
           <img src="./img/close-overlay.png" alt="close" />
         </div>

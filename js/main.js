@@ -38,23 +38,32 @@ let gameLost = false;
  * Starts the game by initializing the level, world, keyboard, and audio.
  * Hides the start screen and shows mobile buttons.
  */
-function startGame() {
-  createNewWorld();
-  startScreen = false;
-  applyFullScreen();
-  showMobileButtons();
-  if (soundEnabled) {
-    basicBackgroundSound.play().catch((e) => console.log(e));
-  }
-  hideStartScreen();
-}
+async function startGame() {
+  showLoadingSpinner();
+  try {
 
+    await createNewWorld(); // Now run heavy logic
+
+    startScreen = false;
+    applyFullScreen();
+    showMobileButtons();
+    if (soundEnabled) {
+      basicBackgroundSound.play().catch((e) => console.log(e));
+    }
+    
+  } catch (error) {
+    console.error("Failed to start game:", error);
+  } finally {
+    hideStartScreen();
+    hideLoadingSpinner();
+  }
+}
 
 /**
  * Reset the old world.
  * Creates new world instance.
  */
-function createNewWorld() {
+async function createNewWorld() {
   world = null;
   initLevel(currentLevel);
   keyboard = new Keyboard();
@@ -74,6 +83,7 @@ function hideStartScreen() {
  * Sets up canvas, control listeners, and UI elements.
  */
 function init() {
+  checkDeviceOrientation();
   toggleGameInfoOverlay();
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
@@ -117,7 +127,8 @@ function initLevel(level) {
  * Also closes the after-game overlay.
  */
 function playPreviousLevel() {
-  resetGameStateFlags(currentLevel -= 1);
+  resetGameStateFlags((currentLevel -= 1));
+  startGame();
   closeAfterGameOverlay();
 }
 
@@ -127,6 +138,7 @@ function playPreviousLevel() {
  */
 function repeatCurrentLevel() {
   resetGameStateFlags(currentLevel);
+  startGame();
   closeAfterGameOverlay();
 }
 
@@ -135,7 +147,8 @@ function repeatCurrentLevel() {
  * Also closes the after-game overlay.
  */
 function playNextLevel() {
-  resetGameStateFlags(currentLevel += 1);
+  resetGameStateFlags((currentLevel += 1));
+  startGame();
   closeAfterGameOverlay();
 }
 
@@ -161,9 +174,10 @@ function restartGame() {
  * @param {number} newLevel - The new level number to set.
  */
 function resetGameStateFlags(newLevel) {
-  world.level.enemies.forEach(enemy => {
+  world.level.enemies.forEach((enemy) => {
     enemy.isDeadChicken = false;
   });
+  hasSpotedCharacter = false;
   currentLevel = newLevel;
   gameLost = false;
   gameIsOver = false;
@@ -172,4 +186,5 @@ function resetGameStateFlags(newLevel) {
   bossAnimationPlayed = false;
   playerAnimationPlayed = false;
   playerIsDead = false;
+  hasEndbossAlerted = false;
 }

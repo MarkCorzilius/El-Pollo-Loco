@@ -36,6 +36,7 @@ class World extends movableObject {
   constructor(canvas, keyboard, level) {
     super();
     this.level = level;
+    this.endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     this.throwableManager = new ThrowableManager(this);
     this.chickenHandler = new ChickenHandler(this);
     this.endbossManager = new EndbossManager(this);
@@ -68,7 +69,6 @@ class World extends movableObject {
     this.collidingCollectableBottle = new Set();
     this.collidingEndboss = new Set();
 
-    this.endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     this.startCollisitionCheck();
     this.endbossManager.getDistanceBetweenEndbossAndCharacter();
   }
