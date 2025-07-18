@@ -71,8 +71,6 @@ class World extends movableObject {
     this.endboss = this.level.enemies.find((enemy) => enemy instanceof Endboss);
     this.startCollisitionCheck();
     this.endbossManager.getDistanceBetweenEndbossAndCharacter();
-
-    startGameOverCheckInterval();
   }
 
   /**
@@ -231,10 +229,12 @@ class World extends movableObject {
    * @param {Enemy} enemy - The enemy to remove.
    */
   removeDeadChickenBody(enemy) {
-    const index = this.level.enemies.indexOf(enemy);
-    setTimeout(() => {
-      this.level.enemies.splice(index, 1);
-    }, 5000);
+      setTimeout(() => {
+        const index = this.level.enemies.indexOf(enemy);
+        if (index != -1) {
+          this.level.enemies.splice(index, 1);
+        }
+      }, 5000);
   }
 
   /**

@@ -209,7 +209,9 @@ class ChickenHandler {
     enemy.isDead = true;
     setTimeout(() => {
       const index = this.world.level.enemies.indexOf(enemy);
-      this.world.level.enemies.indexOf(index, 1);
+      if (index !== -1) {
+        this.world.level.enemies.splice(index, 1);
+      }
     }, 10000);
   }
 }

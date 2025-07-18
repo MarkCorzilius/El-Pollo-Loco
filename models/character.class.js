@@ -178,6 +178,7 @@ class Character extends movableObject {
       gameTimeouts.push(this.deathAnimationTimeOut);
       playerIsDead = true;
       gameIsOver = true;
+      startGameOverCheckInterval();
     }, this.IMAGES_DEAD.length * 50);
   }
 

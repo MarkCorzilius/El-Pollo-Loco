@@ -121,6 +121,8 @@ function stopGame() {
 function startGameOverCheckInterval() {
   gameOverInterval = setInterval(() => {
     gameIntervals.push(gameOverInterval);
-    gameOver();
+    if (playerIsDead || endbossIsDead) {
+      gameOver();
+    }
   }, 100);
 }

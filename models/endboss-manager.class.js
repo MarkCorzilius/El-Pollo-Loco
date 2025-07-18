@@ -75,8 +75,8 @@ class EndbossManager {
     removeEndbossFromLevel() {
       setTimeout(() => {
         this.world.endboss.hasDied = true;
-        const index = this.world.level.enemies.indexOf(this.endboss);
-        this.world.level.enemies.splice(index, 1);
+        const index = this.world.level.enemies.findIndex(enemy => enemy instanceof Endboss);
+          this.world.level.enemies.splice(index, 1);
       }, this.world.endboss.IMAGES_DEAD.length * 300);
     }
   
@@ -98,6 +98,7 @@ class EndbossManager {
     setEndGameFlags() {
       endbossIsDead = true;
       gameIsOver = true;
+      startGameOverCheckInterval();
     }
   
     /**

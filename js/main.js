@@ -2,7 +2,7 @@ let gameIntervals = [];
 let gameTimeouts = [];
 
 let level = 1;
-let currentLevel = 5;
+let currentLevel = 1;
 let coinsCollected = 0;
 
 let canvas;
@@ -39,16 +39,26 @@ let gameLost = false;
  * Hides the start screen and shows mobile buttons.
  */
 function startGame() {
-  initLevel(currentLevel);
+  createNewWorld();
   startScreen = false;
   applyFullScreen();
-  keyboard = new Keyboard();
-  world = new World(canvas, keyboard, level);
-  hideStartScreen();
   showMobileButtons();
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));
   }
+  hideStartScreen();
+}
+
+
+/**
+ * Reset the old world.
+ * Creates new world instance.
+ */
+function createNewWorld() {
+  world = null;
+  initLevel(currentLevel);
+  keyboard = new Keyboard();
+  world = new World(canvas, keyboard, level);
 }
 
 /**
@@ -108,7 +118,6 @@ function initLevel(level) {
  */
 function playPreviousLevel() {
   resetGameStateFlags(currentLevel -= 1);
-  startGame();
   closeAfterGameOverlay();
 }
 
@@ -118,7 +127,6 @@ function playPreviousLevel() {
  */
 function repeatCurrentLevel() {
   resetGameStateFlags(currentLevel);
-  startGame();
   closeAfterGameOverlay();
 }
 
@@ -128,7 +136,6 @@ function repeatCurrentLevel() {
  */
 function playNextLevel() {
   resetGameStateFlags(currentLevel += 1);
-  startGame();
   closeAfterGameOverlay();
 }
 
@@ -154,6 +161,9 @@ function restartGame() {
  * @param {number} newLevel - The new level number to set.
  */
 function resetGameStateFlags(newLevel) {
+  world.level.enemies.forEach(enemy => {
+    enemy.isDeadChicken = false;
+  });
   currentLevel = newLevel;
   gameLost = false;
   gameIsOver = false;

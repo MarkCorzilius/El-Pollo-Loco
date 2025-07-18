@@ -113,6 +113,7 @@ function showAfterGameOverScreen() {
   const dialog = document.getElementById("afterLevelDialog");
   overlay.classList.remove("d-none");
   dialog.classList.remove("d-none");
+  createNewWorld();
   setTimeout(() => {
     dialog.classList.add("show");
   }, 50);
