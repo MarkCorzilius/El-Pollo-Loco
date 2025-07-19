@@ -41,6 +41,7 @@ class World extends movableObject {
     this.chickenHandler = new ChickenHandler(this);
     this.endbossManager = new EndbossManager(this);
     this.coinCollector = new CoinCollector(this);
+    this.collisionsManager = new CollisionsManager(this);
 
     this.finalFight = false;
 
@@ -69,7 +70,7 @@ class World extends movableObject {
     this.collidingCollectableBottle = new Set();
     this.collidingEndboss = new Set();
 
-    this.startCollisitionCheck();
+    this.collisionsManager.startCollisitionCheck();
     this.endbossManager.getDistanceBetweenEndbossAndCharacter();
   }
 
@@ -101,83 +102,6 @@ class World extends movableObject {
     finalBackgroundSound.play();
     finalBackgroundSound.loop = true;
     finalBackgroundSound.volume = 0.05;
-  }
-
-  /**
-   * Starts the interval for continuous collision checks within the world.
-   */
-  startCollisitionCheck() {
-    this.collisionCheckInterval = setInterval(() => {
-      gameIntervals.push(this.collisionCheckInterval);
-      this.checkEnemiesForCollision();
-      this.checkCoinsForCollision();
-      this.checkCollectableObjectsCollision();
-      this.throwableManager.handleBottleAttack();
-    }, 1000 / 60);
-  }
-
-  /**
-   * Checks for collisions between the character and collectable bottles.
-   */
-  checkCollectableObjectsCollision() {
-    this.level.collectableObjects.forEach((collectableBottle, index) => {
-      this.handleCollectableBottleCollisition(collectableBottle, index);
-    });
-  }
-
-  /**
-   * Checks for collisions between the character and coins.
-   */
-  checkCoinsForCollision() {
-    this.level.coins.forEach((coin, index) => {
-      this.coinCollector.handleCoinCollisition(coin, index);
-    });
-  }
-
-  /**
-   * Checks for collisions between the character and enemies,
-   * and also initiates bottle throw checks.
-   */
-  checkEnemiesForCollision() {
-    this.level.enemies.forEach((enemy) => {
-      this.handleEnemyCollision(enemy);
-      this.throwableManager.checkThrowObjects();
-    });
-  }
-
-  /**
-   * Processes collision logic when the character touches an enemy.
-   * @param {Enemy} enemy - The enemy object being checked for collision.
-   */
-  handleEnemyCollision(enemy) {
-    const key = enemy.id;
-    if (this.character.isColliding(enemy)) {
-      this.chickenHandler.didJumpOnChicken(enemy);
-      this.processEnemyDamage(enemy, key);
-    } else {
-      this.processEnemyRemoval(key);
-    }
-  }
-
-  /**
-   * Removes the enemy's key from the collision tracking set.
-   * @param {string|number} key - The unique ID of the enemy.
-   */
-  processEnemyRemoval(key) {
-    this.collidingEnemies.delete(key);
-  }
-
-  /**
-   * Handles the damage dealt to the character by an enemy.
-   * @param {Enemy} enemy - The enemy causing the damage.
-   * @param {string|number} key - The enemy's unique ID for collision tracking.
-   */
-  processEnemyDamage(enemy, key) {
-    if (!this.collidingEnemies.has(key) && !enemy.isDead) {
-      this.character.hit(enemy.damage);
-      this.healthBar.setPercentage(this.character.healthTracker, this.healthBar.HEALTH_STATUS_IMAGES);
-      this.collidingEnemies.add(key);
-    }
   }
 
   /**
@@ -257,61 +181,6 @@ class World extends movableObject {
   }
 
   /**
-   * Handles the logic when the character collides with a collectable bottle.
-   * @param {Object} bottle - The bottle object.
-   * @param {number} index - The index of the bottle in the level array.
-   */
-  handleCollectableBottleCollisition(bottle, index) {
-    const key = bottle.id;
-    if (this.character.isColliding(bottle)) {
-      this.attemptBottleCollection(key, index);
-    } else {
-      this.resetBottleCollision(key);
-    }
-  }
-
-  /**
-   * Removes a bottle's key from the collision tracking set.
-   * @param {string|number} key - The unique ID of the bottle.
-   */
-  resetBottleCollision(key) {
-    this.collidingCollectableBottle.delete(key);
-  }
-
-  /**
-   * Attempts to collect a bottle if not already processed.
-   * @param {string|number} key - The bottle's unique ID.
-   * @param {number} index - The index of the bottle in the level array.
-   */
-  attemptBottleCollection(key, index) {
-    if (!this.collidingCollectableBottle.has(key)) {
-      this.collectBottle(index);
-      this.collidingCollectableBottle.add(key);
-    }
-  }
-
-  /**
-   * Increases bottle ammo and removes the collected bottle from the level.
-   * @param {number} index - The index of the bottle to remove.
-   */
-  collectBottle(index) {
-    if (this.character.bottlesTracker >= 100) return;
-
-    this.playBottleCollectSound();
-    this.updateBottleStatus(index);
-  }
-
-  /**
-   * Updates the character’s weapon bar after bottle collection.
-   * @param {number} index - The index of the bottle in the array.
-   */
-  updateBottleStatus(index) {
-    this.character.bottlesTracker += 20;
-    this.level.collectableObjects.splice(index, 1);
-    this.weaponBar.setPercentage(this.character.bottlesTracker, this.weaponBar.WEAPON_STATUS_IMAGES);
-  }
-
-  /**
    * Plays the sound effect for collecting a bottle.
    */
   playBottleCollectSound() {
@@ -379,10 +248,10 @@ class World extends movableObject {
   createDrawAnimationFrame() {
     let self = this;
     let firstFrame = true;
-  
+
     requestAnimationFrame(function draw() {
       self.draw();
-  
+
       if (firstFrame) {
         firstFrame = false;
         // Set the loading flag to false after the first frame is drawn
