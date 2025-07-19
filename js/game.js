@@ -57,6 +57,7 @@ function playWinAnimations() {
  */
 function playWinSound() {
   if (soundEnabled) {
+    world.gameWonSound.volume = 0.2;
     world.gameWonSound.play();
   }
 }
@@ -82,6 +83,7 @@ function playLoseAnimations() {
  */
 function playLostSound() {
   if (soundEnabled) {
+    world.gameLostSound.volume = 0.2;
     world.gameLostSound.play();
   }
 }
