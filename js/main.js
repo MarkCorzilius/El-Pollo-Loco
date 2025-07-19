@@ -43,8 +43,7 @@ let gameIsLoading = true;
 async function startGame() {
   showLoadingSpinner();
 
-  
-  createNewWorld(); // Now run heavy logic
+  createNewWorld();
   startScreen = false;
   applyFullScreen();
   showMobileButtons();
@@ -54,12 +53,18 @@ async function startGame() {
   startGameLoadingInterval();
 }
 
+/**
+ * Starts an interval to check if the game is loading.
+ * When loading begins, hides the start screen and spinner, then clears the interval.
+ */
 function startGameLoadingInterval() {
   const loadingGameInterval = setInterval(() => {
     if (!gameIsLoading) {
       gameIsLoading = true;
-      hideStartScreen();
-      hideLoadingSpinner();
+      setTimeout(() => {
+        hideStartScreen();
+        hideLoadingSpinner();   
+      }, 1000);
       clearInterval(loadingGameInterval);
     }
   }, 1000 / 60);
