@@ -34,29 +34,35 @@ let fullScreen = false;
 
 let gameLost = false;
 
+let gameIsLoading = true;
+
 /**
  * Starts the game by initializing the level, world, keyboard, and audio.
  * Hides the start screen and shows mobile buttons.
  */
 async function startGame() {
   showLoadingSpinner();
-  try {
 
-    await createNewWorld(); // Now run heavy logic
-
-    startScreen = false;
-    applyFullScreen();
-    showMobileButtons();
-    if (soundEnabled) {
-      basicBackgroundSound.play().catch((e) => console.log(e));
-    }
-    
-  } catch (error) {
-    console.error("Failed to start game:", error);
-  } finally {
-    hideStartScreen();
-    hideLoadingSpinner();
+  
+  createNewWorld(); // Now run heavy logic
+  startScreen = false;
+  applyFullScreen();
+  showMobileButtons();
+  if (soundEnabled) {
+    basicBackgroundSound.play().catch((e) => console.log(e));
   }
+  startGameLoadingInterval();
+}
+
+function startGameLoadingInterval() {
+  const loadingGameInterval = setInterval(() => {
+    if (!gameIsLoading) {
+      gameIsLoading = true;
+      hideStartScreen();
+      hideLoadingSpinner();
+      clearInterval(loadingGameInterval);
+    }
+  }, 1000 / 60);
 }
 
 /**

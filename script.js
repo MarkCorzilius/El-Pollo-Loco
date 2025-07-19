@@ -38,7 +38,7 @@ function adjustUIForMobileDevices() {
   if (detectDeviceType() === "Tablet" || detectDeviceType() === "Mobile") {
     mobileDevice = true;
     isLandscape = detectDeviceOrientation();
-    shouldShowRotateMessage(isLandscape);
+    shouldShowRotateMessage(isLandscape, detectDeviceType());
     adjustInfoOverlayMobile();
   }
 }
@@ -47,7 +47,31 @@ function detectDeviceOrientation() {
   return window.innerWidth > window.innerHeight;
 }
 
-function shouldShowRotateMessage(isLandscape) {
+function shouldShowRotateMessage(isLandscape, deviceType) {
+  if (deviceType === "Tablet") {
+    handleTabletMessage(isLandscape);
+  } else if (deviceType === "Mobile") {
+    handleMobileMessage(isLandscape);
+  } else {
+    handleDesktopMessage(isLandscape);
+  }
+}
+
+function handleDesktopMessage() {
+    hideTurnDeviceMessage();
+}
+
+function handleTabletMessage(isLandscape) {
+  if (window.innerWidth >= 900) {
+    hideTurnDeviceMessage();
+  } else if (isLandscape && window.innerWidth < 900) {
+    showTurnDeviceMessage();
+  } else {
+    showTurnDeviceMessage();
+  }
+}
+
+function handleMobileMessage(isLandscape) {
   if (isLandscape) {
     hideTurnDeviceMessage();
   } else {

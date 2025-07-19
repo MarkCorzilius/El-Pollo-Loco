@@ -51,8 +51,8 @@ class World extends movableObject {
     this.loseMessage = new LoseMessage(this, this.canvas);
     this.winMessage = new WinMessage(this, this.canvas);
 
-    this.draw();
     this.setWorld();
+    this.draw();
 
     this.level.enemies.forEach((enemy) => {
       if (enemy instanceof Chicken || enemy instanceof SmallChicken) {
@@ -229,12 +229,12 @@ class World extends movableObject {
    * @param {Enemy} enemy - The enemy to remove.
    */
   removeDeadChickenBody(enemy) {
-      setTimeout(() => {
-        const index = this.level.enemies.indexOf(enemy);
-        if (index != -1) {
-          this.level.enemies.splice(index, 1);
-        }
-      }, 5000);
+    setTimeout(() => {
+      const index = this.level.enemies.indexOf(enemy);
+      if (index != -1) {
+        this.level.enemies.splice(index, 1);
+      }
+    }, 5000);
   }
 
   /**
@@ -378,8 +378,16 @@ class World extends movableObject {
    */
   createDrawAnimationFrame() {
     let self = this;
+    let firstFrame = true;
+  
     requestAnimationFrame(function draw() {
       self.draw();
+  
+      if (firstFrame) {
+        firstFrame = false;
+        // Set the loading flag to false after the first frame is drawn
+        gameIsLoading = false;
+      }
     });
   }
 
