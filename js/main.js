@@ -83,6 +83,7 @@ function hideStartScreen() {
  * Sets up canvas, control listeners, and UI elements.
  */
 function init() {
+  adjustUIForMobileDevices();
   checkDeviceOrientation();
   toggleGameInfoOverlay();
   canvas = document.getElementById("canvas");

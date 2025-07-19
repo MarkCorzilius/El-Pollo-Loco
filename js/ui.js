@@ -1,9 +1,9 @@
 /**
- * Shows or hides mobile control buttons based on screen size and game state.
+ * Shows or hides mobile control buttons based on device and game state.
  */
 function showMobileButtons() {
   const btnsContainer = document.getElementById("mobileButtons");
-  if (!gameIsOver && !startScreen && window.innerWidth <= 1024) {
+  if (!gameIsOver && !startScreen && (window.innerWidth <= 1024 || mobileDevice)) {
     btnsContainer.classList.replace("d-none", "d-flex");
 
     document.querySelectorAll(".mobile-touch-buttons").forEach((btn) => {
@@ -25,7 +25,7 @@ function showMobileMenu() {
 
   menu.classList.remove("d-none", "d-flex");
 
-  if (window.innerWidth < 1024) {
+  if (mobileDevice || window.innerWidth <= 1024) {
     menu.classList.add("d-flex"); // show
   } else {
     menu.classList.add("d-none"); // hide

@@ -34,8 +34,7 @@ function detectDeviceType() {
   return "Desktop";
 }
 
-function showRotateDeviceMessageIfPortrait() {
-  mobileDevice = false;
+function adjustUIForMobileDevices() {
   if (detectDeviceType() === "Tablet" || detectDeviceType() === "Mobile") {
     mobileDevice = true;
     isLandscape = detectDeviceOrientation();
@@ -68,15 +67,21 @@ function hideTurnDeviceMessage() {
 
 function checkDeviceOrientation() {
   setInterval(() => {
-    showRotateDeviceMessageIfPortrait();
+    adjustUIForMobileDevices();
   }, 100);
 }
 
 function adjustInfoOverlayMobile() {
-    const dialog = document.getElementById('gameInfoDialog');
-  if ((mobileDevice && isLandscape)) {
+  const dialog = document.getElementById("gameInfoDialog");
+  if (mobileDevice && isLandscape) {
     dialog.classList.replace("desktop-info-size", "mobile-info-size");
   } else {
     dialog.classList.replace("mobile-info-size", "desktop-info-size");
   }
 }
+
+window.addEventListener("resize", () => {
+  showMobileButtons();
+  showMobileMenu();
+  adjustUIForMobileDevices();
+});
