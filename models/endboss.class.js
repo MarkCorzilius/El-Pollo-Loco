@@ -20,7 +20,7 @@ class Endboss extends movableObject {
   hasDied = false;
   isAttacking = false;
   otherDirection = false;
-  damage = 20;
+  damage = 30;
 
   IMAGES_ALERT = [
     "./img/4_enemie_boss_chicken/2_alert/G5.png",

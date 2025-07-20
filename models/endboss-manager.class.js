@@ -185,7 +185,7 @@ class EndbossManager {
      * Triggers endboss attack if within attack range.
      */
     handleEndbossAttack() {
-      if (this.distanceCharacterEndboss <= 310 && !this.world.endboss.isAttacking) {
+      if (this.distanceCharacterEndboss <= 150 && !this.world.endboss.isAttacking) {
         this.world.endboss.isAttacking = true;
         this.animateEndbossAttack();
       }
@@ -195,7 +195,7 @@ class EndbossManager {
      * Applies damage and knockback to character if close.
      */
     characterHitByEndboss() {
-      if (this.distanceCharacterEndboss <= 400) {
+      if (this.distanceCharacterEndboss <= 200) {
         this.world.character.hit(this.world.endboss.damage);
         this.world.character.pushCharacterAway();
         this.world.character.playCharacterAnimation();
