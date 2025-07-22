@@ -11,6 +11,32 @@ class Character extends movableObject {
   pushXSpeed = -8;
   floorY = 225;
 
+  IMAGES_LONG_IDLE = [
+    "./img/2_character_pepe/1_idle/long_idle/I-11.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-12.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-13.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-14.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-15.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-16.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-17.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-18.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-19.png",
+    "./img/2_character_pepe/1_idle/long_idle/I-20.png",
+  ];
+
+  IMAGES_IDLE = [
+    "./img/2_character_pepe/1_idle/idle/I-1.png",
+    "./img/2_character_pepe/1_idle/idle/I-2.png",
+    "./img/2_character_pepe/1_idle/idle/I-3.png",
+    "./img/2_character_pepe/1_idle/idle/I-4.png",
+    "./img/2_character_pepe/1_idle/idle/I-5.png",
+    "./img/2_character_pepe/1_idle/idle/I-6.png",
+    "./img/2_character_pepe/1_idle/idle/I-7.png",
+    "./img/2_character_pepe/1_idle/idle/I-8.png",
+    "./img/2_character_pepe/1_idle/idle/I-9.png",
+    "./img/2_character_pepe/1_idle/idle/I-10.png",
+  ];
+
   IMAGES_WALKING = [
     "./img/2_character_pepe/2_walk/W-22.png",
     "./img/2_character_pepe/2_walk/W-23.png",
@@ -61,7 +87,10 @@ class Character extends movableObject {
    */
   constructor() {
     super();
+    this.isLongIdle = false;
     this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
+    this.loadMovementSprites(this.IMAGES_IDLE);
+    this.loadMovementSprites(this.IMAGES_LONG_IDLE);
     this.loadMovementSprites(this.IMAGES_WALKING);
     this.loadMovementSprites(this.IMAGES_JUMPING);
     this.loadMovementSprites(this.IMAGES_DEAD);
@@ -73,6 +102,7 @@ class Character extends movableObject {
    * Starts character animation and movement intervals.
    */
   animate() {
+    this.startIdleAnimations();
     this.startMoveRightInterval();
     this.startMoveLeftAndJumpInterval();
     this.playCharacterAnimation();
@@ -100,14 +130,48 @@ class Character extends movableObject {
   startMoveRightInterval() {
     this.characterMoveRightInterval = setInterval(() => {
       gameIntervals.push(this.characterMoveRightInterval);
-      if (this.isNotMoving()) {
-        this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
-      }
       if (this.canMoveRight()) {
         this.moveRight();
       }
       this.world.camera_x = this.x;
     }, 1000 / 60);
+  }
+
+  /**
+   * Starts the idle animation interval that runs when the character is not moving.
+   */
+  startIdleAnimations() {
+    this.idleInterval = setInterval(() => {
+      gameIntervals.push(this.idleInterval);
+      if (this.isNotMoving()) {
+        this.runIdleAnimation();
+      } else {
+        this.resetIdleAnimationStates();
+      }
+    }, 100);
+  }
+
+  /**
+   * Runs either the normal idle or long idle animation based on the current idle state.
+   */
+  runIdleAnimation() {
+    if (this.isLongIdle) {
+      this.playObjectAnimation(this.IMAGES_LONG_IDLE, false);
+    } else {
+      this.playObjectAnimation(this.IMAGES_IDLE, true);
+
+      this.longIdleTimeout = setTimeout(() => {
+        this.isLongIdle = true;
+      }, this.IMAGES_IDLE.length * 200);
+    }
+  }
+
+  /**
+   * Resets the idle animation state and clears any pending long idle timeout.
+   */
+  resetIdleAnimationStates() {
+    clearTimeout(this.longIdleTimeout);
+    this.isLongIdle = false;
   }
 
   /**
@@ -147,7 +211,7 @@ class Character extends movableObject {
    * @returns {boolean}
    */
   isNotMoving() {
-    return !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE;
+    return !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D;
   }
 
   /**
@@ -167,6 +231,8 @@ class Character extends movableObject {
       }
     }, 1000 / 60);
   }
+
+  
 
   /**
    * Handles the death animation and game over state.
