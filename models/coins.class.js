@@ -9,7 +9,7 @@ class Coins extends movableObject {
 
   COIN_IMAGES = ["./img/8_coin/coin_1.png", "./img/8_coin/coin_2.png"];
 
-  offset = { top: 77, left: 77, right: 77, bottom: 77 };
+  offset = { top: 70, left: 70, right: 70, bottom: 70 };
 
   coinAnimationInterval;
 

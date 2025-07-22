@@ -24,7 +24,7 @@ basicBackgroundSound.volume = 0.1;
 
 const finalBackgroundSound = new Audio("./audio/final-fight.mp3");
 
-let soundEnabled = true;
+let soundEnabled = JSON.parse(localStorage.getItem('soundEnabled') ?? 'true');
 
 let globalEnemyId = 0;
 let world;
@@ -94,9 +94,10 @@ function hideStartScreen() {
  * Sets up canvas, control listeners, and UI elements.
  */
 function init() {
+  setGameVolumeImage('volumeBtn');
+  setGameVolumeImage('mobileVolumeBtn');
   adjustUIForMobileDevices();
   checkDeviceOrientation();
-  toggleGameInfoOverlay();
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
 

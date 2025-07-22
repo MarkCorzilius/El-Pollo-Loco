@@ -230,11 +230,25 @@ function toggleGameVolume(id) {
   }
 }
 
+function setGameVolumeImage(id) {
+  const savedSound = JSON.parse(localStorage.getItem('soundEnabled'))
+  const button = document.getElementById(id);
+  if (!savedSound) {
+    button.src = "./img/volume-off.png";
+  } else {
+    button.src = "./img/volume-on.png";
+  }
+}
+
 /**
  * Enables or disables all game sounds and updates audio state accordingly.
  */
 function toggleSounds() {
+  const savedSound = JSON.parse(localStorage.getItem('soundEnabled'))
+  soundEnabled = savedSound;
+  console.log(soundEnabled);
   soundEnabled = soundEnabled ? false : true;
+  localStorage.setItem("soundEnabled", JSON.stringify(soundEnabled));
   if (world === undefined || !world.character) return;
   updateSoundState();
 }
@@ -261,5 +275,15 @@ function playAppropriateBackgroundSound() {
   } else {
     basicBackgroundSound.play();
     basicBackgroundSound.volume = 0.1;
+  }
+}
+
+function togglePrivacyPolicyOverlay() {
+  const overlay = document.getElementById('privacyPolicyOverlay');
+  const dialog = document.getElementById('privacyPolicyDialog');
+  if (overlay.classList.contains('d-none')) {
+    showInfoOverlayAndDialog(overlay, dialog)
+  } else {
+    hideInfoOverlayAndDialog(overlay, dialog)
   }
 }

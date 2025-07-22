@@ -148,7 +148,7 @@ class StatusBar extends DrawableObject {
    */
   activateEndbossBars() {
     this.show();
-    if (this.type === "weapon" || this.type === "coins") {
+    if (this.type === "coins") {
       this.hide();
     }
     this.world.changeToFinalFightSound();

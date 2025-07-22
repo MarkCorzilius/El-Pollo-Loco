@@ -46,14 +46,38 @@
     <script src="./models/keyboard.class.js"></script>
   </head>
   <body id="body" onload="init()">
-    
     <div class="spinner-overlay d-none" id="spinner">
       <div class="spinner"></div>
     </div>
 
     <div id="rotateOverlay" class="d-none">
       <div class="rotate-message">
-        Please rotate your device to <p class="red-color">landscape</p> mode.
+        Please rotate your device to
+        <p class="red-color">landscape</p>
+        mode.
+      </div>
+    </div>
+
+    <div class="privacy-policy-overlay d-none" id="privacyPolicyOverlay" onclick="togglePrivacyPolicyOverlay()">
+      <div class="privacy-policy-dialog desktop-info-size d-none" id="privacyPolicyDialog" onclick="event.stopPropagation()">
+        <div onclick="togglePrivacyPolicyOverlay()" class="close-overlay-wrapper">
+          <img src="./img/close-overlay.png" alt="close" />
+        </div>
+        <h1>Impressum</h1>
+
+        <p>
+          Mark Corzilius<br />
+          Clayallee 328-334<br />
+          14169 Berlin
+        </p>
+
+        <h2>Kontakt</h2>
+        <p>
+          Telefon: +49 1522 1593715<br />
+          E-Mail: <a href="mailto:corziliusmarc@gmail.com">corziliusmarc@gmail.com</a>
+        </p>
+
+        <p>Quelle: <a href="https://www.e-recht24.de/impressum-generator.html" target="_blank">https://www.e-recht24.de/impressum-generator.html</a></p>
       </div>
     </div>
 
@@ -122,14 +146,10 @@
       <button onclick="enterFullScreen()"><img class="control-icons" src="./img/fullscreen.png" alt="fullscreen" /></button>
       <button onclick="toggleGameVolume('volumeBtn')"><img id="volumeBtn" class="control-icons" src="./img/volume-on.png" alt="sound" /></button>
       <button onclick="toggleGameInfoOverlay()"><img class="control-icons" src="./img/information.png" alt="info" /></button>
-      <a target="_blank" href="./privacy-policy.html"
-        ><button><img class="control-icons" src="./img/privacy-policy.png" alt="privacy-policy" /></button
-      ></a>
+      <button onclick="togglePrivacyPolicyOverlay()"><img class="control-icons" src="./img/privacy-policy.png" alt="privacy-policy" /></button>
     </nav>
     <div class="game-area">
-
       <div class="game-window">
-
         <canvas id="canvas" width="720" height="480"></canvas>
 
         <div id="mobileButtons" class="mobile-buttons d-none">
@@ -142,7 +162,6 @@
             <button class="mobile-touch-buttons" id="mobileBtnAttack"><img class="mobile-button-img" src="./img/attack.png" alt="attack" /></button>
           </div>
         </div>
-
       </div>
 
       <div id="startScreenElements" class="d-block">
@@ -161,9 +180,8 @@
           <div class="mobile-menu-element-wrapper">
             <button class="mobile-menu-element" onclick="toggleGameInfoOverlay()"><img src="./img/information.png" alt="" /></button>
           </div>
-          <div class="mobile-menu-element-wrapper">
-            <a class="mobile-menu-element privacy-policy" target="_blank" href="./privacy-policy.html"
-              ><img src="./img/privacy-policy.png" alt="privacy-policy" /></a>
+          <div class="mobile-menu-element-wrapper" onclick="togglePrivacyPolicyOverlay()">
+            <img src="./img/privacy-policy.png" alt="privacy-policy" />
           </div>
         </div>
       </div>

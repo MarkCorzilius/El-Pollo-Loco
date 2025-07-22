@@ -156,11 +156,15 @@ function checkDeviceOrientation() {
  * Adjusts the game info overlay size based on whether the device is mobile and in landscape orientation.
  */
 function adjustInfoOverlayMobile() {
-  const dialog = document.getElementById("gameInfoDialog");
+  const infoDialog = document.getElementById("gameInfoDialog");
+  const privacyDialog = document.getElementById('privacyPolicyDialog');
   if (mobileDevice && isLandscape) {
-    dialog.classList.replace("desktop-info-size", "mobile-info-size");
+    infoDialog.classList.replace("desktop-info-size", "mobile-info-size");
+    privacyDialog.classList.replace("desktop-info-size", "mobile-info-size");
   } else {
-    dialog.classList.replace("mobile-info-size", "desktop-info-size");
+    infoDialog.classList.replace("mobile-info-size", "desktop-info-size");
+    privacyDialog.classList.replace("mobile-info-size", "desktop-info-size");
+
   }
 }
 

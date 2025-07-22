@@ -82,10 +82,15 @@ level = new Level(
 
     [
         new Coins(200, 100), 
+        new Coins(300, 100), 
         new Coins(600, 300), 
+        new Coins(600, 300), 
+        new Coins(800, 200), 
+        new Coins(900, 90), 
         new Coins(1000, 200), 
         new Coins(1200, 90), 
-        new Coins(1500, 300),
+        new Coins(1300, 300),
+        new Coins(1400, 300),
     ],
 
     [
