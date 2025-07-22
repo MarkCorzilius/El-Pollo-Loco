@@ -346,6 +346,7 @@ class ThrowableManager {
   createBottleSplashInterval(bottle) {
     return setInterval(() => {
       gameIntervals.push(bottle.splashInterval);
+      this.world.character.resetIdleAnimationStates();
       bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
 
       if (this.playedAllSplashImages(bottle)) {

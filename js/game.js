@@ -5,7 +5,6 @@
  */
 function gameOver() {
   showMobileButtons();
-  insertAchievementsBlock();
   if (playerIsDead && !playerAnimationPlayed) {
     handleGameOverLoss();
     stopGame();
@@ -41,6 +40,7 @@ function handleGameOverWin() {
  * including delayed image and screen display.
  */
 function playWinAnimations() {
+  insertAchievementsBlock();
   playWinSound();
   world.winMessage.show();
 
@@ -67,6 +67,7 @@ function playWinSound() {
  * including delayed image and screen display.
  */
 function playLoseAnimations() {
+  insertAchievementsBlock();
   playLostSound();
   world.loseMessage.show();
 

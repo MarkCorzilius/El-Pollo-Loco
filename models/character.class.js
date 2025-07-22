@@ -229,7 +229,7 @@ class Character extends movableObject {
       } else if (this.shouldAnimateWalk()) {
         this.playObjectAnimation(this.IMAGES_WALKING);
       }
-    }, 1000 / 60);
+    }, 1000 / 25);
   }
 
   
