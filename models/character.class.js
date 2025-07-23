@@ -85,6 +85,9 @@ class Character extends movableObject {
   animationInterval = 100;
   animationSpeed = 80;
 
+  idleStartTime;
+  elapsed;
+
   /**
    * Initializes the character with default position, size,
    * sprite images, and starts gravity.
@@ -155,18 +158,24 @@ class Character extends movableObject {
     }, 300);
   }
 
+  // start clock when idle starts
+  // if clock > 5 sec –> longIdle = true;
+  // if movement: reset clock
+
   /**
    * Runs either the normal idle or long idle animation based on the current idle state.
    */
   runIdleAnimation() {
+    if (!this.idleStartTime) this.idleStartTime = performance.now();
+    this.elapsed = performance.now() - this.idleStartTime;
+
     if (this.isLongIdle) {
       this.playObjectAnimation(this.IMAGES_LONG_IDLE, false);
     } else {
       this.playObjectAnimation(this.IMAGES_IDLE, true);
-
-      this.longIdleTimeout = setTimeout(() => {
+      if (this.elapsed > 2000) {
         this.isLongIdle = true;
-      }, this.IMAGES_IDLE.length * 200);
+      }
     }
   }
 
@@ -175,6 +184,7 @@ class Character extends movableObject {
    */
   resetIdleAnimationStates() {
     clearTimeout(this.longIdleTimeout);
+    this.idleStartTime = null;
     this.isLongIdle = false;
   }
 
