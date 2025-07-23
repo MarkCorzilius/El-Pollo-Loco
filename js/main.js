@@ -192,12 +192,12 @@ function resetGameStateFlags(newLevel) {
   });
   hasSpotedCharacter = false;
   currentLevel = newLevel;
+  endbossIsDead = false;
+  playerIsDead = false;
   gameLost = false;
   gameIsOver = false;
   coinsCollected = 0;
-  endbossIsDead = false;
   bossAnimationPlayed = false;
   playerAnimationPlayed = false;
-  playerIsDead = false;
   hasEndbossAlerted = false;
 }

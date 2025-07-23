@@ -65,7 +65,7 @@ class Character extends movableObject {
     "./img/2_character_pepe/5_dead/D-54.png",
     "./img/2_character_pepe/5_dead/D-55.png",
     "./img/2_character_pepe/5_dead/D-56.png",
-    "./img/2_character_pepe/5_dead/D-57.png",
+    //"./img/2_character_pepe/5_dead/D-57.png",
   ];
 
   IMAGES_HURT = ["./img/2_character_pepe/4_hurt/H-41.png", "./img/2_character_pepe/4_hurt/H-42.png", "./img/2_character_pepe/4_hurt/H-43.png"];
@@ -81,6 +81,10 @@ class Character extends movableObject {
   };
   enemyWasJumpedOn;
 
+  lastAnimationTime = 0;
+  animationInterval = 100;
+  animationSpeed = 80;
+
   /**
    * Initializes the character with default position, size,
    * sprite images, and starts gravity.
@@ -88,6 +92,7 @@ class Character extends movableObject {
   constructor() {
     super();
     this.isLongIdle = false;
+    this.deathAnimationPlayed = false;
     this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadMovementSprites(this.IMAGES_IDLE);
     this.loadMovementSprites(this.IMAGES_LONG_IDLE);
@@ -105,7 +110,6 @@ class Character extends movableObject {
     this.startIdleAnimations();
     this.startMoveRightInterval();
     this.startMoveLeftAndJumpInterval();
-    this.playCharacterAnimation();
   }
 
   /**
@@ -217,29 +221,75 @@ class Character extends movableObject {
   /**
    * Plays the appropriate animation based on character state.
    */
-  playCharacterAnimation() {
-    this.characterAnimationInterval = setInterval(() => {
-      gameIntervals.push(this.characterAnimationInterval);
-      if (this.isDead()) {
-        this.handleDeathAnimation();
-      } else if (this.isHurt()) {
-        this.playObjectAnimation(this.IMAGES_HURT);
-      } else if (this.isAboveGround()) {
-        this.playObjectAnimation(this.IMAGES_JUMPING);
-      } else if (this.shouldAnimateWalk()) {
-        this.playObjectAnimation(this.IMAGES_WALKING);
-      }
-    }, 1000 / 25);
+  updateCharacterAnimation(currentTime) {
+    if (currentTime - this.lastAnimationTime < this.animationInterval) {
+      return;
+    }
+    this.lastAnimationTime = currentTime;
+
+    this.selectCharacterAnimation();
   }
 
   /**
-   * Handles the death animation and game over state.
+   * Selects and plays the appropriate animation based on the character's state.
    */
-  handleDeathAnimation() {
-    this.playObjectAnimation(this.IMAGES_DEAD, true);
+  selectCharacterAnimation() {
+    if (this.isDead() && !this.deathAnimationPlayed) {
+      this.playDeathAnimation();
+    } else if (this.isHurt()) {
+      this.playHurtAnimation();
+    } else if (this.isAboveGround()) {
+      this.playJumpAnimation();
+    } else if (this.shouldAnimateWalk()) {
+      this.playWalkAnimation();
+    }
+  }
+
+  /**
+   * Determines the animation speed for jumping based on movement keys pressed.
+   * Sets a faster animation speed if moving left or right, slower otherwise.
+   */
+  decideAnimationSpeedForJump() {
+    if (this.world.keyboard.LEFT || this.world.keyboard.RIGHT) {
+      this.animationSpeed = 65;
+    } else {
+      this.animationSpeed = 40;
+    }
+  }
+
+  /**
+   * Plays the walking animation sequence.
+   */
+  playWalkAnimation() {
+    this.setAnimation(this.IMAGES_WALKING, 60, false);
+  }
+
+  /**
+   * Plays the jumping animation sequence with variable speed.
+   * Calls decideAnimationSpeedForJump to adjust speed before playing.
+   */
+  playJumpAnimation() {
+    this.decideAnimationSpeedForJump();
+    this.setAnimation(this.IMAGES_JUMPING, this.animationSpeed, false);
+  }
+
+  /**
+   * Plays the hurt animation sequence.
+   */
+  playHurtAnimation() {
+    this.setAnimation(this.IMAGES_HURT, 60, true);
+  }
+
+  /**
+   * Starts the death animation and triggers game over logic after it finishes.
+   * Marks the death animation as played to prevent replay.
+   */
+  playDeathAnimation() {
+    this.setAnimation(this.IMAGES_DEAD, 120, true);
     gameLost = true;
     this.deathAnimationTimeOut = setTimeout(() => {
       gameTimeouts.push(this.deathAnimationTimeOut);
+      this.deathAnimationPlayed = true;
       playerIsDead = true;
       gameIsOver = true;
       startGameOverCheckInterval();

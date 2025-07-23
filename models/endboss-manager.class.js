@@ -252,7 +252,6 @@ class EndbossManager extends movableObject {
     if (this.distanceCharacterEndboss <= 200) {
       this.world.character.hit(this.world.endboss.damage);
       this.world.character.pushCharacterAway();
-      this.world.character.playCharacterAnimation();
       this.world.healthBar.setPercentage(this.world.character.healthTracker, this.world.healthBar.HEALTH_STATUS_IMAGES);
     }
   }

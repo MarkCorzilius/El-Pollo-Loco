@@ -13,6 +13,7 @@ function gameOver() {
     stopGame();
   }
   updateOverlayButtons();
+
 }
 
 /**
@@ -73,10 +74,10 @@ function playLoseAnimations() {
 
   setTimeout(() => {
     world.loseMessage.loadImage("./img/You won, you lost/You lost.png");
-  }, 1500);
+  }, 2500);
   setTimeout(() => {
     showAfterGameOverScreen();
-  }, 3000);
+  }, 4000);
 }
 
 /**
@@ -123,9 +124,9 @@ function stopGame() {
  */
 function startGameOverCheckInterval() {
   gameOverInterval = setInterval(() => {
-    gameIntervals.push(gameOverInterval);
     if (playerIsDead || endbossIsDead) {
       gameOver();
     }
   }, 100);
+  gameIntervals.push(gameOverInterval);
 }

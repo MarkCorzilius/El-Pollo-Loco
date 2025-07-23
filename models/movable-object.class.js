@@ -169,4 +169,15 @@ class movableObject extends DrawableObject {
     }
     return this.y < 225;
   }
+
+  /**
+   * Sets the animation speed and starts playing the given image sequence.
+   * @param {string[]} images - Array of image paths for the animation frames.
+   * @param {number} interval - Time in milliseconds between animation frames.
+   * @param {boolean} stopAtEnd - Whether to stop the animation when it reaches the last frame.
+   */
+  setAnimation(images, interval, stopAtEnd) {
+    this.animationInterval = interval;
+    this.playObjectAnimation(images, stopAtEnd);
+  }
 }

@@ -114,10 +114,10 @@ class World extends movableObject {
     this.processEndbossHit(enemy);
   }
 
-/**
- * Applies damage and triggers jump attack logic if the enemy is the endboss.
- * @param {Enemy} enemy - The enemy object to process (must be an instance of Endboss).
- */
+  /**
+   * Applies damage and triggers jump attack logic if the enemy is the endboss.
+   * @param {Enemy} enemy - The enemy object to process (must be an instance of Endboss).
+   */
   processEndbossHit(enemy) {
     if (enemy instanceof Endboss) {
       this.endbossManager.hurtEndboss(this.endboss.hp);
@@ -190,11 +190,16 @@ class World extends movableObject {
   }
 
   /**
-   * Draws all game elements onto the canvas for the current frame.
+   * Renders the entire game frame by clearing the canvas, applying camera translation,
+   * updating the character animation, drawing all game elements (scenery, character,
+   * collectibles, enemies, UI bars, items), and then resetting translation before
+   * drawing endgame messages and scheduling the next animation frame.
    */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
+
+    this.character.updateCharacterAnimation(performance.now());
 
     this.addSceneryToMap();
     this.addToMap(this.character);
