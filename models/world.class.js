@@ -114,13 +114,14 @@ class World extends movableObject {
     this.processEndbossHit(enemy);
   }
 
-  /**
-   * Applies damage logic to the endboss enemy.
-   * @param {Enemy} enemy - The enemy being processed (assumed to be Endboss).
-   */
+/**
+ * Applies damage and triggers jump attack logic if the enemy is the endboss.
+ * @param {Enemy} enemy - The enemy object to process (must be an instance of Endboss).
+ */
   processEndbossHit(enemy) {
     if (enemy instanceof Endboss) {
       this.endbossManager.hurtEndboss(this.endboss.hp);
+      this.endbossManager.handleJumpAttack();
     }
   }
 
@@ -279,7 +280,7 @@ class World extends movableObject {
       this.flipImage(object);
     }
     object.draw(this.ctx);
-    object.drawFrame(this.ctx);
+    //object.drawFrame(this.ctx);
 
     if (object.otherDirection) {
       this.flipImageBack(object);

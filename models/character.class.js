@@ -148,7 +148,7 @@ class Character extends movableObject {
       } else {
         this.resetIdleAnimationStates();
       }
-    }, 100);
+    }, 300);
   }
 
   /**
@@ -231,8 +231,6 @@ class Character extends movableObject {
       }
     }, 1000 / 25);
   }
-
-  
 
   /**
    * Handles the death animation and game over state.
