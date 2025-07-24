@@ -2,7 +2,7 @@ let gameIntervals = [];
 let gameTimeouts = [];
 
 let level = 1;
-let currentLevel = 4;
+let currentLevel = 1;
 let coinsCollected = 0;
 
 let canvas;

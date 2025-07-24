@@ -148,21 +148,43 @@ class Character extends movableObject {
 
   /**
    * Manages the character's idle animation state.
-   * Initializes idle timing, then plays either the normal or long idle animation based on elapsed time.
+   * Initializes idle timing, optionally resets the idle image during
+   * the first 3 seconds, and chooses between short and long idle animations.
    */
   playIdleAnimation() {
     this.initializeIdleStart();
 
     this.elapsed = performance.now() - this.idleStartTime;
-    if (this.elapsed < 3000) {
-      return;
-    };
+    this.maybeResetIdleImage();
 
     if (this.isLongIdle) {
       this.playLongIdleCycle();
     } else {
       this.playIdleCycle();
     }
+  }
+
+  /**
+   * Resets the character's image to the first idle frame if within
+   * the initial 3 seconds of idling and the reset flag is set.
+   * Prevents animation from starting too early and avoids flickering.
+   */
+  maybeResetIdleImage() {
+    if (this.elapsed < 3000) {
+      if (this.resetIdleImage) {
+        this.setDefaultCharacterImage();
+      }
+      return;
+    }
+  }
+
+  /**
+   * Sets the character's image to the first idle frame and clears
+   * the reset flag. Used to ensure a stable starting frame for idle.
+   */
+  setDefaultCharacterImage() {
+    this.img = this.imageCache[this.IMAGES_IDLE[0]];
+    this.resetIdleImage = false;
   }
 
   /**
@@ -280,7 +302,17 @@ class Character extends movableObject {
       this.resetIdleAnimationStates();
       this.playWalkAnimation();
     } else if (isIdle) {
+      this.prepareIdleImageReset();
       this.playIdleAnimation();
+    }
+  }
+
+  /**
+   * Sets the reset flag for the idle image if idle just started.
+   */
+  prepareIdleImageReset() {
+    if (!this.idleStartTime) {
+      this.resetIdleImage = true;
     }
   }
 
