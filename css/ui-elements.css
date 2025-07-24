@@ -25,7 +25,6 @@
   max-height: 600px;
 }
 
-
 .game-info-content {
   overflow-y: auto;
   display: flex;
@@ -52,7 +51,8 @@
   line-height: 1.4;
 }
 
-.game-info-dialog.show, .privacy-policy-dialog.show {
+.game-info-dialog.show,
+.privacy-policy-dialog.show {
   transform: translate(-50%, -50%);
   top: 50%;
 }
@@ -260,4 +260,15 @@
   backdrop-filter: blur(6px); /* optional: for a "frosted glass" look */
   border-radius: 12px; /* smooth corners to match the soft shadow */
   padding: 15px;
+}
+
+.privacy-policy-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.privacy-policy-info::-webkit-scrollbar {
+  display: none;
 }

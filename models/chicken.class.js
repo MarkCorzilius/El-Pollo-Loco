@@ -30,7 +30,7 @@ class Chicken extends movableObject {
   constructor() {
     super().loadImage(`./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png`);
     this.loadMovementSprites(this.IMAGES_WALKING);
-    this.speed = 0.15 + Math.random() * 0.25;
+    this.speed = 0.55 + Math.random() * 0.25;
     this.id = globalEnemyId++;
     this.damage = 10;
     this.animate();

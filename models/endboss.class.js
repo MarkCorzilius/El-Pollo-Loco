@@ -13,7 +13,7 @@ class Endboss extends movableObject {
     left: 30,
     right: 35,
   };
-  speed = 0.4;
+  speed = 1;
   hp;
   isDead = false;
   isHurt = false;
@@ -69,7 +69,6 @@ class Endboss extends movableObject {
     this.loadMovementSprites(this.IMAGES_ATTACK);
     this.id = globalEnemyId++;
     this.hp = 100;
-    this.speed = 0.3;
     this.animate();
   }
 

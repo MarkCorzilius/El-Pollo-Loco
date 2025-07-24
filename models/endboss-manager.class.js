@@ -7,6 +7,8 @@ class EndbossManager extends movableObject {
   speedY = 14;
   jumpXSpeed = -10;
   floorY = 120;
+  jumpCounter = 0;
+  jumpLimit = 1;
 
   /**
    * Creates an instance of EndbossManager to control endboss behavior.
@@ -15,7 +17,6 @@ class EndbossManager extends movableObject {
   constructor(world) {
     super();
     this.world = world;
-    this.didJumpAttack = false;
     this.distanceCharacterEndboss = 0;
     this.startDecidingEndbossDirection();
   }
@@ -25,10 +26,10 @@ class EndbossManager extends movableObject {
    * Clears gravity and starts the jump interval.
    */
   handleJumpAttack() {
-    if (!this.didJumpAttack) {
+    if (this.jumpCounter < this.jumpLimit) {
       clearInterval(this.gravityInterval);
       this.startEndbossJumpInterval();
-      this.didJumpAttack = true;
+      this.jumpCounter++;
     }
   }
 
@@ -61,7 +62,7 @@ class EndbossManager extends movableObject {
   handleEnbossLanding() {
     if (this.world.endboss.y > this.floorY) {
       this.world.endboss.y = this.floorY;
-      this.speedY = 0;
+      this.speedY = 14;
       clearInterval(this.endbossJumpInterval);
       this.world.applyGravity();
     }
@@ -69,28 +70,27 @@ class EndbossManager extends movableObject {
 
   /**
    * Hurts the endboss, handles death, or triggers hurt animations.
-   * @param {number} hp - Current HP after damage.
    */
-  hurtEndboss(hp) {
+  hurtEndboss() {
     this.reduceEndbossHpAndSetHurt();
-    this.increaseEndbossPower();
     this.updateEnbossHealthBar();
-    this.handleEndbossAfterHit(hp);
+    this.handleEndbossAfterHit();
   }
 
   /**
    * Handles hurt or death state after taking damage.
    * @param {number} hp - Current HP after damage.
    */
-  handleEndbossAfterHit(hp) {
+  handleEndbossAfterHit() {
     if (!this.world.endbossBar.isAttacking) {
       this.stopEndbossAnimations();
-      if (hp <= 0) {
+      if (this.world.endboss.hp <= 0) {
         this.playDeathAnimation();
         this.removeEndbossFromLevel();
       } else {
         this.playHurtAnimation();
         this.resetAndResumeAnimation();
+        this.world.endboss.speed += 0.4;
       }
     }
   }
@@ -106,21 +106,8 @@ class EndbossManager extends movableObject {
    * Reduces endboss HP and sets it to hurt state.
    */
   reduceEndbossHpAndSetHurt() {
-    this.world.endboss.hp -= 20;
+    this.world.endboss.hp -= this.world.character.appliedDamage;
     this.world.endboss.isHurt = true;
-  }
-
-  /**
-   * Increases endboss speed and damage based on level.
-   */
-  increaseEndbossPower() {
-    if (currentLevel === 4 || currentLevel === 5) {
-      this.world.endboss.speed += 0.6;
-      this.world.endboss.damage += 10;
-    } else {
-      this.world.endboss.speed += 0.4;
-      this.world.endboss.damage += 5;
-    }
   }
 
   /**

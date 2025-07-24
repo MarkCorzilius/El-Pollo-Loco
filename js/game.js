@@ -44,13 +44,9 @@ function playWinAnimations() {
   insertAchievementsBlock();
   playWinSound();
   world.winMessage.show();
-
-  setTimeout(() => {
-    world.winMessage.loadImage("./img/You won, you lost/You won A.png");
-  }, 1500);
   setTimeout(() => {
     showAfterGameOverScreen();
-  }, 3000);
+  }, 1500);
 }
 
 /**

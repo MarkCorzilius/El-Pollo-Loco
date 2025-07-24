@@ -107,7 +107,7 @@ class StatusBar extends DrawableObject {
       return 3;
     } else if (resource >= 40) {
       return 2;
-    } else if (resource >= 20) {
+    } else if (resource > 0) {
       return 1;
     } else {
       return 0;
@@ -148,9 +148,6 @@ class StatusBar extends DrawableObject {
    */
   activateEndbossBars() {
     this.show();
-    if (this.type === "coins") {
-      this.hide();
-    }
     this.world.changeToFinalFightSound();
   }
 }

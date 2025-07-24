@@ -12,8 +12,7 @@ level = new Level(
         new Chicken(),
         new Chicken(), 
         new SmallChicken(),
-        new Chicken(),
-        new SmallChicken(),
+
         new Endboss(2000),
     ],
 

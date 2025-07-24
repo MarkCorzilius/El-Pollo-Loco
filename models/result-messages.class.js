@@ -37,7 +37,7 @@ class WinMessage extends DrawableObject {
     const centerY = canvas.height / 2 - this.height / 2;
     this.x = centerX;
     this.y = centerY;
-    this.loadImage("./img/You won, you lost/Game over A.png");
+    this.loadImage("./img/You won, you lost/You won A.png");
     this.active = false;
   }
 }

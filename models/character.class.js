@@ -96,6 +96,7 @@ class Character extends movableObject {
     super();
     this.isLongIdle = false;
     this.deathAnimationPlayed = false;
+    this.appliedDamage = 25;
     this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadMovementSprites(this.IMAGES_IDLE);
     this.loadMovementSprites(this.IMAGES_LONG_IDLE);
@@ -303,7 +304,7 @@ class Character extends movableObject {
       playerIsDead = true;
       gameIsOver = true;
       startGameOverCheckInterval();
-    }, this.IMAGES_DEAD.length * 50);
+    }, this.IMAGES_DEAD.length * 200);
   }
 
   /**

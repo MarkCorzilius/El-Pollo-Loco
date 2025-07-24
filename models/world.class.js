@@ -72,6 +72,7 @@ class World extends movableObject {
 
     this.collisionsManager.startCollisitionCheck();
     this.endbossManager.getDistanceBetweenEndbossAndCharacter();
+    this.setLevelDifficulty();
   }
 
   /**
@@ -311,4 +312,27 @@ class World extends movableObject {
     this.ctx.restore();
     object.x = object.x * -1;
   }
+
+  setLevelDifficulty() {
+    if (currentLevel >= 1 && currentLevel <= 2) {
+      this.endboss.speed = 0.7;
+      this.endboss.damage = 30;
+      this.character.appliedDamage = 20;
+      this.endbossManager.jumpLimit = 1;
+    }
+
+    if (currentLevel >= 3 && currentLevel <= 5) {
+      this.character.appliedDamage = 18;
+      this.endboss.damage = 35;
+      this.endbossManager.jumpLimit = 2;
+    }
+
+    if (currentLevel === 4 || currentLevel === 5) {
+      this.endboss.speed = 1;
+      this.endboss.damage += 10;
+      this.endboss.damage = 50;
+      this.endbossManager.jumpLimit = 3;
+    }
+  }
+
 }
