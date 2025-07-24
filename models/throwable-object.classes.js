@@ -44,12 +44,14 @@ class ThrowableObjects extends movableObject {
   }
 
   /**
-   * Initializes and manages the bottle throw behavior.
+   * Initializes and executes the bottle throw action.
+   *
    * @param {number} x - X position to start the throw.
    * @param {number} y - Y position to start the throw.
    * @param {Character} character - Character who throws the object.
    */
   throw(x, y, character) {
+    this.character.resetIdleAnimationStates();
     this.setInitialThrowState(x, y);
     this.playBottleThrowSound();
     this.determineThrowDirection(character);

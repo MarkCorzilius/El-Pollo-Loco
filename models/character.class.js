@@ -88,6 +88,8 @@ class Character extends movableObject {
   idleStartTime;
   elapsed;
 
+  resetIdleImage = false;
+
   /**
    * Initializes the character with default position, size,
    * sprite images, and starts gravity.
@@ -111,7 +113,6 @@ class Character extends movableObject {
    * Starts character animation and movement intervals.
    */
   animate() {
-    this.startIdleAnimations();
     this.startMoveRightInterval();
     this.startMoveLeftAndJumpInterval();
   }
@@ -146,37 +147,52 @@ class Character extends movableObject {
   }
 
   /**
-   * Starts the idle animation interval that runs when the character is not moving.
+   * Manages the character's idle animation state.
+   * Initializes idle timing, then plays either the normal or long idle animation based on elapsed time.
    */
-  startIdleAnimations() {
-    this.idleInterval = setInterval(() => {
-      gameIntervals.push(this.idleInterval);
-      if (this.isNotMoving()) {
-        this.runIdleAnimation();
-      } else {
-        this.resetIdleAnimationStates();
-      }
-    }, 300);
-  }
+  playIdleAnimation() {
+    this.initializeIdleStart();
 
-  // start clock when idle starts
-  // if clock > 5 sec –> longIdle = true;
-  // if movement: reset clock
-
-  /**
-   * Runs either the normal idle or long idle animation based on the current idle state.
-   */
-  runIdleAnimation() {
-    if (!this.idleStartTime) this.idleStartTime = performance.now();
     this.elapsed = performance.now() - this.idleStartTime;
+    if (this.elapsed < 3000) {
+      return;
+    };
 
     if (this.isLongIdle) {
-      this.playObjectAnimation(this.IMAGES_LONG_IDLE, false);
+      this.playLongIdleCycle();
     } else {
-      this.playObjectAnimation(this.IMAGES_IDLE, true);
-      if (this.elapsed > 2000) {
-        this.isLongIdle = true;
-      }
+      this.playIdleCycle();
+    }
+  }
+
+  /**
+   * Plays the long idle animation sequence.
+   * Does not loop through reset idle image flag.
+   */
+  playLongIdleCycle() {
+    this.playObjectAnimation(this.IMAGES_LONG_IDLE, false);
+  }
+
+  /**
+   * Plays the normal idle animation sequence.
+   * Sets the flag to reset the idle image and switches to long idle after 5 seconds.
+   */
+  playIdleCycle() {
+    this.resetIdleImage = true;
+    this.playObjectAnimation(this.IMAGES_IDLE, true);
+    if (this.elapsed > 5000) {
+      this.isLongIdle = true;
+    }
+  }
+
+  /**
+   * Initializes the idle animation start time and sets the initial image if not already initialized.
+   */
+  initializeIdleStart() {
+    if (!this.idleStartTime) {
+      this.idleStartTime = performance.now();
+
+      this.currentImage = 0;
     }
   }
 
@@ -184,9 +200,12 @@ class Character extends movableObject {
    * Resets the idle animation state and clears any pending long idle timeout.
    */
   resetIdleAnimationStates() {
-    clearTimeout(this.longIdleTimeout);
     this.idleStartTime = null;
     this.isLongIdle = false;
+    if (this.resetIdleImage) {
+      this.currentImage = 0;
+      this.resetIdleImage = false;
+    }
   }
 
   /**
@@ -226,7 +245,7 @@ class Character extends movableObject {
    * @returns {boolean}
    */
   isNotMoving() {
-    return !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE && !this.world.keyboard.D;
+    return !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE;
   }
 
   /**
@@ -242,18 +261,47 @@ class Character extends movableObject {
   }
 
   /**
-   * Selects and plays the appropriate animation based on the character's state.
+   * Selects and plays the appropriate character animation based on current state flags.
+   * Resets idle animation states where applicable and handles death animation playback once.
    */
   selectCharacterAnimation() {
-    if (this.isDead() && !this.deathAnimationPlayed) {
+    let { isDead, isHurt, isJumping, isWalking, isIdle } = this.createAnimationFlags();
+
+    if (isDead && !this.deathAnimationPlayed) {
+      this.resetIdleAnimationStates();
       this.playDeathAnimation();
-    } else if (this.isHurt()) {
+    } else if (isHurt) {
+      this.resetIdleAnimationStates();
       this.playHurtAnimation();
-    } else if (this.isAboveGround()) {
+    } else if (isJumping) {
+      this.resetIdleAnimationStates();
       this.playJumpAnimation();
-    } else if (this.shouldAnimateWalk()) {
+    } else if (isWalking) {
+      this.resetIdleAnimationStates();
       this.playWalkAnimation();
+    } else if (isIdle) {
+      this.playIdleAnimation();
     }
+  }
+
+  /**
+   * Computes the character's animation state flags based on current inputs and conditions.
+   *
+   * @returns {Object} Object containing boolean flags:
+   * - isDead: whether the character is dead
+   * - isHurt: whether the character is hurt
+   * - isJumping: whether the character is currently above ground (jumping)
+   * - isWalking: whether the character is currently moving left or right
+   * - isIdle: whether the character is standing still (no movement input)
+   */
+  createAnimationFlags() {
+    const isDead = this.isDead();
+    const isHurt = this.isHurt();
+    const isJumping = this.isAboveGround();
+    const isWalking = this.shouldAnimateWalk();
+    const isIdle = this.isNotMoving();
+
+    return { isDead, isHurt, isJumping, isWalking, isIdle };
   }
 
   /**
@@ -262,9 +310,9 @@ class Character extends movableObject {
    */
   decideAnimationSpeedForJump() {
     if (this.world.keyboard.LEFT || this.world.keyboard.RIGHT) {
-      this.animationSpeed = 65;
+      this.animationSpeed = 85;
     } else {
-      this.animationSpeed = 40;
+      this.animationSpeed = 100;
     }
   }
 
