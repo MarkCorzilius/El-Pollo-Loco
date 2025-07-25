@@ -67,7 +67,9 @@ function adjustUIForMobileDevices() {
     mobileDevice = true;
     isLandscape = detectDeviceOrientation();
     shouldShowRotateMessage(isLandscape, detectDeviceType());
-    adjustInfoOverlayMobile();
+    adjustDialogSize('gameInfoDialog');
+    adjustDialogSize('privacyPolicyDialog');
+    adjustDialogSize('afterLevelDialog');
   }
 }
 
@@ -153,17 +155,15 @@ function checkDeviceOrientation() {
 }
 
 /**
- * Adjusts the game info overlay size based on whether the device is mobile and in landscape orientation.
+ * Adjusts the game dialog size based on whether the device is mobile and in landscape orientation.
  */
-function adjustInfoOverlayMobile() {
-  const infoDialog = document.getElementById("gameInfoDialog");
-  const privacyDialog = document.getElementById('privacyPolicyDialog');
+function adjustDialogSize(id) {
+  const dialog = document.getElementById(id);
   if (mobileDevice && isLandscape) {
-    infoDialog.classList.replace("desktop-info-size", "mobile-info-size");
-    privacyDialog.classList.replace("desktop-info-size", "mobile-info-size");
+    dialog.classList.replace("desktop-info-size", "mobile-info-size");
+
   } else {
-    infoDialog.classList.replace("mobile-info-size", "desktop-info-size");
-    privacyDialog.classList.replace("mobile-info-size", "desktop-info-size");
+    dialog.classList.replace("mobile-info-size", "desktop-info-size");
 
   }
 }

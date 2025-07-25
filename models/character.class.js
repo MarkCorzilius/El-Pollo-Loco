@@ -278,8 +278,9 @@ class Character extends movableObject {
       return;
     }
     this.lastAnimationTime = currentTime;
-
-    this.selectCharacterAnimation();
+    if (!gameLost) {
+      this.selectCharacterAnimation();
+    }
   }
 
   /**
@@ -289,7 +290,7 @@ class Character extends movableObject {
   selectCharacterAnimation() {
     let { isDead, isHurt, isJumping, isWalking, isIdle } = this.createAnimationFlags();
 
-    if (isDead && !this.deathAnimationPlayed) {
+    if (isDead) {
       this.resetIdleAnimationStates();
       this.playDeathAnimation();
     } else if (isHurt) {

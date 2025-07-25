@@ -18,6 +18,7 @@
 .mobile-info-size {
   width: 95vw;
   max-height: 90vh;
+  max-width: 600px;
 }
 
 .desktop-info-size {
@@ -245,23 +246,6 @@
   display: flex;
 }
 
-.privacy-policy-dialog {
-  position: absolute;
-  left: 50%;
-  background-color: rgba(255, 255, 255, 0.85);
-  transform: translate(-50%, 200%);
-  transition: transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2); /* light, elegant border */
-  backdrop-filter: blur(6px); /* optional: for a "frosted glass" look */
-  border-radius: 12px; /* smooth corners to match the soft shadow */
-  padding: 15px;
-}
-
 .privacy-policy-info {
   display: flex;
   flex-direction: column;
@@ -270,5 +254,18 @@
 }
 
 .privacy-policy-info::-webkit-scrollbar {
+  display: none;
+}
+
+.result-info {
+  display: flex;
+  align-items: center;
+  overflow-y: auto;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.result-info::-webkit-scrollbar {
   display: none;
 }
