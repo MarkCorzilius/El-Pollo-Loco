@@ -25,13 +25,18 @@ class movableObject extends DrawableObject {
   }
 
   /**
-   * Applies damage unless enemy was jumped on.
-   * @param {number} damage
+   * Applies damage to the character unless the enemy was jumped on.
+   * Plays a hurt sound and updates the last hit time if damage is applied.
+   *
+   * @param {number} damage - The amount of damage to apply.
    */
   hit(damage) {
     if (this.enemyWasJumpedOn) return;
-    this.playCharacterHurtSound();
-    this.applyDamage(damage);
+    if (!this.isHurt()) {
+      this.playCharacterHurtSound();
+      this.applyDamage(damage);
+      this.lastHit = performance.now();
+    }
   }
 
   /**
@@ -60,9 +65,8 @@ class movableObject extends DrawableObject {
    * @returns {boolean}
    */
   isHurt() {
-    let timepassed = new Date().getTime() - this.lastHit;
-    timepassed = timepassed / 1000;
-    return timepassed < 1;
+    let timepassed = performance.now() - this.lastHit;
+    return timepassed < 1000;
   }
 
   /**

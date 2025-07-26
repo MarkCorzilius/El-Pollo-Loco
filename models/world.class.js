@@ -66,7 +66,6 @@ class World extends movableObject {
       coin.world = this;
     });
 
-    this.collidingEnemies = new Set();
     this.collidingCollectableBottle = new Set();
     this.collidingEndboss = new Set();
 

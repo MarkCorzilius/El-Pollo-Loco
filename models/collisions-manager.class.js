@@ -1,4 +1,5 @@
 class CollisionsManager extends movableObject {
+  lastHit = 0;
   constructor(world) {
     super();
     this.world = world;
@@ -47,16 +48,15 @@ class CollisionsManager extends movableObject {
   }
 
   /**
-   * Processes collision logic when the character touches an enemy.
-   * @param {Enemy} enemy - The enemy object being checked for collision.
+   * Handles collision logic between the character and an enemy.
+   * Determines if the enemy was jumped on or damage should be processed.
+   *
+   * @param {Enemy} enemy - The enemy involved in the collision.
    */
   handleEnemyCollision(enemy) {
-    const key = enemy.id;
     if (this.world.character.isColliding(enemy)) {
       this.world.chickenHandler.didJumpOnChicken(enemy);
-      this.processEnemyDamage(enemy, key);
-    } else {
-      this.processEnemyRemoval(key);
+      this.processEnemyDamage(enemy);
     }
   }
 
@@ -113,26 +113,19 @@ class CollisionsManager extends movableObject {
     this.world.character.bottlesTracker += 20;
     this.world.level.collectableObjects.splice(index, 1);
     this.world.weaponBar.setPercentage(this.world.character.bottlesTracker, this.world.weaponBar.WEAPON_STATUS_IMAGES);
-  } 
-
-  /**
-   * Removes the enemy's key from the collision tracking set.
-   * @param {string|number} key - The unique ID of the enemy.
-   */
-  processEnemyRemoval(key) {
-    this.world.collidingEnemies.delete(key);
   }
 
   /**
-   * Handles the damage dealt to the character by an enemy.
+   * Processes the damage dealt to the character by a specific enemy.
+   * Updates the last hit time, applies damage, and updates the health bar.
+   *
    * @param {Enemy} enemy - The enemy causing the damage.
-   * @param {string|number} key - The enemy's unique ID for collision tracking.
    */
-  processEnemyDamage(enemy, key) {
-    if (!this.world.collidingEnemies.has(key) && !enemy.isDead) {
+  processEnemyDamage(enemy) {
+    if (!enemy.isDead) {
+      this.lastHit = performance.now();
       this.world.character.hit(enemy.damage);
       this.world.healthBar.setPercentage(this.world.character.healthTracker, this.world.healthBar.HEALTH_STATUS_IMAGES);
-      this.world.collidingEnemies.add(key);
     }
   }
 }

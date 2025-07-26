@@ -8,7 +8,7 @@ class Character extends movableObject {
   width = 130;
   y = 225;
   x = 100;
-  pushXSpeed = -8;
+  pushXSpeed = -15;
   floorY = 225;
 
   IMAGES_LONG_IDLE = [
@@ -369,7 +369,7 @@ class Character extends movableObject {
    * Plays the hurt animation sequence.
    */
   playHurtAnimation() {
-    this.setAnimation(this.IMAGES_HURT, 60, true);
+    this.setAnimation(this.IMAGES_HURT, 200, true);
   }
 
   /**
@@ -377,7 +377,7 @@ class Character extends movableObject {
    * Marks the death animation as played to prevent replay.
    */
   playDeathAnimation() {
-    this.setAnimation(this.IMAGES_DEAD, 120, true);
+    this.setAnimation(this.IMAGES_DEAD, 200, true);
     gameLost = true;
     this.deathAnimationTimeOut = setTimeout(() => {
       gameTimeouts.push(this.deathAnimationTimeOut);
