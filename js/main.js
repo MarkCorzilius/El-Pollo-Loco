@@ -32,9 +32,9 @@ let world;
 let startScreen = true;
 let fullScreen = false;
 
-let gameLost = false;
-
 let gameIsLoading = true;
+
+let gameLost = false;
 
 /**
  * Starts the game by initializing the level, world, keyboard, and audio.
