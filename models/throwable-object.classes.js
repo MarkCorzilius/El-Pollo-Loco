@@ -51,7 +51,7 @@ class ThrowableObjects extends movableObject {
    * @param {Character} character - Character who throws the object.
    */
   throw(x, y, character) {
-    this.character.resetIdleAnimationStates();
+    this.character.characterAnimations.resetIdleAnimationStates();
     this.setInitialThrowState(x, y);
     this.playBottleThrowSound();
     this.determineThrowDirection(character);
@@ -348,7 +348,7 @@ class ThrowableManager {
   createBottleSplashInterval(bottle) {
     return setInterval(() => {
       gameIntervals.push(bottle.splashInterval);
-      this.world.character.resetIdleAnimationStates();
+      this.world.character.characterAnimations.resetIdleAnimationStates();
       bottle.playObjectAnimation(bottle.BOTTLE_SPLASH_IMAGES, true);
 
       if (this.playedAllSplashImages(bottle)) {

@@ -4,6 +4,7 @@
  * Extends movableObject.
  */
 class Character extends movableObject {
+  
   height = 200;
   width = 130;
   y = 225;
@@ -71,6 +72,10 @@ class Character extends movableObject {
   IMAGES_HURT = ["./img/2_character_pepe/4_hurt/H-41.png", "./img/2_character_pepe/4_hurt/H-42.png", "./img/2_character_pepe/4_hurt/H-43.png"];
 
   world;
+
+  characterController = new CharacterController(this);
+  characterAnimations = new CharacterAnimations(this);
+
   speed = 6;
 
   offset = {
@@ -80,15 +85,9 @@ class Character extends movableObject {
     right: 44,
   };
   enemyWasJumpedOn;
-
-  lastAnimationTime = 0;
-  animationInterval = 100;
   animationSpeed = 80;
 
-  idleStartTime;
   elapsed;
-
-  resetIdleImage = false;
 
   healthTracker = 100;
 
@@ -98,7 +97,6 @@ class Character extends movableObject {
    */
   constructor() {
     super();
-    this.isLongIdle = false;
     this.deathAnimationPlayed = false;
     this.deathAnimationPlaying = false;
     this.appliedDamage = 25;
@@ -116,228 +114,17 @@ class Character extends movableObject {
    * Starts character animation and movement intervals.
    */
   animate() {
-    this.startMoveRightInterval();
-    this.startMoveLeftAndJumpInterval();
-  }
-
-  /**
-   * Starts interval to move character left and jump.
-   */
-  startMoveLeftAndJumpInterval() {
-    this.characterMoveLeftInterval = setInterval(() => {
-      gameIntervals.push(this.characterMoveLeftInterval);
-      if (this.canMoveLeft()) {
-        this.moveLeft();
-      }
-      if (this.canJump()) {
-        this.jump();
-      }
-      this.world.camera_x = -this.x + 200;
-    }, 1000 / 60);
-  }
-
-  /**
-   * Starts interval to move character right.
-   */
-  startMoveRightInterval() {
-    this.characterMoveRightInterval = setInterval(() => {
-      gameIntervals.push(this.characterMoveRightInterval);
-      if (this.canMoveRight()) {
-        this.moveRight();
-      }
-      this.world.camera_x = this.x;
-    }, 1000 / 60);
-  }
-
-  /**
-   * Manages the character's idle animation state.
-   * Initializes idle timing, optionally resets the idle image during
-   * the first 3 seconds, and chooses between short and long idle animations.
-   */
-  playIdleAnimation() {
-    this.initializeIdleStart();
-
-    this.elapsed = performance.now() - this.idleStartTime;
-    this.maybeResetIdleImage();
-
-    if (this.isLongIdle) {
-      this.playLongIdleCycle();
-    } else {
-      this.playIdleCycle();
-    }
-  }
-
-  /**
-   * Resets the character's image to the first idle frame if within
-   * the initial 3 seconds of idling and the reset flag is set.
-   * Prevents animation from starting too early and avoids flickering.
-   */
-  maybeResetIdleImage() {
-    if (this.elapsed < 3000) {
-      if (this.resetIdleImage) {
-        this.setDefaultCharacterImage();
-      }
-      return;
-    }
-  }
-
-  /**
-   * Sets the character's image to the first idle frame and clears
-   * the reset flag. Used to ensure a stable starting frame for idle.
-   */
-  setDefaultCharacterImage() {
-    this.img = this.imageCache[this.IMAGES_IDLE[0]];
-    this.resetIdleImage = false;
-  }
-
-  /**
-   * Plays the long idle animation sequence.
-   * Does not loop through reset idle image flag.
-   */
-  playLongIdleCycle() {
-    this.playObjectAnimation(this.IMAGES_LONG_IDLE, false);
-  }
-
-  /**
-   * Plays the normal idle animation sequence.
-   * Sets the flag to reset the idle image and switches to long idle after 5 seconds.
-   */
-  playIdleCycle() {
-    this.resetIdleImage = true;
-    this.playObjectAnimation(this.IMAGES_IDLE, true);
-    if (this.elapsed > 5000) {
-      this.isLongIdle = true;
-    }
-  }
-
-  /**
-   * Initializes the idle animation start time and sets the initial image if not already initialized.
-   */
-  initializeIdleStart() {
-    if (!this.idleStartTime) {
-      this.idleStartTime = performance.now();
-
-      this.currentImage = 0;
-    }
-  }
-
-  /**
-   * Resets the idle animation state and clears any pending long idle timeout.
-   */
-  resetIdleAnimationStates() {
-    this.idleStartTime = null;
-    this.isLongIdle = false;
-    if (this.resetIdleImage) {
-      this.currentImage = 0;
-      this.resetIdleImage = false;
-    }
-  }
-
-  /**
-   * Checks if character should play walking animation.
-   * @returns {boolean}
-   */
-  shouldAnimateWalk() {
-    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
-  }
-
-  /**
-   * Checks if character can move left.
-   * @returns {boolean}
-   */
-  canMoveLeft() {
-    return this.world.keyboard.LEFT && this.x > 0;
-  }
-
-  /**
-   * Checks if character can move right.
-   * @returns {boolean}
-   */
-  canMoveRight() {
-    return this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x;
-  }
-
-  /**
-   * Checks if character can jump.
-   * @returns {boolean}
-   */
-  canJump() {
-    return this.world.keyboard.SPACE && !this.isAboveGround();
-  }
-
-  /**
-   * Checks if character is not moving.
-   * @returns {boolean}
-   */
-  isNotMoving() {
-    return !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.world.keyboard.SPACE;
-  }
-
-  /**
-   * Plays the appropriate animation based on character state.
-   */
-  updateCharacterAnimation(currentTime) {
-    if (currentTime - this.lastAnimationTime < this.animationInterval) {
-      return;
-    }
-    this.lastAnimationTime = currentTime;
-    if (!gameIsOver) {
-      this.selectCharacterAnimation();
-    }
-  }
-
-  /**
-   * Selects and plays the appropriate character animation based on current state flags.
-   * Resets idle animation states where applicable and handles death animation playback once.
-   */
-  selectCharacterAnimation() {
-    let { isDead, isHurt, isJumping, isWalking, isIdle } = this.createAnimationFlags();
-
-    if (isDead) {
-      this.resetIdleAnimationStates();
-      this.playDeathAnimation();
-    } else if (isHurt) {
-      this.resetIdleAnimationStates();
-      this.playHurtAnimation();
-    } else if (isJumping) {
-      this.resetIdleAnimationStates();
-      this.playJumpAnimation();
-    } else if (isWalking) {
-      this.resetIdleAnimationStates();
-      this.playWalkAnimation();
-    } else if (isIdle) {
-      this.prepareIdleImageReset();
-      this.playIdleAnimation();
-    }
+    this.characterController.startMoveRightInterval();
+    this.characterController.startMoveLeftAndJumpInterval();
   }
 
   /**
    * Sets the reset flag for the idle image if idle just started.
    */
   prepareIdleImageReset() {
-    if (!this.idleStartTime) {
-      this.resetIdleImage = true;
+    if (!this.characterAnimations.idleStartTime) {
+      this.characterAnimations.resetIdleImage = true;
     }
-  }
-
-  /**
-   * Computes the character's animation state flags based on current inputs and conditions.
-   *
-   * @returns {Object} Object containing boolean flags:
-   * - isDead: whether the character is dead
-   * - isHurt: whether the character is hurt
-   * - isJumping: whether the character is currently above ground (jumping)
-   * - isWalking: whether the character is currently moving left or right
-   * - isIdle: whether the character is standing still (no movement input)
-   */
-  createAnimationFlags() {
-    const isDead = this.isDead();
-    const isHurt = this.isHurt();
-    const isJumping = this.isAboveGround();
-    const isWalking = this.shouldAnimateWalk();
-    const isIdle = this.isNotMoving();
-
-    return { isDead, isHurt, isJumping, isWalking, isIdle };
   }
 
   /**
@@ -350,57 +137,6 @@ class Character extends movableObject {
     } else {
       this.animationSpeed = 100;
     }
-  }
-
-  /**
-   * Plays the walking animation sequence.
-   */
-  playWalkAnimation() {
-    this.setAnimation(this.IMAGES_WALKING, 60, false);
-  }
-
-  /**
-   * Plays the jumping animation sequence with variable speed.
-   * Calls decideAnimationSpeedForJump to adjust speed before playing.
-   */
-  playJumpAnimation() {
-    this.decideAnimationSpeedForJump();
-    this.setAnimation(this.IMAGES_JUMPING, this.animationSpeed, false);
-  }
-
-  /**
-   * Plays the hurt animation sequence.
-   */
-  playHurtAnimation() {
-    this.setAnimation(this.IMAGES_HURT, 200, true);
-  }
-
-  /**
-   * Initiates the death animation sequence for the character.
-   * Sets the animation to play once and marks the game as lost.
-   * Ensures the death sequence is only triggered once.
-   */
-  playDeathAnimation() {
-    this.setAnimation(this.IMAGES_DEAD, 150, true);
-    gameLost = true;
-    if (!this.deathAnimationPlaying) {
-      this.deathAnimationPlaying = true;
-      this.scheduleGameOverAfterDeath();
-    }
-  }
-
-  /**
-   * Schedules the game-over logic to be executed after the death animation finishes.
-   * Adds the timeout to the gameTimeouts array for tracking.
-   * Calls the method to update post-death state flags.
-   */
-  scheduleGameOverAfterDeath() {
-    this.deathAnimationTimeOut = setTimeout(() => {
-      this.deathAnimationPlaying = true;
-      gameTimeouts.push(this.deathAnimationTimeOut);
-      this.setAfterDeathAnimationStates();
-      startGameOverCheckInterval();
-    }, this.IMAGES_DEAD.length * 160);
   }
 
   /**
@@ -474,7 +210,7 @@ class Character extends movableObject {
       this.y = this.floorY;
       this.speedY = 0;
       clearInterval(this.pushAwayInterval);
-      this.world.applyGravity();
+      this.applyGravity();
     }
   }
 
