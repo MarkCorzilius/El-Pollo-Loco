@@ -117,6 +117,7 @@ class movableObject extends DrawableObject {
    * Applies gravity to the object.
    */
   applyGravity() {
+    clearInterval(this.gravityInterval);
     this.gravityInterval = setInterval(() => {
       gameIntervals.push(this.gravityInterval);
       this.updateVerticalPosition();
