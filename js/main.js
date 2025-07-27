@@ -190,6 +190,7 @@ function resetGameStateFlags(newLevel) {
   world.level.enemies.forEach((enemy) => {
     enemy.isDeadChicken = false;
   });
+  world.character.healthTracker = 100;
   hasSpotedCharacter = false;
   currentLevel = newLevel;
   endbossIsDead = false;

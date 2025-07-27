@@ -90,6 +90,8 @@ class Character extends movableObject {
 
   resetIdleImage = false;
 
+  healthTracker = 100;
+
   /**
    * Initializes the character with default position, size,
    * sprite images, and starts gravity.
@@ -98,6 +100,7 @@ class Character extends movableObject {
     super();
     this.isLongIdle = false;
     this.deathAnimationPlayed = false;
+    this.deathAnimationPlaying = false;
     this.appliedDamage = 25;
     this.loadImage("./img/2_character_pepe/1_idle/idle/I-1.png");
     this.loadMovementSprites(this.IMAGES_IDLE);
@@ -278,7 +281,7 @@ class Character extends movableObject {
       return;
     }
     this.lastAnimationTime = currentTime;
-    if (!gameLost) {
+    if (!gameIsOver) {
       this.selectCharacterAnimation();
     }
   }
@@ -373,19 +376,41 @@ class Character extends movableObject {
   }
 
   /**
-   * Starts the death animation and triggers game over logic after it finishes.
-   * Marks the death animation as played to prevent replay.
+   * Initiates the death animation sequence for the character.
+   * Sets the animation to play once and marks the game as lost.
+   * Ensures the death sequence is only triggered once.
    */
   playDeathAnimation() {
-    this.setAnimation(this.IMAGES_DEAD, 200, true);
+    this.setAnimation(this.IMAGES_DEAD, 150, true);
     gameLost = true;
+    if (!this.deathAnimationPlaying) {
+      this.deathAnimationPlaying = true;
+      this.scheduleGameOverAfterDeath();
+    }
+  }
+
+  /**
+   * Schedules the game-over logic to be executed after the death animation finishes.
+   * Adds the timeout to the gameTimeouts array for tracking.
+   * Calls the method to update post-death state flags.
+   */
+  scheduleGameOverAfterDeath() {
     this.deathAnimationTimeOut = setTimeout(() => {
+      this.deathAnimationPlaying = true;
       gameTimeouts.push(this.deathAnimationTimeOut);
-      this.deathAnimationPlayed = true;
-      playerIsDead = true;
-      gameIsOver = true;
+      this.setAfterDeathAnimationStates();
       startGameOverCheckInterval();
-    }, this.IMAGES_DEAD.length * 200);
+    }, this.IMAGES_DEAD.length * 160);
+  }
+
+  /**
+   * Sets the game state flags to reflect the character's death.
+   * Marks the player as dead, ends the game, and clears the dying state flag.
+   */
+  setAfterDeathAnimationStates() {
+    playerIsDead = true;
+    gameIsOver = true;
+    this.isDying = false;
   }
 
   /**
@@ -451,5 +476,26 @@ class Character extends movableObject {
       clearInterval(this.pushAwayInterval);
       this.world.applyGravity();
     }
+  }
+
+  /**
+   * Reduces health based on damage.
+   * @param {number} damage
+   */
+  applyDamage(damage) {
+    this.healthTracker -= damage;
+    if (this.healthTracker <= 0) {
+      this.healthTracker = 0;
+    } else {
+      this.lastHit = new Date().getTime();
+    }
+  }
+
+  /**
+   * Checks if the object is dead (health <= 0).
+   * @returns {boolean}
+   */
+  isDead() {
+    return this.healthTracker <= 0;
   }
 }

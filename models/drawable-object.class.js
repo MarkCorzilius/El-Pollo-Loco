@@ -12,7 +12,6 @@ class DrawableObject {
   currentImage = 0;
   offset = { top: 0, left: 0, right: 0, bottom: 0 };
   coinsTracker = 0;
-  healthTracker = 100;
   bottlesTracker = 100;
 
   /**

@@ -40,19 +40,6 @@ class movableObject extends DrawableObject {
   }
 
   /**
-   * Reduces health based on damage.
-   * @param {number} damage
-   */
-  applyDamage(damage) {
-    this.healthTracker -= damage;
-    if (this.healthTracker <= 0) {
-      this.healthTracker = 0;
-    } else {
-      this.lastHit = new Date().getTime();
-    }
-  }
-
-  /**
    * Plays the character hurt sound.
    */
   playCharacterHurtSound() {
@@ -66,15 +53,7 @@ class movableObject extends DrawableObject {
    */
   isHurt() {
     let timepassed = performance.now() - this.lastHit;
-    return timepassed < 1000;
-  }
-
-  /**
-   * Checks if the object is dead (health = 0).
-   * @returns {boolean}
-   */
-  isDead() {
-    return this.healthTracker == 0;
+    return timepassed < 400;
   }
 
   /**
