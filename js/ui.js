@@ -222,12 +222,12 @@ function applyFullScreen() {
  */
 function toggleGameVolume(id) {
   const button = document.getElementById(id);
-  toggleSounds();
   if (button.src.includes("volume-on.png")) {
     button.src = "./img/volume-off.png";
   } else {
     button.src = "./img/volume-on.png";
   }
+  toggleSounds();
 }
 
 function setGameVolumeImage(id) {
@@ -246,7 +246,6 @@ function setGameVolumeImage(id) {
 function toggleSounds() {
   const savedSound = JSON.parse(localStorage.getItem('soundEnabled'))
   soundEnabled = savedSound;
-  console.log(soundEnabled);
   soundEnabled = soundEnabled ? false : true;
   localStorage.setItem("soundEnabled", JSON.stringify(soundEnabled));
   if (world === undefined || !world.character) return;
