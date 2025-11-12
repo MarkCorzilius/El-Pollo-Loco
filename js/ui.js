@@ -99,11 +99,23 @@ function updateRestartGameBtnAndText() {
  * state and UI adjustments when exiting fullscreen.
  */
 window.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement) {
+  if (isInFullscreen()) {
+    adjustCanvasBasedOnScreen(true);
     fullScreen = false;
     removeObjectFitContain();
+  } else {
+    adjustCanvasBasedOnScreen(false);
   }
 });
+
+ function adjustCanvasBasedOnScreen(canvasFullScreen = false) {
+  const canvas = document.getElementById("canvas");
+  if (canvasFullScreen) {
+    canvas.classList.add("full-screen-canvas");
+  } else {
+    canvas.classList.remove("full-screen-canvas");
+  }
+ }
 
 /**
  * Displays the game over overlay and dialog after level completion or loss.

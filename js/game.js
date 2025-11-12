@@ -13,7 +13,6 @@ function gameOver() {
     stopGame();
   }
   updateOverlayButtons();
-
 }
 
 /**
@@ -45,6 +44,7 @@ function playWinAnimations() {
   playWinSound();
   world.winMessage.show();
   setTimeout(() => {
+    exitFullscreenIfActive();
     showAfterGameOverScreen();
   }, 1500);
 }
@@ -72,6 +72,7 @@ function playLoseAnimations() {
     world.loseMessage.loadImage("./img/You won, you lost/You lost.png");
   }, 2500);
   setTimeout(() => {
+    exitFullscreenIfActive();
     showAfterGameOverScreen();
   }, 4000);
 }
@@ -83,6 +84,38 @@ function playLostSound() {
   if (soundEnabled) {
     world.gameLostSound.volume = 0.2;
     world.gameLostSound.play();
+  }
+}
+
+/**
+ * Checks if the document is currently in fullscreen mode across all browsers.
+ * @returns {boolean} True if in fullscreen, false otherwise.
+ */
+function isInFullscreen() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+}
+
+/**
+ * Exits fullscreen mode using the appropriate browser method.
+ */
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+}
+
+/**
+ * Exits fullscreen mode if the document is currently in fullscreen.
+ */
+function exitFullscreenIfActive() {
+  if (isInFullscreen()) {
+    exitFullscreen();
   }
 }
 

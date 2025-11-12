@@ -153,3 +153,7 @@
   border-radius: 12px; /* smooth corners to match the soft shadow */
   padding: 15px;
 }
+
+.full-screen-canvas {
+  border-radius: 0 !important;
+}
