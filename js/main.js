@@ -42,10 +42,9 @@ let gameLost = false;
  */
 async function startGame() {
   showLoadingSpinner();
-
   createNewWorld();
   startScreen = false;
-  applyFullScreen();
+  enterFullScreen();
   showMobileButtons();
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));

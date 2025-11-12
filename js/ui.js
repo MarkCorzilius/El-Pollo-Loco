@@ -108,6 +108,12 @@ window.addEventListener("fullscreenchange", () => {
   }
 });
 
+
+/**
+ * Adjusts the canvas element's class based on fullscreen state.
+ *
+ * @param {boolean} [canvasFullScreen=false] - Whether the canvas should be fullscreen.
+ */
  function adjustCanvasBasedOnScreen(canvasFullScreen = false) {
   const canvas = document.getElementById("canvas");
   if (canvasFullScreen) {
@@ -219,7 +225,6 @@ function enterFullScreen() {
  */
 function applyFullScreen() {
   const introScreen = document.getElementById("startScreenElements");
-
   if (startScreen && fullScreen) {
     introScreen.requestFullscreen();
   }
