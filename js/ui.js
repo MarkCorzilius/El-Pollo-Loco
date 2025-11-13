@@ -3,7 +3,7 @@
  */
 function showMobileButtons() {
   const btnsContainer = document.getElementById("mobileButtons");
-  if (!gameIsOver && !startScreen && (window.innerWidth <= 1024 || mobileDevice)) {
+  if (!gameIsOver && !startScreen && mobileDevice) {
     btnsContainer.classList.replace("d-none", "d-flex");
 
     document.querySelectorAll(".mobile-touch-buttons").forEach((btn) => {
@@ -214,6 +214,7 @@ function removeObjectFitContain() {
  * Enters full screen mode and adjusts screen fitting styles.
  */
 function enterFullScreen() {
+  if (mobileDevice) return;
   fullScreen = true;
   applyFullScreen();
   objectFitContain();
