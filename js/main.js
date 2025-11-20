@@ -44,6 +44,7 @@ async function startGame() {
   showLoadingSpinner();
   createNewWorld();
   startScreen = false;
+  enterFullScreen();
   showMobileButtons();
   if (soundEnabled) {
     basicBackgroundSound.play().catch((e) => console.log(e));

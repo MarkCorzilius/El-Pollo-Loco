@@ -214,7 +214,6 @@ function removeObjectFitContain() {
  * Enters full screen mode and adjusts screen fitting styles.
  */
 function enterFullScreen() {
-  if (mobileDevice) return;
   fullScreen = true;
   applyFullScreen();
   objectFitContain();
@@ -225,6 +224,7 @@ function enterFullScreen() {
  * depending on the current game state.
  */
 function applyFullScreen() {
+  if (mobileDevice) return;
   const introScreen = document.getElementById("startScreenElements");
   if (startScreen && fullScreen) {
     introScreen.requestFullscreen();

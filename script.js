@@ -70,7 +70,12 @@ function adjustUIForMobileDevices() {
     adjustDialogSize('gameInfoDialog');
     adjustDialogSize('privacyPolicyDialog');
     adjustDialogSize('afterLevelDialog');
+  } else {
+    mobileDevice = false;
+    isLandscape = false;
+    shouldShowRotateMessage(false, detectDeviceType());
   }
+
 }
 
 /**
@@ -172,7 +177,7 @@ function adjustDialogSize(id) {
  * Adds a resize event listener to adjust the UI and show mobile elements when the window is resized.
  */
 window.addEventListener("resize", () => {
+  adjustUIForMobileDevices();
   showMobileButtons();
   showMobileMenu();
-  adjustUIForMobileDevices();
 });
