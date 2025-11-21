@@ -40,14 +40,14 @@
   top: 0;
   left: 0;
   z-index: 50;
-  height: 100dvh;
-  width: 100dvw;
+  height: 100svh;
+  width: 100svw;
   background-color: rgba(251, 117, 79, 1);
 }
 
 .after-level-dialog {
   background-color: rgba(255, 255, 255, 0.85);
-  width: clamp(300px, 70dvw, 500px);
+  width: clamp(300px, 70svw, 500px);
   height: auto;
   border-radius: 30px;
   position: fixed;
@@ -67,13 +67,13 @@
 }
 
 .result-overlay-buttons {
-  margin-top: clamp(1rem, 5vw, 10rem);
+  margin-top: clamp(1rem, svw, 10rem);
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
   flex-direction: column;
-  gap: clamp(5px, 1dvw, 15px);
+  gap: clamp(5px, 1svw, 15px);
   margin-bottom: 10px;
 }
 
@@ -86,7 +86,7 @@
   outline: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   height: 40px;
-  width: clamp(200px, 20dvw, 400px);
+  width: clamp(200px, 20svw, 400px);
 }
 
 .result-overlay-buttons button:hover {
@@ -128,8 +128,8 @@
   top: 0;
   left: 0;
   z-index: 0;
-  height: 100dvh;
-  width: 100dvw;
+  height: 100svh;
+  width: 100svw;
   object-fit: cover;
 }
 
